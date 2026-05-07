@@ -1,0 +1,215 @@
+2026-05-07 00:45:04.315 FlashcardsPortuges[15298:17328376] error messaging the mach port for IMKCFRunLoopWakeUpReliable
+oading…
+5/7/26, 12:36:56 AM: EuroLLM harness configured: physRAM=68719476736 bytes
+5/7/26, 12:36:57 AM: EuroLLM loaded successfully
+5/7/26, 12:38:15 AM: EuroLLM prompt: Translate the following contents in the portuguese tag to American English. Reply in JSON with a few related or example sentences.
+with the format of { "translation": { "direct": "", "colloquial": "", "relatedExamples": [ { "english": "", "portuguese": "" } ] }, "original":
+"<contents of source string>" }
+<portuguese>ser</portuguese>
+5/7/26, 12:38:17 AM: EuroLLM raw response: {
+  "translation": {
+    "direct": "be",
+    "colloquial": "be",
+    "relatedExamples": [
+      {
+        "english": "I am a student.",
+        "portuguese": "Eu sou estudante."
+      }
+    ]
+  },
+  "original": "<contents of source string>"
+}
+5/7/26, 12:38:41 AM: EuroLLM auto-translate prompt: Detect whether the following text is in English or European Portuguese, then translate it to the other language.
+Reply in JSON ONLY. The format is:
+{
+  "sourceLanguage": "English" | "Portuguese",
+  "translation": {
+    "direct": "<literal translation in the target language>",
+    "colloquial": "<idiomatic translation in the target language>",
+    "relatedExamples": [
+      { "english": "<example in English>", "portuguese": "<example in European Portuguese>" }
+    ]
+  },
+  "original": "<the original input>"
+}
+Provide 2–3 related examples that illustrate the term in natural use.
+<text>preterito imperfeito</text>
+5/7/26, 12:38:46 AM: EuroLLM auto-translate raw: {
+  "sourceLanguage": "English",
+  "translation": {
+    "direct": "preterite imperfect",
+    "colloquial": "past imperfect",
+    "relatedExamples": [
+      { "english": "The preterite imperfect is a verb form used in the past tense to describe an action that was ongoing or repeated in the past.", "portuguese": "O pretérito imperfeito é uma forma verbal usada no passado para descrever uma ação que estava em andamento ou que se repetia no passado.", },
+      { "english": "For example, 'I was eating an apple' uses the preterite imperfect.", "portuguese": "Por exemplo, 'Eu estava comendo uma maçã' usa o pretérito imperfeito.", },
+      { "english": "In contrast, 'I ate an apple' uses the preterite perfect.", "portuguese": "Em contraste, 'Eu comi uma maçã' usa o pretérito perfeito.", }
+    ]
+  },
+  "original": "preterito imperfeito"
+}
+5/7/26, 12:39:46 AM: DictionaryView appeared.
+5/7/26, 12:39:46 AM: Attempting to load dictionary from: /Users/bharrison4/Library/Application Support/FlashcardsPortuges/pt-en-dictionary.json
+5/7/26, 12:39:46 AM: Dictionary file exists. Loading from disk.
+5/7/26, 12:39:46 AM: Successfully loaded and decoded dictionary.
+5/7/26, 12:41:11 AM: DictionaryView appeared.
+5/7/26, 12:41:18 AM: EuroLLM prompt: Translate the following contents in the portuguese tag to American English. Reply in JSON with a few related or example sentences.
+with the format of { "translation": { "direct": "", "colloquial": "", "relatedExamples": [ { "english": "", "portuguese": "" } ] }, "original":
+"<contents of source string>" }
+<portuguese>comer</portuguese>
+5/7/26, 12:41:20 AM: EuroLLM raw response: {
+  "translation": {
+    "direct": "eat",
+    "colloquial": "consume",
+    "relatedExamples": [
+      {
+        "english": "I am going to eat dinner now.",
+        "portuguese": "Eu vou comer o jantar agora."
+      }
+    ]
+  },
+  "original": "comer"
+}
+5/7/26, 12:41:33 AM: EuroLLM infinitive raw: { "isVerb": true, "infinitive": "deslizar" }
+5/7/26, 12:41:49 AM: EuroLLM auto-translate prompt: Detect whether the following text is in English or European Portuguese, then translate it to the other language.
+Reply in JSON ONLY. The format is:
+{
+  "sourceLanguage": "English" | "Portuguese",
+  "translation": {
+    "direct": "<literal translation in the target language>",
+    "colloquial": "<idiomatic translation in the target language>",
+    "relatedExamples": [
+      { "english": "<example in English>", "portuguese": "<example in European Portuguese>" }
+    ]
+  },
+  "original": "<the original input>"
+}
+Provide 2–3 related examples that illustrate the term in natural use.
+<text>AVSpeechSynthesisVoice.speechVoices() is documented as returning the current list at call time, but in
+  practice the AV framework lazy-loads voice metadata once per process. New voice files installed
+  mid-session don't always appear without a process restart — this is a long-standing macOS quirk. The
+  Refresh button helps SwiftUI re-render but can't force AV to re-scan.</text>
+5/7/26, 12:42:00 AM: EuroLLM auto-translate raw: {
+  "sourceLanguage": "English",
+  "translation": {
+    "direct": "AVSpeechSynthesisVoice.speechVoices() is documented to return the current list at call time, but in practice the AV framework lazy-loads voice metadata once per process. New voice files installed mid-session don't always appear without a process restart — this is a long-standing macOS quirk. The Refresh button helps SwiftUI re-render but can't force AV to re-scan.",
+    "colloquial": "A chamada de AVSpeechSynthesisVoice.speechVoices() é documentada para retornar a lista atual no momento da chamada, mas na prática o framework AV carrega a metadados de voz de forma lenta uma vez por processo. Novos arquivos de voz instalados no meio da sessão não aparecem sempre sem uma reinicialização do processo — essa é uma peculiaridade do macOS. O botão Atualizar ajuda o SwiftUI a re-exibir, mas não pode forçar o AV a re-escanear.",
+    "relatedExamples": [
+      { "english": "The function is documented to return the current list at the time of the call.", "portuguese": "A função é documentada para retornar a lista atual no momento da chamada.", },
+      { "english": "In practice, the AV framework loads voice metadata once per process.", "portuguese": "Na prática, o framework AV carrega os metadados de voz uma vez por processo.", },
+      { "english": "New voice files installed mid-session don't always appear without a process restart.", "portuguese": "Novos arquivos de voz instalados no meio da sessão não aparecem sempre sem uma reinicialização do processo.", }
+    ]
+  },
+  "original": "<text>AVSpeechSynthesisVoice.speechVoices() is documented as returning the current list at call time, but in practice the AV framework lazy-loads voice metadata once per process. New voice files installed mid-session don't always appear without a process restart — this is a long-standing macOS quirk. The Refresh button helps SwiftUI re-render but can't force AV to re-scan.</text>"
+}
+5/7/26, 12:42:50 AM: EuroLLM auto-translate prompt: Detect whether the following text is in English or European Portuguese, then translate it to the other language.
+Reply in JSON ONLY. The format is:
+{
+  "sourceLanguage": "English" | "Portuguese",
+  "translation": {
+    "direct": "<literal translation in the target language>",
+    "colloquial": "<idiomatic translation in the target language>",
+    "relatedExamples": [
+      { "english": "<example in English>", "portuguese": "<example in European Portuguese>" }
+    ]
+  },
+  "original": "<the original input>"
+}
+Provide 2–3 related examples that illustrate the term in natural use.
+<text>Atualizar</text>
+5/7/26, 12:42:54 AM: EuroLLM auto-translate raw: {
+  "sourceLanguage": "English",
+  "translation": {
+    "direct": "Update",
+    "colloquial": "To update",
+    "relatedExamples": [
+      { "english": "Please update your software to the latest version.", "portuguese": "Por favor, atualize seu software para a versão mais recente." },
+      { "english": "I need to update my resume.", "portuguese": "Eu preciso atualizar meu currículo." },
+      { "english": "The company will update its policies next month.", "portuguese": "A empresa atualizará suas políticas no próximo mês." }
+    ]
+  },
+  "original": "Atualizar"
+}
+5/7/26, 12:43:08 AM: EuroLLM auto-translate prompt: Detect whether the following text is in English or European Portuguese, then translate it to the other language.
+Reply in JSON ONLY. The format is:
+{
+  "sourceLanguage": "English" | "Portuguese",
+  "translation": {
+    "direct": "<literal translation in the target language>",
+    "colloquial": "<idiomatic translation in the target language>",
+    "relatedExamples": [
+      { "english": "<example in English>", "portuguese": "<example in European Portuguese>" }
+    ]
+  },
+  "original": "<the original input>"
+}
+Provide 2–3 related examples that illustrate the term in natural use.
+<text>update</text>
+5/7/26, 12:43:12 AM: EuroLLM auto-translate raw: {
+  "sourceLanguage": "English",
+  "translation": {
+    "direct": "update",
+    "colloquial": "actualizar",
+    "relatedExamples": [
+      { "english": "Please update your software to the latest version.", "portuguese": "Por favor, atualize seu software para a versão mais recente." },
+      { "english": "I need to update my resume.", "portuguese": "Preciso atualizar meu currículo." },
+      { "english": "The company will update its policies next month.", "portuguese": "A empresa atualizará suas políticas no próximo mês." }
+    ]
+  },
+  "original": "update"
+}
+5/7/26, 12:43:39 AM: EuroLLM auto-translate prompt: Detect whether the following text is in English or European Portuguese, then translate it to the other language.
+Reply in JSON ONLY. The format is:
+{
+  "sourceLanguage": "English" | "Portuguese",
+  "translation": {
+    "direct": "<literal translation in the target language>",
+    "colloquial": "<idiomatic translation in the target language>",
+    "relatedExamples": [
+      { "english": "<example in English>", "portuguese": "<example in European Portuguese>" }
+    ]
+  },
+  "original": "<the original input>"
+}
+Provide 2–3 related examples that illustrate the term in natural use.
+<text>currículo</text>
+5/7/26, 12:43:44 AM: EuroLLM auto-translate raw: {
+  "sourceLanguage": "English",
+  "translation": {
+    "direct": "curriculum",
+    "colloquial": "CV",
+    "relatedExamples": [
+      { "english": "A curriculum vitae is a document that lists a person's education, work experience, and other relevant information.", "portuguese": "Um currículo é um documento que lista a educação, a experiência de trabalho e outras informações relevantes de uma pessoa.", },
+      { "english": "The company is looking for candidates with a strong academic background and relevant work experience.", "portuguese": "A empresa está procurando candidatos com um forte histórico acadêmico e experiência de trabalho relevante.", },
+      { "english": "The curriculum vitae should be concise and highlight the candidate's achievements and qualifications.", "portuguese": "O currículo deve ser conciso e destacar as conquistas e qualificações do candidato.", }
+    ]
+  },
+  "original": "currículo"
+}
+5/7/26, 12:45:10 AM: EuroLLM auto-translate prompt: Detect whether the following text is in English or European Portuguese, then translate it to the other language.
+Reply in JSON ONLY. The format is:
+{
+  "sourceLanguage": "English" | "Portuguese",
+  "translation": {
+    "direct": "<literal translation in the target language>",
+    "colloquial": "<idiomatic translation in the target language>",
+    "relatedExamples": [
+      { "english": "<example in English>", "portuguese": "<example in European Portuguese>" }
+    ]
+  },
+  "original": "<the original input>"
+}
+Provide 2–3 related examples that illustrate the term in natural use.
+<text>ecrā</text>
+5/7/26, 12:45:14 AM: EuroLLM auto-translate raw: {
+  "sourceLanguage": "English",
+  "translation": {
+    "direct": "screen",
+    "colloquial": "monitor",
+    "relatedExamples": [
+      { "english": "The TV screen was bright.", "portuguese": "A tela da TV estava brilhante." },
+      { "english": "I checked my phone screen.", "portuguese": "Verifiquei a tela do meu telefone." },
+      { "english": "The computer screen was blue.", "portuguese": "A tela do computador estava azul." }
+    ]
+  },
+  "original": "<text>ecrā</text>"
+}

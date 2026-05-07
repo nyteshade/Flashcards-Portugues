@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__fina__get_latest_session_state",
+      "mcp__fina__get_project_hotspots",
+      "mcp__fina__search_issues",
+      "mcp__fina__query_project_context",
+      "mcp__fina__query_knowledge",
+      "Bash(swift build *)",
+      "Bash(./launch.sh)",
+      "Bash(awk '/Target.target\\\\\\(/,/^\\\\\\)/' /Users/bharrison4/Projects/Flashcards-Portuges/.build/checkouts/mlx-swift/Package.swift)",
+      "Bash(xcodebuild -version)",
+      "Bash(xcodegen generate *)",
+      "Bash(pkill -f FlashcardsPortuges)",
+      "Bash(xcodebuild -project FlashcardsPortuges.xcodeproj -scheme FlashcardsPortuges -configuration Debug -derivedDataPath .build/derived build)",
+      "Bash(REGEN=1 ./launch.sh)",
+      "Bash(xcodebuild -project FlashcardsPortuges.xcodeproj -scheme FlashcardsPortuges -configuration Debug -derivedDataPath .build/derived -skipMacroValidation -skipPackagePluginValidation build)",
+      "Bash(xcodebuild -project FlashcardsPortuges.xcodeproj -list)",
+      "Bash(security find-identity *)",
+      "Bash(chmod +x *)",
+      "Bash(DEVELOPMENT_TEAM=4HK2NGRWKW ./scripts/release.sh)",
+      "Bash(plutil -p .build/derived/Build/Products/Debug/FlashcardsPortuges.app/Contents/Info.plist)",
+      "Bash(/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -f /Users/bharrison4/Projects/Flashcards-Portuges/.build/derived/Build/Products/Debug/FlashcardsPortuges.app)",
+      "mcp__fina__save_session_state",
+      "Bash(say -v '?')"
+    ]
+  }
+}

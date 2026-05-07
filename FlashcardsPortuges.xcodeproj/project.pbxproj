@@ -1,0 +1,585 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		042D246BDEADA4531AB84F11 /* Tokenizers in Frameworks */ = {isa = PBXBuildFile; productRef = BE32FEFCD7AFA75BC37E672B /* Tokenizers */; };
+		2972DBEEF2F679B5C0B30D50 /* SpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6957AC9FF6E584D0388197BA /* SpeechService.swift */; };
+		2C940A469BD26D102E73B81F /* LocalTranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1696E050DFDF7FC37E9C77 /* LocalTranslationService.swift */; };
+		2C9AA41D2C222A51E0A0BCFC /* DeckDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036B3BD8D665A4C00B2EC5A1 /* DeckDocument.swift */; };
+		309E72620FD452F5E26C9E07 /* VoicePreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6E3AFDAB768DC859C52876 /* VoicePreferences.swift */; };
+		3DE808E55A75AF582134E459 /* DictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7F224AF87A918422BF0248 /* DictionaryView.swift */; };
+		3F70EE189928958082DA487E /* MLXHuggingFace in Frameworks */ = {isa = PBXBuildFile; productRef = D84D76FFD949C4A86C29FE2D /* MLXHuggingFace */; };
+		45346F2A56C2D2C371AACE69 /* DeckFileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8CA2668364B2C8EF3DC173 /* DeckFileService.swift */; };
+		477F9FCFF80AA3D2C1D0E933 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C13DB1CD8948B7F9F1B6FB /* ContentView.swift */; };
+		49966CF9C3CD8F0AAFEFA42D /* TranslationActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0531A694F21606D67D23931 /* TranslationActionsView.swift */; };
+		4C70D1D1BCF1390B24477790 /* MLXMemoryHarness.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1318FACAFA18908F316E0DC /* MLXMemoryHarness.swift */; };
+		4D8864803F43D1EC8C2F8092 /* MLX in Frameworks */ = {isa = PBXBuildFile; productRef = 1D757D01DDE13B58C69D2AEE /* MLX */; };
+		4DE617E6014260D64001D359 /* SmartTranslateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1111E350996B4ABF6535812 /* SmartTranslateButton.swift */; };
+		54B3DDCF19E8C60DAE8CB8C9 /* DictionaryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B90501A9CF6DCE93C6953CF /* DictionaryStore.swift */; };
+		56DFFA2339327138425456E5 /* VerbDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542B65576CA6F13D5608C62B /* VerbDetailView.swift */; };
+		576489EA53028080996596AD /* EuroLLMTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F751F6934F0C807D5F1DA80 /* EuroLLMTranslator.swift */; };
+		5C8B3DF8C43CD6D55FFA9AE6 /* Flashcards.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4865A0B248EAD240A942A70E /* Flashcards.icns */; };
+		64255821B51BCF0CCD472B8D /* TranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52294922EC4EAA110F91CBC2 /* TranslationService.swift */; };
+		730CDEB2294EE06147AB55DB /* MLXOptimizers in Frameworks */ = {isa = PBXBuildFile; productRef = 527778BD6CF731D88367B822 /* MLXOptimizers */; };
+		7462D464DBC4A6164430DD34 /* Flashcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3302D199D72C70FAA6D7442D /* Flashcard.swift */; };
+		7A1138296F955807DA37CF9D /* MLXLMCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 12E6357B74AB8A91A2FF4479 /* MLXLMCommon */; };
+		97AB249B0229E33FFEC1D5B9 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91FDC63357E92728A614013 /* SettingsView.swift */; };
+		9B15F3A1976A868CF97AA1B0 /* MLXLLM in Frameworks */ = {isa = PBXBuildFile; productRef = D0DC95B14FEFB8D984846E68 /* MLXLLM */; };
+		9E04538A9510240EFF7B5ED0 /* DictionaryLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20B050E72593EE7FA4EB8EF /* DictionaryLookup.swift */; };
+		A504219F5B3ED1321B0E2991 /* VerbEnglishFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69F023B02C2499C8F234209 /* VerbEnglishFormatter.swift */; };
+		A6B8BE0934D7DC1A29C245E2 /* StudyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0C65DCD09A903710E07C98 /* StudyView.swift */; };
+		A74C4A38D2F6F8DB5B135106 /* VerbConjugator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594B2C08D119C507EF67E077 /* VerbConjugator.swift */; };
+		C00418C6ED154C62C499E89A /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2534080EC43FA86C3DE74507 /* Logger.swift */; };
+		C06A48803A623C0DFE086DBD /* TranslateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB20C362D56830742C81CF40 /* TranslateView.swift */; };
+		C3390E7A4A734EBD2FC553F8 /* ModelStatusPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8843478178F699C32FD7DF48 /* ModelStatusPill.swift */; };
+		CB5D9F3FB7D4B95A97894897 /* FlashcardsPortugesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45005C3C594B9C0256835551 /* FlashcardsPortugesApp.swift */; };
+		CDB073218C1B8F50CDBCF5C0 /* DefinePopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6751FDB84B4B302FBF6A2C /* DefinePopover.swift */; };
+		D42718090809242DC37FA1B1 /* MLXRandom in Frameworks */ = {isa = PBXBuildFile; productRef = 7317197404699E0BDF37B849 /* MLXRandom */; };
+		E9186979B846D93804493A89 /* StudyDeck.icns in Resources */ = {isa = PBXBuildFile; fileRef = B2CBAA1ADD60B0172F2B392C /* StudyDeck.icns */; };
+		ED48122A374FE30AFBBC6804 /* MLXNN in Frameworks */ = {isa = PBXBuildFile; productRef = 3ED34B2E477A810C2597C660 /* MLXNN */; };
+		EEF034052A9D23CB084821A0 /* HuggingFace in Frameworks */ = {isa = PBXBuildFile; productRef = 261D7AFE31C0B36FF839A997 /* HuggingFace */; };
+		F9529AF742E57071AFE4B60E /* MLXModelCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0027A0B1EC04711D611F45BB /* MLXModelCoordinator.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0027A0B1EC04711D611F45BB /* MLXModelCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLXModelCoordinator.swift; sourceTree = "<group>"; };
+		036B3BD8D665A4C00B2EC5A1 /* DeckDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDocument.swift; sourceTree = "<group>"; };
+		0E1696E050DFDF7FC37E9C77 /* LocalTranslationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalTranslationService.swift; sourceTree = "<group>"; };
+		1DACC4A4DACAC34578A250C9 /* FlashcardsPortuges.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlashcardsPortuges.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1E0C65DCD09A903710E07C98 /* StudyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyView.swift; sourceTree = "<group>"; };
+		2534080EC43FA86C3DE74507 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		2B6751FDB84B4B302FBF6A2C /* DefinePopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefinePopover.swift; sourceTree = "<group>"; };
+		3302D199D72C70FAA6D7442D /* Flashcard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flashcard.swift; sourceTree = "<group>"; };
+		3B90501A9CF6DCE93C6953CF /* DictionaryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryStore.swift; sourceTree = "<group>"; };
+		45005C3C594B9C0256835551 /* FlashcardsPortugesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardsPortugesApp.swift; sourceTree = "<group>"; };
+		4865A0B248EAD240A942A70E /* Flashcards.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Flashcards.icns; sourceTree = "<group>"; };
+		4F751F6934F0C807D5F1DA80 /* EuroLLMTranslator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EuroLLMTranslator.swift; sourceTree = "<group>"; };
+		52294922EC4EAA110F91CBC2 /* TranslationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationService.swift; sourceTree = "<group>"; };
+		542B65576CA6F13D5608C62B /* VerbDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbDetailView.swift; sourceTree = "<group>"; };
+		594B2C08D119C507EF67E077 /* VerbConjugator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbConjugator.swift; sourceTree = "<group>"; };
+		6957AC9FF6E584D0388197BA /* SpeechService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechService.swift; sourceTree = "<group>"; };
+		7A8CA2668364B2C8EF3DC173 /* DeckFileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckFileService.swift; sourceTree = "<group>"; };
+		8843478178F699C32FD7DF48 /* ModelStatusPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStatusPill.swift; sourceTree = "<group>"; };
+		A5C13DB1CD8948B7F9F1B6FB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		AB20C362D56830742C81CF40 /* TranslateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateView.swift; sourceTree = "<group>"; };
+		AF6E3AFDAB768DC859C52876 /* VoicePreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePreferences.swift; sourceTree = "<group>"; };
+		B1318FACAFA18908F316E0DC /* MLXMemoryHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLXMemoryHarness.swift; sourceTree = "<group>"; };
+		B2CBAA1ADD60B0172F2B392C /* StudyDeck.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = StudyDeck.icns; sourceTree = "<group>"; };
+		B69F023B02C2499C8F234209 /* VerbEnglishFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbEnglishFormatter.swift; sourceTree = "<group>"; };
+		B91FDC63357E92728A614013 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		BA7F224AF87A918422BF0248 /* DictionaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryView.swift; sourceTree = "<group>"; };
+		C0531A694F21606D67D23931 /* TranslationActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationActionsView.swift; sourceTree = "<group>"; };
+		C20B050E72593EE7FA4EB8EF /* DictionaryLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryLookup.swift; sourceTree = "<group>"; };
+		F1111E350996B4ABF6535812 /* SmartTranslateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartTranslateButton.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5737DFF31F8636360537CF33 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D8864803F43D1EC8C2F8092 /* MLX in Frameworks */,
+				ED48122A374FE30AFBBC6804 /* MLXNN in Frameworks */,
+				730CDEB2294EE06147AB55DB /* MLXOptimizers in Frameworks */,
+				D42718090809242DC37FA1B1 /* MLXRandom in Frameworks */,
+				9B15F3A1976A868CF97AA1B0 /* MLXLLM in Frameworks */,
+				7A1138296F955807DA37CF9D /* MLXLMCommon in Frameworks */,
+				3F70EE189928958082DA487E /* MLXHuggingFace in Frameworks */,
+				EEF034052A9D23CB084821A0 /* HuggingFace in Frameworks */,
+				042D246BDEADA4531AB84F11 /* Tokenizers in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1A6C59043C3081A09F1DDB0B /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				6F02BE57CF45910B1A31E3D4 /* FlashcardsPortuges */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		1B6A25B0FE79A7290540DA2B /* MLX */ = {
+			isa = PBXGroup;
+			children = (
+				B1318FACAFA18908F316E0DC /* MLXMemoryHarness.swift */,
+				0027A0B1EC04711D611F45BB /* MLXModelCoordinator.swift */,
+			);
+			path = MLX;
+			sourceTree = "<group>";
+		};
+		53599541A1562B3FFFF66204 /* icons */ = {
+			isa = PBXGroup;
+			children = (
+				4865A0B248EAD240A942A70E /* Flashcards.icns */,
+				B2CBAA1ADD60B0172F2B392C /* StudyDeck.icns */,
+			);
+			path = icons;
+			sourceTree = "<group>";
+		};
+		6F02BE57CF45910B1A31E3D4 /* FlashcardsPortuges */ = {
+			isa = PBXGroup;
+			children = (
+				45005C3C594B9C0256835551 /* FlashcardsPortugesApp.swift */,
+				91E6800FF4BC8BBDCC6351B2 /* Models */,
+				C92D498A35B7971E67623F27 /* Views */,
+			);
+			path = FlashcardsPortuges;
+			sourceTree = "<group>";
+		};
+		7F4C1B10876E1DBFC7F4690F = {
+			isa = PBXGroup;
+			children = (
+				53599541A1562B3FFFF66204 /* icons */,
+				1A6C59043C3081A09F1DDB0B /* Sources */,
+				EF25A0DD14C31E25AE9B3811 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		91E6800FF4BC8BBDCC6351B2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				036B3BD8D665A4C00B2EC5A1 /* DeckDocument.swift */,
+				7A8CA2668364B2C8EF3DC173 /* DeckFileService.swift */,
+				C20B050E72593EE7FA4EB8EF /* DictionaryLookup.swift */,
+				3B90501A9CF6DCE93C6953CF /* DictionaryStore.swift */,
+				4F751F6934F0C807D5F1DA80 /* EuroLLMTranslator.swift */,
+				3302D199D72C70FAA6D7442D /* Flashcard.swift */,
+				0E1696E050DFDF7FC37E9C77 /* LocalTranslationService.swift */,
+				2534080EC43FA86C3DE74507 /* Logger.swift */,
+				6957AC9FF6E584D0388197BA /* SpeechService.swift */,
+				52294922EC4EAA110F91CBC2 /* TranslationService.swift */,
+				594B2C08D119C507EF67E077 /* VerbConjugator.swift */,
+				B69F023B02C2499C8F234209 /* VerbEnglishFormatter.swift */,
+				AF6E3AFDAB768DC859C52876 /* VoicePreferences.swift */,
+				1B6A25B0FE79A7290540DA2B /* MLX */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		C92D498A35B7971E67623F27 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A5C13DB1CD8948B7F9F1B6FB /* ContentView.swift */,
+				2B6751FDB84B4B302FBF6A2C /* DefinePopover.swift */,
+				BA7F224AF87A918422BF0248 /* DictionaryView.swift */,
+				8843478178F699C32FD7DF48 /* ModelStatusPill.swift */,
+				B91FDC63357E92728A614013 /* SettingsView.swift */,
+				F1111E350996B4ABF6535812 /* SmartTranslateButton.swift */,
+				1E0C65DCD09A903710E07C98 /* StudyView.swift */,
+				AB20C362D56830742C81CF40 /* TranslateView.swift */,
+				C0531A694F21606D67D23931 /* TranslationActionsView.swift */,
+				542B65576CA6F13D5608C62B /* VerbDetailView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		EF25A0DD14C31E25AE9B3811 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1DACC4A4DACAC34578A250C9 /* FlashcardsPortuges.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		49A19E1104F97BC7933BF815 /* FlashcardsPortuges */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 54F9D390BE6F75210855A832 /* Build configuration list for PBXNativeTarget "FlashcardsPortuges" */;
+			buildPhases = (
+				03183132577AC33D4601123B /* Sources */,
+				329013F88D59FC188B23BD31 /* Resources */,
+				5737DFF31F8636360537CF33 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FlashcardsPortuges;
+			packageProductDependencies = (
+				1D757D01DDE13B58C69D2AEE /* MLX */,
+				3ED34B2E477A810C2597C660 /* MLXNN */,
+				527778BD6CF731D88367B822 /* MLXOptimizers */,
+				7317197404699E0BDF37B849 /* MLXRandom */,
+				D0DC95B14FEFB8D984846E68 /* MLXLLM */,
+				12E6357B74AB8A91A2FF4479 /* MLXLMCommon */,
+				D84D76FFD949C4A86C29FE2D /* MLXHuggingFace */,
+				261D7AFE31C0B36FF839A997 /* HuggingFace */,
+				BE32FEFCD7AFA75BC37E672B /* Tokenizers */,
+			);
+			productName = FlashcardsPortuges;
+			productReference = 1DACC4A4DACAC34578A250C9 /* FlashcardsPortuges.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		02D55FD309E8064A142607D3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					49A19E1104F97BC7933BF815 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 61EEFD95B3D5E33839DB2180 /* Build configuration list for PBXProject "FlashcardsPortuges" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 7F4C1B10876E1DBFC7F4690F;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C55CBF2FCD4B179BEE82D711 /* XCRemoteSwiftPackageReference "mlx-swift" */,
+				F1EAB5A4B9E38BAAFF5EE320 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */,
+				6133B89DDB6BF0109BC9D13F /* XCRemoteSwiftPackageReference "swift-huggingface" */,
+				1CA0368E552E1A2B2BB0E943 /* XCRemoteSwiftPackageReference "swift-transformers" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = EF25A0DD14C31E25AE9B3811 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				49A19E1104F97BC7933BF815 /* FlashcardsPortuges */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		329013F88D59FC188B23BD31 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5C8B3DF8C43CD6D55FFA9AE6 /* Flashcards.icns in Resources */,
+				E9186979B846D93804493A89 /* StudyDeck.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		03183132577AC33D4601123B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				477F9FCFF80AA3D2C1D0E933 /* ContentView.swift in Sources */,
+				2C9AA41D2C222A51E0A0BCFC /* DeckDocument.swift in Sources */,
+				45346F2A56C2D2C371AACE69 /* DeckFileService.swift in Sources */,
+				CDB073218C1B8F50CDBCF5C0 /* DefinePopover.swift in Sources */,
+				9E04538A9510240EFF7B5ED0 /* DictionaryLookup.swift in Sources */,
+				54B3DDCF19E8C60DAE8CB8C9 /* DictionaryStore.swift in Sources */,
+				3DE808E55A75AF582134E459 /* DictionaryView.swift in Sources */,
+				576489EA53028080996596AD /* EuroLLMTranslator.swift in Sources */,
+				7462D464DBC4A6164430DD34 /* Flashcard.swift in Sources */,
+				CB5D9F3FB7D4B95A97894897 /* FlashcardsPortugesApp.swift in Sources */,
+				2C940A469BD26D102E73B81F /* LocalTranslationService.swift in Sources */,
+				C00418C6ED154C62C499E89A /* Logger.swift in Sources */,
+				4C70D1D1BCF1390B24477790 /* MLXMemoryHarness.swift in Sources */,
+				F9529AF742E57071AFE4B60E /* MLXModelCoordinator.swift in Sources */,
+				C3390E7A4A734EBD2FC553F8 /* ModelStatusPill.swift in Sources */,
+				97AB249B0229E33FFEC1D5B9 /* SettingsView.swift in Sources */,
+				4DE617E6014260D64001D359 /* SmartTranslateButton.swift in Sources */,
+				2972DBEEF2F679B5C0B30D50 /* SpeechService.swift in Sources */,
+				A6B8BE0934D7DC1A29C245E2 /* StudyView.swift in Sources */,
+				C06A48803A623C0DFE086DBD /* TranslateView.swift in Sources */,
+				49966CF9C3CD8F0AAFEFA42D /* TranslationActionsView.swift in Sources */,
+				64255821B51BCF0CCD472B8D /* TranslationService.swift in Sources */,
+				A74C4A38D2F6F8DB5B135106 /* VerbConjugator.swift in Sources */,
+				56DFFA2339327138425456E5 /* VerbDetailView.swift in Sources */,
+				A504219F5B3ED1321B0E2991 /* VerbEnglishFormatter.swift in Sources */,
+				309E72620FD452F5E26C9E07 /* VoicePreferences.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		211C43C9E1FF744BCD5F4BA5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				CODE_SIGN_ENTITLEMENTS = FlashcardsPortuges.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_NAME = FlashcardsPortuges;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		3D378163A06C41DC854D9DC8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				CODE_SIGN_ENTITLEMENTS = FlashcardsPortuges.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_NAME = FlashcardsPortuges;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		765990AE744FFC600EBF4CE1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nyteshade.flashcards.portugues;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		8EC0BAB32FAE3C8613200F63 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nyteshade.flashcards.portugues;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_STRICT_CONCURRENCY = minimal;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		54F9D390BE6F75210855A832 /* Build configuration list for PBXNativeTarget "FlashcardsPortuges" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				211C43C9E1FF744BCD5F4BA5 /* Debug */,
+				3D378163A06C41DC854D9DC8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		61EEFD95B3D5E33839DB2180 /* Build configuration list for PBXProject "FlashcardsPortuges" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8EC0BAB32FAE3C8613200F63 /* Debug */,
+				765990AE744FFC600EBF4CE1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1CA0368E552E1A2B2BB0E943 /* XCRemoteSwiftPackageReference "swift-transformers" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/huggingface/swift-transformers";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.3.0;
+			};
+		};
+		6133B89DDB6BF0109BC9D13F /* XCRemoteSwiftPackageReference "swift-huggingface" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/huggingface/swift-huggingface.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.9.0;
+			};
+		};
+		C55CBF2FCD4B179BEE82D711 /* XCRemoteSwiftPackageReference "mlx-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ml-explore/mlx-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.31.3;
+			};
+		};
+		F1EAB5A4B9E38BAAFF5EE320 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ml-explore/mlx-swift-lm.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		12E6357B74AB8A91A2FF4479 /* MLXLMCommon */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1EAB5A4B9E38BAAFF5EE320 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */;
+			productName = MLXLMCommon;
+		};
+		1D757D01DDE13B58C69D2AEE /* MLX */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C55CBF2FCD4B179BEE82D711 /* XCRemoteSwiftPackageReference "mlx-swift" */;
+			productName = MLX;
+		};
+		261D7AFE31C0B36FF839A997 /* HuggingFace */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6133B89DDB6BF0109BC9D13F /* XCRemoteSwiftPackageReference "swift-huggingface" */;
+			productName = HuggingFace;
+		};
+		3ED34B2E477A810C2597C660 /* MLXNN */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C55CBF2FCD4B179BEE82D711 /* XCRemoteSwiftPackageReference "mlx-swift" */;
+			productName = MLXNN;
+		};
+		527778BD6CF731D88367B822 /* MLXOptimizers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C55CBF2FCD4B179BEE82D711 /* XCRemoteSwiftPackageReference "mlx-swift" */;
+			productName = MLXOptimizers;
+		};
+		7317197404699E0BDF37B849 /* MLXRandom */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C55CBF2FCD4B179BEE82D711 /* XCRemoteSwiftPackageReference "mlx-swift" */;
+			productName = MLXRandom;
+		};
+		BE32FEFCD7AFA75BC37E672B /* Tokenizers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1CA0368E552E1A2B2BB0E943 /* XCRemoteSwiftPackageReference "swift-transformers" */;
+			productName = Tokenizers;
+		};
+		D0DC95B14FEFB8D984846E68 /* MLXLLM */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1EAB5A4B9E38BAAFF5EE320 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */;
+			productName = MLXLLM;
+		};
+		D84D76FFD949C4A86C29FE2D /* MLXHuggingFace */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1EAB5A4B9E38BAAFF5EE320 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */;
+			productName = MLXHuggingFace;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 02D55FD309E8064A142607D3 /* Project object */;
+}
