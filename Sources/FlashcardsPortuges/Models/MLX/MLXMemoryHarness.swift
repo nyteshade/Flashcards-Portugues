@@ -1,6 +1,23 @@
 import Foundation
 import MLX
 
+/// Total free + reclaimable system memory (bytes) via Mach VM stats.
+/// Uses `free_count + inactive_count` — inactive pages can be
+/// reclaimed by the kernel before swapping.
+func freeSystemMemoryBytes() -> Int {
+    let host = mach_host_self()
+    var size = mach_msg_type_number_t(MemoryLayout<vm_statistics64_data_t>.size / MemoryLayout<integer_t>.size)
+    var vmInfo = vm_statistics64_data_t()
+    let kr = withUnsafeMutablePointer(to: &vmInfo) { ptr in
+        ptr.withMemoryRebound(to: integer_t.self, capacity: Int(size)) { intPtr in
+            host_statistics64(host, HOST_VM_INFO64, intPtr, &size)
+        }
+    }
+    guard kr == KERN_SUCCESS else { return 0 }
+    let pageSize = Int(sysconf(_SC_PAGESIZE))
+    return (Int(vmInfo.free_count) + Int(vmInfo.inactive_count)) * pageSize
+}
+
 struct MLXMemorySnapshot: Equatable, Sendable {
     let activeMemory: Int
     let cacheMemory: Int
@@ -48,6 +65,7 @@ enum MLXLoadRejection: Equatable, Sendable {
     case notConfigured
     case memoryPressureCritical
     case approachingBudgetCeiling(currentBytes: Int, ceilingBytes: Int)
+    case freeMemoryLow(requestedBytes: Int, availableBytes: Int)
 
     var userMessage: String {
         switch self {
@@ -59,6 +77,8 @@ enum MLXLoadRejection: Equatable, Sendable {
             return "macOS reported low memory recently. New MLX loads are paused until the system recovers."
         case .approachingBudgetCeiling(let current, let ceiling):
             return "MLX is near its memory ceiling (\(format(current)) / \(format(ceiling))). New loads paused; complete or unload current work first."
+        case .freeMemoryLow(let requested, let available):
+            return "System does not have enough free memory to load the model (needs \(format(requested)), only \(format(available)) available). Close other applications and try again."
         }
     }
 
@@ -79,6 +99,7 @@ actor MLXMemoryHarness {
     private var physicalRAMBytes: Int = 0
     private(set) var criticalPressureActive: Bool = false
     private let safetyThreshold: Double = 0.90
+    private let freeMemoryThreshold: Double = 0.85
 
     func configure(physicalRAMBytes: Int) {
         self.physicalRAMBytes = physicalRAMBytes
@@ -100,6 +121,16 @@ actor MLXMemoryHarness {
         if criticalPressureActive {
             return .rejected(reason: .memoryPressureCritical)
         }
+
+        let available = freeSystemMemoryBytes()
+        let headroom = Int(Double(available) * freeMemoryThreshold)
+        if requested > headroom {
+            return .rejected(reason: .freeMemoryLow(
+                requestedBytes: requested,
+                availableBytes: available
+            ))
+        }
+
         let snap = MLX.Memory.snapshot()
         let projected = snap.activeMemory + requested
         if projected > budget.memoryLimitBytes {

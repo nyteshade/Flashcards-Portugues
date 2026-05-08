@@ -168,6 +168,30 @@ final class EuroLLMTranslator: ObservableObject {
         }
     }
 
+    /// Unload the model from memory. Does NOT remove cached files.
+    func unload() async {
+        await coordinator.unload()
+        status = .notLoaded
+        statusMessage = "Unloaded"
+        Logger.log("EuroLLM unloaded")
+    }
+
+    /// Remove the cached model files from disk. Unloads first if loaded.
+    func deleteCachedModel() async {
+        if await coordinator.isLoaded() {
+            await coordinator.unload()
+        }
+        let home = FileManager.default.homeDirectoryForCurrentUser
+        let dir = home
+            .appendingPathComponent(".cache/huggingface/hub")
+            .appendingPathComponent("models--stelterlab--EuroLLM-9B-Instruct-MLX-4bit")
+        try? FileManager.default.removeItem(at: dir)
+        try? FileManager.default.removeItem(at: dir.appendingPathExtension("incomplete"))
+        status = .notLoaded
+        statusMessage = "Not loaded"
+        Logger.log("EuroLLM cached model deleted")
+    }
+
     /// Ask the LLM to classify the Portuguese phrase/word into one
     /// of the app's `PartOfSpeech` categories. Returns `nil` if the
     /// model is unavailable or the response can't be mapped to a

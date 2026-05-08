@@ -70,30 +70,36 @@ struct StudyView: View {
             }
         }
         .safeAreaInset(edge: .bottom) {
-            HStack(spacing: 4) {
+            HStack(spacing: 0) {
                 Button {
                     store.createDeck()
                 } label: {
                     Image(systemName: "plus")
+                        .frame(minWidth: 28, minHeight: 28)
                 }
                 .help("New deck")
                 .buttonStyle(.borderless)
+                .contentShape(Rectangle())
 
                 Button {
                     store.duplicateDeck(id: store.activeDeckID)
                 } label: {
                     Image(systemName: "doc.on.doc")
+                        .frame(minWidth: 28, minHeight: 28)
                 }
                 .help("Duplicate active deck")
                 .buttonStyle(.borderless)
+                .contentShape(Rectangle())
 
                 Button {
                     store.deleteDeck(id: store.activeDeckID)
                 } label: {
                     Image(systemName: "minus")
+                        .frame(minWidth: 28, minHeight: 28)
                 }
                 .help("Delete active deck")
                 .buttonStyle(.borderless)
+                .contentShape(Rectangle())
                 .disabled(store.decks.count < 2)
 
                 Spacer()
@@ -156,7 +162,6 @@ struct StudyView: View {
             Button("Delete", role: .destructive) {
                 store.deleteDeck(id: deck.id)
             }
-            .disabled(store.decks.count < 2)
         }
     }
 

@@ -92,20 +92,44 @@ struct SettingsView: View {
         HStack {
             switch translator.status {
             case .notLoaded, .failed:
-                Button {
-                    startDownload()
-                } label: {
-                    Label("Download & Load Model", systemImage: "arrow.down.circle")
+                if EuroLLMTranslator.isModelOnDisk() {
+                    Button {
+                        startDownload()
+                    } label: {
+                        Label("Load", systemImage: "play.circle")
+                    }
+                    .buttonStyle(.borderedProminent)
+
+                    Button(role: .destructive) {
+                        deleteModel()
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+                } else {
+                    Button {
+                        startDownload()
+                    } label: {
+                        Label("Download & Load", systemImage: "arrow.down.circle")
+                    }
+                    .buttonStyle(.borderedProminent)
                 }
-                .buttonStyle(.borderedProminent)
             case .loading:
                 Button("Cancel", role: .destructive) {
                     loadTask?.cancel()
                     loadTask = nil
                 }
             case .ready, .processing:
-                Label("Loaded", systemImage: "checkmark.circle.fill")
-                    .foregroundStyle(.green)
+                Button {
+                    unloadModel()
+                } label: {
+                    Label("Unload", systemImage: "stop.circle")
+                }
+
+                Button(role: .destructive) {
+                    deleteModel()
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                }
             }
             Spacer()
         }
@@ -165,6 +189,20 @@ struct SettingsView: View {
             } catch {
                 Logger.log("Download/load failed from Settings: \(error.localizedDescription)")
             }
+        }
+    }
+
+    private func unloadModel() {
+        loadTask?.cancel()
+        loadTask = Task {
+            await translator.unload()
+        }
+    }
+
+    private func deleteModel() {
+        loadTask?.cancel()
+        loadTask = Task {
+            await translator.deleteCachedModel()
         }
     }
 }

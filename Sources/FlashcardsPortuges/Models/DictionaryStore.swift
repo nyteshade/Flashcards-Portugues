@@ -175,8 +175,11 @@ class DictionaryStore: ObservableObject {
     }
 
     func deleteDeck(id: UUID) {
-        guard decks.count > 1 else { return }   // never delete the last deck
         decks.removeAll { $0.id == id }
+        if decks.isEmpty {
+            createDeck()
+            return
+        }
         if activeDeckID == id {
             activeDeckID = decks[0].id
         }
