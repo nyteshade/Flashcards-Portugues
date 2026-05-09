@@ -45,6 +45,12 @@ enum SpeechService {
       }
       synthesizer.speak(utterance)
     }
+    let langLabel = language == .portuguese ? "pt" : "en"
+    ActivityTracker.shared.record(
+      category: .audio,
+      action: "Played audio",
+      detail: "'\(word)' (\(langLabel))"
+    )
   }
   
   @MainActor

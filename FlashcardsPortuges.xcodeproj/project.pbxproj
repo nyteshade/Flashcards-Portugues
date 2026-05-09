@@ -46,6 +46,7 @@
 		F9529AF742E57071AFE4B60E /* MLXModelCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0027A0B1EC04711D611F45BB /* MLXModelCoordinator.swift */; };
 		C4D83AB20720439387125288 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FD69644AC2941EA9295715B /* ChatView.swift */; };
 		339E859D19BA4B64997EF4BB /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFC47A3613E549CC9BA637F0 /* ChatService.swift */; };
+		D371DECCFE36475BB711A263 /* ActivityTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FEC900A7DC4C9289C592D7 /* ActivityTracker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +81,7 @@
 		F1111E350996B4ABF6535812 /* SmartTranslateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartTranslateButton.swift; sourceTree = "<group>"; };
 		0FD69644AC2941EA9295715B /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		DFC47A3613E549CC9BA637F0 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
+		A7FEC900A7DC4C9289C592D7 /* ActivityTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTracker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +166,7 @@
 				B69F023B02C2499C8F234209 /* VerbEnglishFormatter.swift */,
 				AF6E3AFDAB768DC859C52876 /* VoicePreferences.swift */,
 				DFC47A3613E549CC9BA637F0 /* ChatService.swift */,
+				A7FEC900A7DC4C9289C592D7 /* ActivityTracker.swift */,
 				1B6A25B0FE79A7290540DA2B /* MLX */,
 			);
 			path = Models;
@@ -310,6 +313,7 @@
 				309E72620FD452F5E26C9E07 /* VoicePreferences.swift in Sources */,
 				C4D83AB20720439387125288 /* ChatView.swift in Sources */,
 				339E859D19BA4B64997EF4BB /* ChatService.swift in Sources */,
+				D371DECCFE36475BB711A263 /* ActivityTracker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -399,7 +403,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Info.plist;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nyteshade.flashcards.portugues;
@@ -469,7 +473,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = Info.plist;
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;

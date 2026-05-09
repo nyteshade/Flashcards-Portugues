@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "Flashcards-Portuges",
-    platforms: [.macOS(.v14)],
+    platforms: [.macOS(.v15)],
     dependencies: [
         .package(url: "https://github.com/ml-explore/mlx-swift.git", from: "0.1.0"),
         .package(url: "https://github.com/ml-explore/mlx-swift-lm.git", branch: "main"),

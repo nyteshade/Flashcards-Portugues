@@ -263,16 +263,36 @@ struct StudyView: View {
   
   private func previous() {
     guard !cards.isEmpty else { return }
+    let card = cards[currentIndex]
     withAnimation { currentIndex = max(0, currentIndex - 1); flipped = false }
+    ActivityTracker.shared.record(
+      category: .study,
+      action: "Moved to previous card",
+      detail: card.portuguese
+    )
   }
-  
+
   private func next() {
     guard !cards.isEmpty else { return }
+    let card = cards[currentIndex]
     withAnimation { currentIndex = min(cards.count - 1, currentIndex + 1); flipped = false }
+    ActivityTracker.shared.record(
+      category: .study,
+      action: "Moved to next card",
+      detail: card.portuguese
+    )
   }
-  
+
   private func flip() {
     withAnimation(.spring) { flipped.toggle() }
+    let card = cards[currentIndex]
+    if flipped {
+      ActivityTracker.shared.record(
+        category: .study,
+        action: "Flipped card",
+        detail: "'\(card.portuguese)' → '\(card.english)'"
+      )
+    }
   }
   
   private func randomize() {

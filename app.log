@@ -2,3 +2,9 @@
 5/8/26, 11:30:54 PM: EuroLLM auto-load: model present on disk, loading…
 5/8/26, 11:30:54 PM: EuroLLM harness configured: physRAM=137438953472 bytes
 5/8/26, 11:30:56 PM: EuroLLM loaded successfully
+5/8/26, 11:58:01 PM: DictionaryView appeared.
+5/8/26, 11:58:01 PM: Attempting to load dictionary from: /Users/brie/Library/Application Support/FlashcardsPortuges/pt-en-dictionary.json
+5/8/26, 11:58:01 PM: Dictionary file does not exist. Starting download.
+5/8/26, 11:58:01 PM: Downloading from: https://raw.githubusercontent.com/SMenigat/thousand-most-common-words/master/words/pt.json
+5/8/26, 11:58:02 PM: Successfully saved dictionary to: /Users/brie/Library/Application Support/FlashcardsPortuges/pt-en-dictionary.json
+5/8/26, 11:58:02 PM: Successfully decoded downloaded dictionary.

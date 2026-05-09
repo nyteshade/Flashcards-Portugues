@@ -135,6 +135,11 @@ struct VerbDetailView: View {
                       Spacer()
                       Button {
                         SpeechService.speakConjugation(pronoun: form.pronoun, form: form.form)
+                        ActivityTracker.shared.record(
+                          category: .verb,
+                          action: "Listened to conjugation",
+                          detail: "\(conj.infinitive) — \(form.pronoun) \(form.form)"
+                        )
                       } label: {
                         Image(systemName: "speaker.wave.2")
                           .font(.caption)

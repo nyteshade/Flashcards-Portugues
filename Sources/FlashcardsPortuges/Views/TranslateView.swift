@@ -224,6 +224,11 @@ struct TranslateView: View {
         await MainActor.run {
           result = outcome.translation
           detectedDirection = outcome.direction
+          ActivityTracker.shared.record(
+            category: .translate,
+            action: "Translated text",
+            detail: "'\(trimmed)' → '\(outcome.translation.translation.direct)'"
+          )
         }
       } catch {
         await MainActor.run {

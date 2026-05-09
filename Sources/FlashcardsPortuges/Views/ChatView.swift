@@ -3,11 +3,14 @@ import SwiftUI
 struct ChatView: View {
   @ObservedObject var store: DictionaryStore
   @ObservedObject private var translator = EuroLLMTranslator.shared
+  @ObservedObject private var tracker = ActivityTracker.shared
 
   @State private var messages: [ChatMessage] = []
   @State private var input: String = ""
   @State private var busy = false
   @State private var error: String?
+
+  @FocusState private var inputFocused: Bool
 
   var body: some View {
     VStack(spacing: 0) {
@@ -17,6 +20,7 @@ struct ChatView: View {
 
       inputBar
     }
+    .onAppear { inputFocused = true }
   }
 
   // MARK: - Message list
@@ -46,7 +50,6 @@ struct ChatView: View {
               .padding(.horizontal, 16)
           }
 
-          // Invisible anchor so we can scroll to bottom.
           Color.clear
             .frame(height: 1)
             .id("bottomAnchor")
@@ -77,7 +80,7 @@ struct ChatView: View {
       Image(systemName: "bubble.left.and.bubble.right")
         .font(.system(size: 40))
         .foregroundStyle(.secondary)
-      Text("Ask EuroLLM about Portuguese")
+      Text("Ask Sofia about Portuguese")
         .font(.title3)
         .foregroundStyle(.secondary)
       Text("Translation nuances, grammar, verb tenses, cultural context — anything language-related.")
@@ -95,7 +98,7 @@ struct ChatView: View {
     HStack(spacing: 8) {
       ProgressView()
         .controlSize(.small)
-      Text("Thinking…")
+      Text("Sofia is thinking…")
         .font(.callout)
         .foregroundStyle(.secondary)
       Spacer()
@@ -108,15 +111,25 @@ struct ChatView: View {
 
   @ViewBuilder
   private var inputBar: some View {
-    HStack(alignment: .bottom, spacing: 8) {
+    HStack(alignment: .center, spacing: 8) {
       TextEditor(text: $input)
         .font(.body)
         .frame(minHeight: 36, maxHeight: 120)
         .fixedSize(horizontal: false, vertical: true)
+        .focused($inputFocused)
         .overlay(
           RoundedRectangle(cornerRadius: 8)
             .strokeBorder(Color.secondary.opacity(0.3), lineWidth: 1)
         )
+        .onKeyPress(keys: [.return], phases: .down) { keyPress in
+          if keyPress.modifiers.contains(.shift) {
+            // Shift+Enter: insert newline (default TextEditor behavior).
+            return .ignored
+          }
+          // Enter alone: send.
+          send()
+          return .handled
+        }
 
       Button(action: send) {
         Image(systemName: "arrow.up.circle.fill")
@@ -124,18 +137,9 @@ struct ChatView: View {
       }
       .buttonStyle(.plain)
       .disabled(busy || input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-      .help("Send (⌘↵)")
+      .help("Send (Enter)")
     }
     .padding(12)
-
-    // Hidden button for Cmd+Return shortcut.
-    ZStack {
-      Button(action: send) { EmptyView() }
-        .keyboardShortcut(.return, modifiers: .command)
-        .opacity(0)
-        .frame(width: 0, height: 0)
-    }
-    .accessibilityHidden(true)
   }
 
   // MARK: - Send
@@ -149,9 +153,10 @@ struct ChatView: View {
     input = ""
     error = nil
     busy = true
+    inputFocused = true
 
-    // Build the full prompt including the new user message.
-    let prompt = ChatService.buildPrompt(messages: messages)
+    let summary = tracker.contextualSummary()
+    let prompt = ChatService.buildPrompt(messages: messages, activitySummary: summary)
 
     Task {
       defer {

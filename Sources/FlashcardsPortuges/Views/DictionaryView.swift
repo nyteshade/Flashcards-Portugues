@@ -86,6 +86,11 @@ struct DictionaryView: View {
               definitionResult = result ?? "No definition found in local dictionary."
               defineWord = entry.portuguese
               showDefinition = true
+              ActivityTracker.shared.record(
+                category: .lookup,
+                action: "Looked up definition",
+                detail: "'\(entry.portuguese)' (\(entry.partOfSpeech.rawValue): \(entry.english))"
+              )
             } label: {
               Image(systemName: "book.closed")
             }
