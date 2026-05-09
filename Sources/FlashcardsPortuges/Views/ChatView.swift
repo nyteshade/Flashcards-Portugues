@@ -45,7 +45,7 @@ struct ChatView: View {
 
           if let error = error {
             Text(error)
-              .font(.callout)
+              .font(.system(size: 13))
               .foregroundStyle(.red)
               .padding(.horizontal, 16)
           }
@@ -99,7 +99,7 @@ struct ChatView: View {
       ProgressView()
         .controlSize(.small)
       Text("Sofia is thinking…")
-        .font(.callout)
+        .font(.system(size: 14))
         .foregroundStyle(.secondary)
       Spacer()
     }
@@ -113,11 +113,13 @@ struct ChatView: View {
   private var inputBar: some View {
     HStack(alignment: .center, spacing: 8) {
       TextEditor(text: $input)
-        .font(.body)
+        .font(.system(size: 15))
         .frame(minHeight: 36, maxHeight: 120)
         .fixedSize(horizontal: false, vertical: true)
         .focused($inputFocused)
-        .overlay(
+        .padding(.horizontal, 8)
+        .padding(.vertical, 6)
+        .background(
           RoundedRectangle(cornerRadius: 8)
             .strokeBorder(Color.secondary.opacity(0.3), lineWidth: 1)
         )
@@ -192,7 +194,7 @@ struct MessageBubble: View {
 
       VStack(alignment: message.role == .user ? .trailing : .leading, spacing: 4) {
         Text(message.content)
-          .font(.body)
+          .font(.system(size: 15))
           .textSelection(.enabled)
           .padding(.horizontal, 12)
           .padding(.vertical, 8)
