@@ -8,86 +8,86 @@ import UniformTypeIdentifiers
 /// main actor.
 @MainActor
 enum DeckFileService {
-    /// Prompt for a save location and write the deck as a `.flcd`.
-    /// After writing, stamps the file with the bundled `StudyDeck.icns`
-    /// so it shows the deck icon in Finder regardless of how aggressive
-    /// macOS's icon cache is for newly-introduced UTIs.
-    static func saveDeckAs(_ deck: Deck) {
-        let panel = NSSavePanel()
-        panel.title = "Save Deck"
-        panel.nameFieldStringValue = "\(deck.name).\(DeckDocument.fileExtension)"
-        panel.allowedContentTypes = [Self.flcdType]
-        panel.canCreateDirectories = true
-        guard panel.runModal() == .OK, let url = panel.url else { return }
-        do {
-            try DeckIO.write(deck: deck, to: url)
-            applyDeckIcon(to: url)
-        } catch {
-            presentError(title: "Could not save deck", error: error)
-        }
+  /// Prompt for a save location and write the deck as a `.flcd`.
+  /// After writing, stamps the file with the bundled `StudyDeck.icns`
+  /// so it shows the deck icon in Finder regardless of how aggressive
+  /// macOS's icon cache is for newly-introduced UTIs.
+  static func saveDeckAs(_ deck: Deck) {
+    let panel = NSSavePanel()
+    panel.title = "Save Deck"
+    panel.nameFieldStringValue = "\(deck.name).\(DeckDocument.fileExtension)"
+    panel.allowedContentTypes = [Self.flcdType]
+    panel.canCreateDirectories = true
+    guard panel.runModal() == .OK, let url = panel.url else { return }
+    do {
+      try DeckIO.write(deck: deck, to: url)
+      applyDeckIcon(to: url)
+    } catch {
+      presentError(title: "Could not save deck", error: error)
     }
-
-    /// Apply the bundled StudyDeck icon as a custom Finder icon on
-    /// `url`. No-op if the icon resource isn't present in the bundle.
-    /// Failures here are non-fatal — the file is already saved; the
-    /// icon is cosmetic.
-    private static func applyDeckIcon(to url: URL) {
-        guard let iconURL = Bundle.main.url(forResource: "StudyDeck", withExtension: "icns"),
-              let icon = NSImage(contentsOf: iconURL) else {
-            return
-        }
-        NSWorkspace.shared.setIcon(icon, forFile: url.path, options: [])
+  }
+  
+  /// Apply the bundled StudyDeck icon as a custom Finder icon on
+  /// `url`. No-op if the icon resource isn't present in the bundle.
+  /// Failures here are non-fatal — the file is already saved; the
+  /// icon is cosmetic.
+  private static func applyDeckIcon(to url: URL) {
+    guard let iconURL = Bundle.main.url(forResource: "StudyDeck", withExtension: "icns"),
+          let icon = NSImage(contentsOf: iconURL) else {
+      return
     }
-
-    /// Prompt for a `.flcd` file and return the decoded deck.
-    static func openDeck() -> Deck? {
-        let panel = NSOpenPanel()
-        panel.title = "Open Deck"
-        panel.allowedContentTypes = [Self.flcdType, .json]
-        panel.allowsMultipleSelection = false
-        panel.canChooseDirectories = false
-        guard panel.runModal() == .OK, let url = panel.url else { return nil }
-        do {
-            return try DeckIO.read(from: url)
-        } catch {
-            presentError(title: "Could not open deck", error: error)
-            return nil
-        }
+    NSWorkspace.shared.setIcon(icon, forFile: url.path, options: [])
+  }
+  
+  /// Prompt for a `.flcd` file and return the decoded deck.
+  static func openDeck() -> Deck? {
+    let panel = NSOpenPanel()
+    panel.title = "Open Deck"
+    panel.allowedContentTypes = [Self.flcdType, .json]
+    panel.allowsMultipleSelection = false
+    panel.canChooseDirectories = false
+    guard panel.runModal() == .OK, let url = panel.url else { return nil }
+    do {
+      return try DeckIO.read(from: url)
+    } catch {
+      presentError(title: "Could not open deck", error: error)
+      return nil
     }
-
-    /// Prompt for a destination and write a Markdown rendering of `deck`.
-    static func exportDeckAsMarkdown(_ deck: Deck) {
-        let panel = NSSavePanel()
-        panel.title = "Export Deck as Markdown"
-        panel.nameFieldStringValue = "\(deck.name).md"
-        panel.allowedContentTypes = [.plainText]
-        panel.canCreateDirectories = true
-        guard panel.runModal() == .OK, let url = panel.url else { return }
-        let markdown = DeckIO.markdown(for: deck)
-        do {
-            try markdown.data(using: .utf8)?.write(to: url, options: .atomic)
-        } catch {
-            presentError(title: "Could not export deck", error: error)
-        }
+  }
+  
+  /// Prompt for a destination and write a Markdown rendering of `deck`.
+  static func exportDeckAsMarkdown(_ deck: Deck) {
+    let panel = NSSavePanel()
+    panel.title = "Export Deck as Markdown"
+    panel.nameFieldStringValue = "\(deck.name).md"
+    panel.allowedContentTypes = [.plainText]
+    panel.canCreateDirectories = true
+    guard panel.runModal() == .OK, let url = panel.url else { return }
+    let markdown = DeckIO.markdown(for: deck)
+    do {
+      try markdown.data(using: .utf8)?.write(to: url, options: .atomic)
+    } catch {
+      presentError(title: "Could not export deck", error: error)
     }
-
-    // MARK: - File type
-
-    /// `.flcd` UTType. Declared as exported in Info.plist would let us
-    /// double-click open from Finder; for now this is enough to drive
-    /// the save / open panels.
-    static var flcdType: UTType {
-        UTType(filenameExtension: DeckDocument.fileExtension, conformingTo: .json) ?? .json
-    }
-
-    // MARK: - Error surfacing
-
-    private static func presentError(title: String, error: Error) {
-        let alert = NSAlert()
-        alert.alertStyle = .warning
-        alert.messageText = title
-        alert.informativeText = error.localizedDescription
-        alert.addButton(withTitle: "OK")
-        alert.runModal()
-    }
+  }
+  
+  // MARK: - File type
+  
+  /// `.flcd` UTType. Declared as exported in Info.plist would let us
+  /// double-click open from Finder; for now this is enough to drive
+  /// the save / open panels.
+  static var flcdType: UTType {
+    UTType(filenameExtension: DeckDocument.fileExtension, conformingTo: .json) ?? .json
+  }
+  
+  // MARK: - Error surfacing
+  
+  private static func presentError(title: String, error: Error) {
+    let alert = NSAlert()
+    alert.alertStyle = .warning
+    alert.messageText = title
+    alert.informativeText = error.localizedDescription
+    alert.addButton(withTitle: "OK")
+    alert.runModal()
+  }
 }

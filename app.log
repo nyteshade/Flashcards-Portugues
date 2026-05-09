@@ -1,8 +1,4 @@
-5/7/26, 9:00:25 PM: FlashcardsPortugesApp started.
-5/7/26, 9:00:25 PM: EuroLLM auto-load: model present on disk, loading…
-5/7/26, 9:00:25 PM: EuroLLM harness configured: physRAM=68719476736 bytes
-5/7/26, 9:00:27 PM: EuroLLM loaded successfully
-5/7/26, 9:00:40 PM: DictionaryView appeared.
-5/7/26, 9:00:40 PM: Attempting to load dictionary from: /Users/bharrison4/Library/Application Support/FlashcardsPortuges/pt-en-dictionary.json
-5/7/26, 9:00:40 PM: Dictionary file exists. Loading from disk.
-5/7/26, 9:00:40 PM: Successfully loaded and decoded dictionary.
+5/8/26, 11:30:54 PM: FlashcardsPortugesApp started.
+5/8/26, 11:30:54 PM: EuroLLM auto-load: model present on disk, loading…
+5/8/26, 11:30:54 PM: EuroLLM harness configured: physRAM=137438953472 bytes
+5/8/26, 11:30:56 PM: EuroLLM loaded successfully
