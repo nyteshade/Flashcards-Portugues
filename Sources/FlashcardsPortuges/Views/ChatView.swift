@@ -125,10 +125,8 @@ struct ChatView: View {
         )
         .onKeyPress(keys: [.return], phases: .down) { keyPress in
           if keyPress.modifiers.contains(.shift) {
-            // Shift+Enter: insert newline (default TextEditor behavior).
             return .ignored
           }
-          // Enter alone: send.
           send()
           return .handled
         }
@@ -193,16 +191,20 @@ struct MessageBubble: View {
       }
 
       VStack(alignment: message.role == .user ? .trailing : .leading, spacing: 4) {
-        Text(message.content)
-          .font(.system(size: 15))
-          .textSelection(.enabled)
-          .padding(.horizontal, 12)
-          .padding(.vertical, 8)
-          .background(
-            RoundedRectangle(cornerRadius: 12)
-              .fill(message.role == .user ? Color.accentColor : Color.gray.opacity(0.2))
-          )
-          .foregroundStyle(message.role == .user ? .white : .primary)
+        if message.role == .assistant {
+          assistantBody
+        } else {
+          Text(message.content)
+            .font(.system(size: 15))
+            .textSelection(.enabled)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(
+              RoundedRectangle(cornerRadius: 12)
+                .fill(Color.accentColor)
+            )
+            .foregroundStyle(.white)
+        }
       }
 
       if message.role == .user {
@@ -213,11 +215,89 @@ struct MessageBubble: View {
     }
   }
 
+  // MARK: - Assistant body with Portuguese audio buttons
+
+  @ViewBuilder
+  private var assistantBody: some View {
+    // Split into paragraphs and detect Portuguese segments.
+    let paragraphs = message.content
+      .components(separatedBy: "\n")
+      .filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
+
+    if paragraphs.isEmpty {
+      Text(message.content)
+        .font(.system(size: 15))
+        .textSelection(.enabled)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 8)
+    } else {
+      VStack(alignment: .leading, spacing: 8) {
+        ForEach(Array(paragraphs.enumerated()), id: \.offset) { _, para in
+          if para.looksPortuguese {
+            portugueseSegment(para)
+          } else {
+            Text(para)
+              .font(.system(size: 15))
+              .textSelection(.enabled)
+          }
+        }
+      }
+      .padding(.horizontal, 12)
+      .padding(.vertical, 10)
+      .frame(maxWidth: .infinity, alignment: .leading)
+      .background(
+        RoundedRectangle(cornerRadius: 12)
+          .fill(Color.gray.opacity(0.2))
+      )
+    }
+  }
+
+  @ViewBuilder
+  private func portugueseSegment(_ text: String) -> some View {
+    HStack(alignment: .firstTextBaseline, spacing: 4) {
+      Text(text)
+        .font(.system(size: 15))
+        .italic()
+        .foregroundStyle(.primary)
+        .textSelection(.enabled)
+
+      Button {
+        SpeechService.speak(text, language: .portuguese)
+      } label: {
+        Image(systemName: "speaker.wave.2")
+          .font(.system(size: 12))
+          .foregroundColor(.accentColor)
+      }
+      .buttonStyle(.plain)
+      .help("Pronounce (European Portuguese)")
+    }
+  }
+
   @ViewBuilder
   private var avatar: some View {
     Image(systemName: message.role == .assistant ? "brain.head.profile" : "person.circle.fill")
       .font(.system(size: 22))
       .foregroundStyle(message.role == .assistant ? .indigo : .accentColor)
       .frame(width: 28, height: 28)
+  }
+}
+
+// MARK: - Portuguese detection
+
+extension String {
+  /// Heuristic: does this text contain Portuguese-specific diacritics?
+  fileprivate var looksPortuguese: Bool {
+    let ptChars: Set<Character> = [
+      "ã", "õ", "ç", "â", "ê", "ô",
+      "á", "é", "í", "ó", "ú",
+      "à", "è", "ì", "ò", "ù",
+      "ü"
+    ]
+    // Must have at least one Portuguese-specific character and be
+    // more than just a single accented word (to avoid false
+    // positives on stray characters).
+    let hasDiacritic = contains { ptChars.contains($0) }
+    let wordCount = split(separator: " ").count
+    return hasDiacritic && wordCount >= 2
   }
 }
