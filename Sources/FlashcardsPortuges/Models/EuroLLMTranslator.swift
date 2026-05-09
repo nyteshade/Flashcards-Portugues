@@ -398,6 +398,27 @@ final class EuroLLMTranslator: ObservableObject {
     }
   }
   
+  /// Free-form chat against the loaded model. Sends the full prompt
+  /// (system + conversation history) and returns the raw response.
+  /// The caller builds the prompt via `ChatService.buildPrompt`.
+  func chat(prompt: String, maxTokens: Int = 1024) async throws -> String {
+    try await ensureLoaded()
+    status = .processing
+    statusMessage = "Thinking…"
+    defer {
+      status = .ready
+      statusMessage = "Ready"
+    }
+    Logger.log("EuroLLM chat prompt length: \(prompt.count)")
+    let raw = try await coordinator.infer(
+      prompt: prompt,
+      maxTokens: maxTokens,
+      temperature: 0.7
+    )
+    Logger.log("EuroLLM chat response length: \(raw.count)")
+    return raw
+  }
+
   /// Translate `text` in the given direction. Returns the parsed
   /// JSON body — `direct` (literal) and `colloquial` (idiomatic).
   func translate(_ text: String, direction: LLMDirection) async throws -> LLMTranslation {

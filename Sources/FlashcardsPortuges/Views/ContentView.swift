@@ -18,6 +18,9 @@ struct ContentView: View {
       if translator.isReady {
         TranslateView(store: store)
           .tabItem { Label("Translate", systemImage: "wand.and.stars") }
+
+        ChatView(store: store)
+          .tabItem { Label("Chat", systemImage: "bubble.left.and.bubble.right") }
       }
     }
     .frame(minWidth: 700, minHeight: 500)
