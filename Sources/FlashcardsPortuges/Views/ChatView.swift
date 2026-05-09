@@ -1,5 +1,7 @@
 import SwiftUI
 
+// MARK: - Main view
+
 struct ChatView: View {
   @ObservedObject var store: DictionaryStore
   @ObservedObject private var translator = EuroLLMTranslator.shared
@@ -10,17 +12,22 @@ struct ChatView: View {
   @State private var busy = false
   @State private var error: String?
 
+  @State private var addToDeckPhrase: String = ""
+  @State private var addToDeckEnglish: String = ""
+  @State private var showAddSheet = false
+
   @FocusState private var inputFocused: Bool
 
   var body: some View {
     VStack(spacing: 0) {
       messageList
-
       Divider()
-
       inputBar
     }
     .onAppear { inputFocused = true }
+    .sheet(isPresented: $showAddSheet) {
+      addToDeckSheet
+    }
   }
 
   // MARK: - Message list
@@ -30,18 +37,18 @@ struct ChatView: View {
     ScrollViewReader { proxy in
       ScrollView {
         LazyVStack(alignment: .leading, spacing: 12) {
-          if messages.isEmpty {
-            emptyState
-          }
+          if messages.isEmpty { emptyState }
 
           ForEach(messages) { msg in
-            MessageBubble(message: msg)
-              .id(msg.id)
+            MessageBubble(message: msg, onAddToDeck: { phrase in
+              addToDeckPhrase = phrase
+              addToDeckEnglish = ""
+              showAddSheet = true
+            })
+            .id(msg.id)
           }
 
-          if busy {
-            thinkingRow
-          }
+          if busy { thinkingRow }
 
           if let error = error {
             Text(error)
@@ -50,25 +57,17 @@ struct ChatView: View {
               .padding(.horizontal, 16)
           }
 
-          Color.clear
-            .frame(height: 1)
-            .id("bottomAnchor")
+          Color.clear.frame(height: 1).id("bottomAnchor")
         }
         .padding(16)
         .frame(maxWidth: .infinity)
       }
       .defaultScrollAnchor(.bottom)
       .onChange(of: messages.count) { _, _ in
-        withAnimation {
-          proxy.scrollTo("bottomAnchor", anchor: .bottom)
-        }
+        withAnimation { proxy.scrollTo("bottomAnchor", anchor: .bottom) }
       }
       .onChange(of: busy) { _, newValue in
-        if newValue {
-          withAnimation {
-            proxy.scrollTo("bottomAnchor", anchor: .bottom)
-          }
-        }
+        if newValue { withAnimation { proxy.scrollTo("bottomAnchor", anchor: .bottom) } }
       }
     }
   }
@@ -78,16 +77,12 @@ struct ChatView: View {
     VStack(spacing: 12) {
       Spacer().frame(height: 60)
       Image(systemName: "bubble.left.and.bubble.right")
-        .font(.system(size: 40))
-        .foregroundStyle(.secondary)
+        .font(.system(size: 40)).foregroundStyle(.secondary)
       Text("Ask Sofia about Portuguese")
-        .font(.title3)
-        .foregroundStyle(.secondary)
+        .font(.title3).foregroundStyle(.secondary)
       Text("Translation nuances, grammar, verb tenses, cultural context — anything language-related.")
-        .font(.callout)
-        .foregroundStyle(.tertiary)
-        .multilineTextAlignment(.center)
-        .frame(maxWidth: 360)
+        .font(.callout).foregroundStyle(.tertiary)
+        .multilineTextAlignment(.center).frame(maxWidth: 360)
       Spacer().frame(height: 60)
     }
     .frame(maxWidth: .infinity)
@@ -96,15 +91,12 @@ struct ChatView: View {
   @ViewBuilder
   private var thinkingRow: some View {
     HStack(spacing: 8) {
-      ProgressView()
-        .controlSize(.small)
+      ProgressView().controlSize(.small)
       Text("Sofia is thinking…")
-        .font(.system(size: 14))
-        .foregroundStyle(.secondary)
+        .font(.system(size: 14)).foregroundStyle(.secondary)
       Spacer()
     }
-    .padding(.horizontal, 4)
-    .padding(.vertical, 6)
+    .padding(.horizontal, 4).padding(.vertical, 6)
   }
 
   // MARK: - Input bar
@@ -117,16 +109,13 @@ struct ChatView: View {
         .frame(minHeight: 36, maxHeight: 120)
         .fixedSize(horizontal: false, vertical: true)
         .focused($inputFocused)
-        .padding(.horizontal, 8)
-        .padding(.vertical, 6)
+        .padding(.horizontal, 8).padding(.vertical, 6)
         .background(
           RoundedRectangle(cornerRadius: 8)
             .strokeBorder(Color.secondary.opacity(0.3), lineWidth: 1)
         )
         .onKeyPress(keys: [.return], phases: .down) { keyPress in
-          if keyPress.modifiers.contains(.shift) {
-            return .ignored
-          }
+          if keyPress.modifiers.contains(.shift) { return .ignored }
           send()
           return .handled
         }
@@ -140,6 +129,51 @@ struct ChatView: View {
       .help("Send (Enter)")
     }
     .padding(12)
+  }
+
+  // MARK: - Add to deck sheet
+
+  @ViewBuilder
+  private var addToDeckSheet: some View {
+    VStack(spacing: 16) {
+      Text("Add to Study Deck")
+        .font(.headline)
+
+      VStack(alignment: .leading, spacing: 6) {
+        Text("Portuguese").font(.caption).foregroundStyle(.secondary)
+        Text(addToDeckPhrase)
+          .font(.system(size: 15, weight: .medium))
+          .italic()
+          .padding(8)
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .background(RoundedRectangle(cornerRadius: 6).fill(.quaternary))
+      }
+
+      VStack(alignment: .leading, spacing: 6) {
+        Text("English translation").font(.caption).foregroundStyle(.secondary)
+        TextField("Enter English translation…", text: $addToDeckEnglish)
+          .textFieldStyle(.roundedBorder)
+          .font(.system(size: 15))
+      }
+
+      HStack(spacing: 12) {
+        Button("Cancel") { showAddSheet = false }
+          .keyboardShortcut(.escape)
+        Spacer()
+        Button("Add to Deck") {
+          store.addEntry(
+            portuguese: addToDeckPhrase,
+            english: addToDeckEnglish.isEmpty ? addToDeckPhrase : addToDeckEnglish,
+            partOfSpeech: .phrase
+          )
+          showAddSheet = false
+        }
+        .buttonStyle(.borderedProminent)
+        .disabled(addToDeckEnglish.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+      }
+    }
+    .padding()
+    .frame(width: 380)
   }
 
   // MARK: - Send
@@ -159,19 +193,14 @@ struct ChatView: View {
     let prompt = ChatService.buildPrompt(messages: messages, activitySummary: summary)
 
     Task {
-      defer {
-        Task { @MainActor in busy = false }
-      }
+      defer { Task { @MainActor in busy = false } }
       do {
         let response = try await translator.chat(prompt: prompt)
         await MainActor.run {
-          let assistantMessage = ChatMessage(role: .assistant, content: response)
-          messages.append(assistantMessage)
+          messages.append(ChatMessage(role: .assistant, content: response))
         }
       } catch {
-        await MainActor.run {
-          self.error = error.localizedDescription
-        }
+        await MainActor.run { self.error = error.localizedDescription }
       }
     }
   }
@@ -181,6 +210,7 @@ struct ChatView: View {
 
 struct MessageBubble: View {
   let message: ChatMessage
+  var onAddToDeck: ((String) -> Void)?
 
   var body: some View {
     HStack(alignment: .top, spacing: 8) {
@@ -190,21 +220,10 @@ struct MessageBubble: View {
         Spacer(minLength: 60)
       }
 
-      VStack(alignment: message.role == .user ? .trailing : .leading, spacing: 4) {
-        if message.role == .assistant {
-          assistantBody
-        } else {
-          Text(message.content)
-            .font(.system(size: 15))
-            .textSelection(.enabled)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
-            .background(
-              RoundedRectangle(cornerRadius: 12)
-                .fill(Color.accentColor)
-            )
-            .foregroundStyle(.white)
-        }
+      if message.role == .assistant {
+        assistantBubble
+      } else {
+        userBubble
       }
 
       if message.role == .user {
@@ -215,11 +234,18 @@ struct MessageBubble: View {
     }
   }
 
-  // MARK: - Assistant body with Portuguese audio buttons
+  @ViewBuilder
+  private var userBubble: some View {
+    Text(message.content)
+      .font(.system(size: 15))
+      .textSelection(.enabled)
+      .padding(.horizontal, 12).padding(.vertical, 8)
+      .background(RoundedRectangle(cornerRadius: 12).fill(Color.accentColor))
+      .foregroundStyle(.white)
+  }
 
   @ViewBuilder
-  private var assistantBody: some View {
-    // Split into paragraphs and detect Portuguese segments.
+  private var assistantBubble: some View {
     let paragraphs = message.content
       .components(separatedBy: "\n")
       .filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }
@@ -228,48 +254,20 @@ struct MessageBubble: View {
       Text(message.content)
         .font(.system(size: 15))
         .textSelection(.enabled)
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
+        .padding(.horizontal, 12).padding(.vertical, 8)
+        .background(RoundedRectangle(cornerRadius: 12).fill(Color.gray.opacity(0.2)))
     } else {
-      VStack(alignment: .leading, spacing: 8) {
+      VStack(alignment: .leading, spacing: 6) {
         ForEach(Array(paragraphs.enumerated()), id: \.offset) { _, para in
-          if para.looksPortuguese {
-            portugueseSegment(para)
-          } else {
-            Text(para)
-              .font(.system(size: 15))
-              .textSelection(.enabled)
-          }
+          RichMessageText(
+            paragraph: para,
+            onAddToDeck: onAddToDeck
+          )
         }
       }
-      .padding(.horizontal, 12)
-      .padding(.vertical, 10)
+      .padding(.horizontal, 12).padding(.vertical, 10)
       .frame(maxWidth: .infinity, alignment: .leading)
-      .background(
-        RoundedRectangle(cornerRadius: 12)
-          .fill(Color.gray.opacity(0.2))
-      )
-    }
-  }
-
-  @ViewBuilder
-  private func portugueseSegment(_ text: String) -> some View {
-    HStack(alignment: .firstTextBaseline, spacing: 4) {
-      Text(text)
-        .font(.system(size: 15))
-        .italic()
-        .foregroundStyle(.primary)
-        .textSelection(.enabled)
-
-      Button {
-        SpeechService.speak(text, language: .portuguese)
-      } label: {
-        Image(systemName: "speaker.wave.2")
-          .font(.system(size: 12))
-          .foregroundColor(.accentColor)
-      }
-      .buttonStyle(.plain)
-      .help("Pronounce (European Portuguese)")
+      .background(RoundedRectangle(cornerRadius: 12).fill(Color.gray.opacity(0.2)))
     }
   }
 
@@ -282,22 +280,184 @@ struct MessageBubble: View {
   }
 }
 
-// MARK: - Portuguese detection
+// MARK: - Rich message text (mixed English + Portuguese with inline buttons)
 
-extension String {
-  /// Heuristic: does this text contain Portuguese-specific diacritics?
-  fileprivate var looksPortuguese: Bool {
-    let ptChars: Set<Character> = [
-      "ã", "õ", "ç", "â", "ê", "ô",
-      "á", "é", "í", "ó", "ú",
-      "à", "è", "ì", "ò", "ù",
-      "ü"
-    ]
-    // Must have at least one Portuguese-specific character and be
-    // more than just a single accented word (to avoid false
-    // positives on stray characters).
-    let hasDiacritic = contains { ptChars.contains($0) }
-    let wordCount = split(separator: " ").count
-    return hasDiacritic && wordCount >= 2
+struct RichMessageText: View {
+  let paragraph: String
+  var onAddToDeck: ((String) -> Void)?
+
+  var body: some View {
+    let segments = parseSegments(paragraph)
+
+    if segments.isEmpty {
+      Text(paragraph)
+        .font(.system(size: 15))
+        .textSelection(.enabled)
+    } else {
+      VStack(alignment: .leading, spacing: 4) {
+        ForEach(segments) { seg in
+          if seg.isPortuguese {
+            portugueseChip(phrase: seg.text)
+          } else {
+            Text(seg.text)
+              .font(.system(size: 15))
+              .textSelection(.enabled)
+          }
+        }
+      }
+    }
   }
+
+  @ViewBuilder
+  private func portugueseChip(phrase: String) -> some View {
+    HStack(alignment: .firstTextBaseline, spacing: 2) {
+      Text(phrase)
+        .font(.system(size: 15))
+        .italic()
+        .foregroundStyle(.indigo)
+        .textSelection(.enabled)
+
+      Button {
+        SpeechService.speak(phrase, language: .portuguese)
+      } label: {
+        Image(systemName: "speaker.wave.2")
+          .font(.system(size: 11))
+      }
+      .buttonStyle(.plain)
+      .help("Pronounce")
+
+      Button {
+        onAddToDeck?(phrase)
+      } label: {
+        Image(systemName: "plus.circle")
+          .font(.system(size: 11))
+      }
+      .buttonStyle(.plain)
+      .help("Add to study deck")
+    }
+  }
+}
+
+// MARK: - Portuguese detection & segment parsing
+
+/// A segment of text within a paragraph, tagged as Portuguese or English.
+private struct TextSegment: Identifiable {
+  let id = UUID()
+  let text: String
+  let isPortuguese: Bool
+}
+
+/// The set of characters that strongly indicate European Portuguese.
+private let ptDiacritics: Set<Character> = [
+  "ã", "õ", "ç", "â", "ê", "ô",
+  "á", "é", "í", "ó", "ú",
+  "à", "è", "ì", "ò", "ù", "ü"
+]
+
+/// English-centric letter patterns — if a word contains these it's
+/// unlikely to be Portuguese.
+private let englishPatterns: Set<String> = [
+  "th", "ing", "tion", "ough", "ght", "ould", "eigh",
+  "tial", "cial", "sion", "ment", "ness", "able", "ible",
+  "less", "ship", "ward", "wise", "ize", "ise", "ify",
+  "ology", "graph", "phil", "scope", "cycle"
+]
+
+/// Heuristic: does a word look Portuguese (not English)?
+private func looksPortugueseWord(_ word: String) -> Bool {
+  let lower = word.lowercased()
+  // Must contain at least one Portuguese diacritic.
+  guard lower.contains(where: { ptDiacritics.contains($0) }) else { return false }
+  // Reject if it contains English-specific patterns.
+  for pat in englishPatterns {
+    if lower.contains(pat) { return false }
+  }
+  return true
+}
+
+/// Parse a paragraph into alternating English / Portuguese segments.
+/// Portuguese segments are text runs that contain Portuguese-looking
+/// words, expanded to include adjacent non-English words.
+private func parseSegments(_ para: String) -> [TextSegment] {
+  // Tokenize: split on whitespace while tracking positions.
+  let words = para.components(separatedBy: .whitespaces)
+  guard !words.isEmpty else { return [] }
+
+  // Mark which word indices are Portuguese anchors.
+  var isAnchor = words.map { looksPortugueseWord($0) }
+  guard isAnchor.contains(true) else { return [] }
+
+  // Expand anchors: adjacent non-English words get pulled in.
+  // A non-English word is one that doesn't contain English patterns
+  // and doesn't look like a standalone English function word.
+  let englishFunctionWords: Set<String> = [
+    "the", "a", "an", "is", "are", "was", "were", "be", "been",
+    "have", "has", "had", "do", "does", "did", "will", "would",
+    "can", "could", "shall", "should", "may", "might", "must",
+    "i", "you", "he", "she", "it", "we", "they",
+    "me", "him", "her", "us", "them",
+    "my", "your", "his", "its", "our", "their",
+    "this", "that", "these", "those",
+    "and", "or", "but", "if", "so", "as", "at", "by", "for",
+    "in", "of", "on", "to", "with", "from", "about", "into",
+    "not", "no", "yes", "than", "then", "also", "very", "just",
+    "it's", "that's", "there's", "here's", "don't", "doesn't"
+  ]
+
+  // Expand anchors to neighbor words.
+  var inPortuguese = isAnchor
+  var changed = true
+  while changed {
+    changed = false
+    for i in 0..<words.count {
+      if inPortuguese[i] { continue }
+      let w = words[i].lowercased()
+        .trimmingCharacters(in: .punctuationCharacters)
+      // Already known Portuguese via expansion in previous pass.
+      // Pull in neighbors of Portuguese runs if they aren't clearly English.
+      let hasPortugueseNeighbor: Bool = {
+        if i > 0 && inPortuguese[i - 1] { return true }
+        if i < words.count - 1 && inPortuguese[i + 1] { return true }
+        return false
+      }()
+      guard hasPortugueseNeighbor else { continue }
+
+      // Don't pull in English function words or words with English patterns.
+      if englishFunctionWords.contains(w) { continue }
+      var hasEnglishPattern = false
+      for pat in englishPatterns {
+        if w.contains(pat) { hasEnglishPattern = true; break }
+      }
+      if hasEnglishPattern { continue }
+
+      inPortuguese[i] = true
+      changed = true
+    }
+  }
+
+  // Build segments: consecutive Portuguese/non-Portuguese runs.
+  var segments: [TextSegment] = []
+  var i = 0
+  while i < words.count {
+    let start = i
+    let isPT = inPortuguese[i]
+    while i < words.count && inPortuguese[i] == isPT { i += 1 }
+    let text = words[start..<i].joined(separator: " ")
+    let trimmed = text.trimmingCharacters(in: .whitespaces)
+    if !trimmed.isEmpty {
+      segments.append(TextSegment(text: trimmed, isPortuguese: isPT))
+    }
+  }
+
+  // Filter out single-word Portuguese "segments" that are just
+  // prepositions or articles — they're noise.
+  segments = segments.filter { seg in
+    if seg.isPortuguese {
+      let count = seg.text.split(separator: " ").count
+      return count >= 2
+    }
+    return true
+  }
+
+  return segments
 }
