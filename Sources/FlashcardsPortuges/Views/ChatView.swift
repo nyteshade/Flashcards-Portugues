@@ -375,6 +375,30 @@ private let ptDiacritics: Set<Character> = [
   "à", "è", "ì", "ò", "ù", "ü"
 ]
 
+/// Known English function words — stop Portuguese expansion.
+private let englishFunctionWords: Set<String> = [
+  "the", "a", "an", "is", "are", "was", "were", "be", "been",
+  "have", "has", "had", "do", "does", "did", "will", "would",
+  "can", "could", "shall", "should", "may", "might", "must",
+  "i", "you", "he", "she", "it", "we", "they",
+  "me", "him", "her", "us", "them",
+  "my", "your", "his", "its", "our", "their",
+  "this", "that", "these", "those",
+  "and", "or", "but", "if", "so", "as", "at", "by", "for",
+  "in", "of", "on", "to", "with", "from", "about", "into",
+  "not", "no", "yes", "than", "then", "also", "very", "just",
+  "it's", "that's", "there's", "here's", "don't", "doesn't",
+  "i'm", "you're", "he's", "she's", "we're", "they're",
+  "isn't", "aren't", "wasn't", "weren't", "haven't", "hasn't",
+  "hadn't", "won't", "wouldn't", "can't", "couldn't",
+  "shouldn't", "mightn't", "mustn't",
+  "what", "when", "where", "which", "who", "whom", "whose",
+  "why", "how", "all", "any", "both", "each", "every",
+  "more", "most", "other", "some", "such", "only",
+  "up", "down", "out", "off", "over", "under", "again",
+  "further", "once", "here", "there", "now", "then"
+]
+
 /// English-centric letter patterns — if a word contains these it's
 /// unlikely to be Portuguese.
 private let englishPatterns: Set<String> = [
@@ -389,11 +413,33 @@ private func looksPortugueseWord(_ word: String) -> Bool {
   let lower = word.lowercased()
   // Must contain at least one Portuguese diacritic.
   guard lower.contains(where: { ptDiacritics.contains($0) }) else { return false }
+  // Apostrophes are English contractions.
+  if word.contains("'") { return false }
   // Reject if it contains English-specific patterns.
   for pat in englishPatterns {
     if lower.contains(pat) { return false }
   }
   return true
+}
+
+/// Is this word clearly English and should stop Portuguese expansion?
+private func isEnglishWord(_ raw: String) -> Bool {
+  let w = raw.lowercased().trimmingCharacters(in: .punctuationCharacters)
+  // Apostrophe → English contraction.
+  if raw.contains("'") { return true }
+  // Mid-sentence capital letter → English proper noun or new clause.
+  if let first = raw.first, first.isUppercase, raw != raw.capitalized {
+    return true
+  }
+  // Numbers → not Portuguese.
+  if w.rangeOfCharacter(from: .decimalDigits) != nil { return true }
+  // Known English function words.
+  if englishFunctionWords.contains(w) { return true }
+  // Contains English patterns.
+  for pat in englishPatterns {
+    if w.contains(pat) { return true }
+  }
+  return false
 }
 
 /// Parse a paragraph into alternating English / Portuguese segments.
@@ -408,48 +454,21 @@ private func parseSegments(_ para: String) -> [TextSegment] {
   var isAnchor = words.map { looksPortugueseWord($0) }
   guard isAnchor.contains(true) else { return [] }
 
-  // Expand anchors: adjacent non-English words get pulled in.
-  // A non-English word is one that doesn't contain English patterns
-  // and doesn't look like a standalone English function word.
-  let englishFunctionWords: Set<String> = [
-    "the", "a", "an", "is", "are", "was", "were", "be", "been",
-    "have", "has", "had", "do", "does", "did", "will", "would",
-    "can", "could", "shall", "should", "may", "might", "must",
-    "i", "you", "he", "she", "it", "we", "they",
-    "me", "him", "her", "us", "them",
-    "my", "your", "his", "its", "our", "their",
-    "this", "that", "these", "those",
-    "and", "or", "but", "if", "so", "as", "at", "by", "for",
-    "in", "of", "on", "to", "with", "from", "about", "into",
-    "not", "no", "yes", "than", "then", "also", "very", "just",
-    "it's", "that's", "there's", "here's", "don't", "doesn't"
-  ]
-
-  // Expand anchors to neighbor words.
+  // Expand anchors: pull in adjacent non-English words.
   var inPortuguese = isAnchor
   var changed = true
   while changed {
     changed = false
     for i in 0..<words.count {
       if inPortuguese[i] { continue }
-      let w = words[i].lowercased()
-        .trimmingCharacters(in: .punctuationCharacters)
-      // Already known Portuguese via expansion in previous pass.
-      // Pull in neighbors of Portuguese runs if they aren't clearly English.
       let hasPortugueseNeighbor: Bool = {
         if i > 0 && inPortuguese[i - 1] { return true }
         if i < words.count - 1 && inPortuguese[i + 1] { return true }
         return false
       }()
       guard hasPortugueseNeighbor else { continue }
-
-      // Don't pull in English function words or words with English patterns.
-      if englishFunctionWords.contains(w) { continue }
-      var hasEnglishPattern = false
-      for pat in englishPatterns {
-        if w.contains(pat) { hasEnglishPattern = true; break }
-      }
-      if hasEnglishPattern { continue }
+      // Stop at any English word.
+      guard !isEnglishWord(words[i]) else { continue }
 
       inPortuguese[i] = true
       changed = true
