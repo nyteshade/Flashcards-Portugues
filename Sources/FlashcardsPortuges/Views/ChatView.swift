@@ -14,6 +14,7 @@ struct ChatView: View {
 
   @State private var addToDeckPhrase: String = ""
   @State private var addToDeckEnglish: String = ""
+  @State private var translatingPhrase = false
   @State private var showAddSheet = false
 
   @FocusState private var inputFocused: Bool
@@ -43,7 +44,21 @@ struct ChatView: View {
             MessageBubble(message: msg, onAddToDeck: { phrase in
               addToDeckPhrase = phrase
               addToDeckEnglish = ""
+              translatingPhrase = true
               showAddSheet = true
+              // Fire off LLM translation in background.
+              Task {
+                defer {
+                  Task { @MainActor in translatingPhrase = false }
+                }
+                if let result = try? await translator.translate(
+                  phrase, direction: .portugueseToEnglish
+                ) {
+                  await MainActor.run {
+                    addToDeckEnglish = result.translation.colloquial
+                  }
+                }
+              }
             })
             .id(msg.id)
           }
@@ -151,9 +166,15 @@ struct ChatView: View {
 
       VStack(alignment: .leading, spacing: 6) {
         Text("English translation").font(.caption).foregroundStyle(.secondary)
-        TextField("Enter English translation…", text: $addToDeckEnglish)
-          .textFieldStyle(.roundedBorder)
-          .font(.system(size: 15))
+        HStack(spacing: 6) {
+          TextField("Enter English translation…", text: $addToDeckEnglish)
+            .textFieldStyle(.roundedBorder)
+            .font(.system(size: 15))
+          if translatingPhrase {
+            ProgressView()
+              .controlSize(.small)
+          }
+        }
       }
 
       HStack(spacing: 12) {
