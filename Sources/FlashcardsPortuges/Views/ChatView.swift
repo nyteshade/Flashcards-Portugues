@@ -396,7 +396,9 @@ private let englishFunctionWords: Set<String> = [
   "why", "how", "all", "any", "both", "each", "every",
   "more", "most", "other", "some", "such", "only",
   "up", "down", "out", "off", "over", "under", "again",
-  "further", "once", "here", "there", "now", "then"
+  "further", "once", "here", "there", "now", "then",
+  "example", "examples", "note", "notes", "usage",
+  "translation", "direct", "colloquial", "literal", "idiomatic"
 ]
 
 /// English-centric letter patterns — if a word contains these it's
@@ -427,6 +429,8 @@ private func isEnglishWord(_ raw: String) -> Bool {
   let w = raw.lowercased().trimmingCharacters(in: .punctuationCharacters)
   // Apostrophe → English contraction.
   if raw.contains("'") { return true }
+  // Colon-terminated words are labels / metadata, not content.
+  if raw.hasSuffix(":") { return true }
   // Mid-sentence capital letter → English proper noun or new clause.
   if let first = raw.first, first.isUppercase, raw != raw.capitalized {
     return true
