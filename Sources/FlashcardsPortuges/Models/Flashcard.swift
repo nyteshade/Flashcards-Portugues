@@ -39,6 +39,12 @@ struct DictionaryEntry: Identifiable, Codable {
   var english: String
   var partOfSpeech: PartOfSpeech
   var notes: String = ""
+  var groupID: UUID? = nil
+}
+
+struct DictionaryGroup: Identifiable, Codable {
+  var id = UUID()
+  var name: String
 }
 
 struct Deck: Identifiable, Codable, Hashable {

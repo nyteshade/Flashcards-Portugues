@@ -5,6 +5,7 @@ class DictionaryStore: ObservableObject {
   @Published var entries: [DictionaryEntry] = []
   @Published var decks: [Deck] = []
   @Published var activeDeckID: UUID
+  @Published var groups: [DictionaryGroup] = []
   
   /// Default deck name used on first launch.
   static let defaultDeckName = "Study Deck"
@@ -41,6 +42,13 @@ class DictionaryStore: ObservableObject {
     try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
     return dir.appendingPathComponent("decks.json")
   }
+
+  private var groupsURL: URL {
+    let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+    let dir = appSupport.appendingPathComponent("FlashcardsPortuges", isDirectory: true)
+    try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+    return dir.appendingPathComponent("groups.json")
+  }
   
   init() {
     // Bootstrap with an empty deck; load() will replace if present.
@@ -67,6 +75,10 @@ class DictionaryStore: ObservableObject {
         activeDeckID = decoded[0].id
       }
     }
+    if let data = try? Data(contentsOf: groupsURL),
+       let decoded = try? JSONDecoder().decode([DictionaryGroup].self, from: data) {
+      groups = decoded
+    }
   }
   
   func save() {
@@ -76,21 +88,70 @@ class DictionaryStore: ObservableObject {
     if let data = try? JSONEncoder().encode(decks) {
       try? data.write(to: decksURL, options: .atomic)
     }
+    if let data = try? JSONEncoder().encode(groups) {
+      try? data.write(to: groupsURL, options: .atomic)
+    }
   }
   
   // MARK: - Dictionary entries
   
-  func addEntry(portuguese: String, english: String, partOfSpeech: PartOfSpeech, notes: String = "") {
-    let entry = DictionaryEntry(portuguese: portuguese, english: english, partOfSpeech: partOfSpeech, notes: notes)
+  func addEntry(portuguese: String, english: String, partOfSpeech: PartOfSpeech, notes: String = "", groupID: UUID? = nil) {
+    let entry = DictionaryEntry(portuguese: portuguese, english: english, partOfSpeech: partOfSpeech, notes: notes, groupID: groupID)
     entries.append(entry)
     save()
   }
-  
-  func removeEntry(_ entry: DictionaryEntry) {
-    entries.removeAll { $0.id == entry.id }
+
+  func updateEntry(id: UUID, portuguese: String, english: String, partOfSpeech: PartOfSpeech, notes: String, groupID: UUID? = nil) {
+    guard let idx = entries.firstIndex(where: { $0.id == id }) else { return }
+    entries[idx].portuguese = portuguese
+    entries[idx].english = english
+    entries[idx].partOfSpeech = partOfSpeech
+    entries[idx].notes = notes
+    entries[idx].groupID = groupID
     save()
   }
-  
+
+  func removeEntry(_ entry: DictionaryEntry) {
+    entries.removeAll { $0.id == entry.id }
+    // Remove matching cards from all decks so orphans don't linger.
+    for i in decks.indices {
+      decks[i].cards.removeAll { !$0.isVerbCard && $0.portuguese == entry.portuguese }
+    }
+    save()
+  }
+
+  // MARK: - Groups
+
+  func createGroup(named name: String) {
+    let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !trimmed.isEmpty else { return }
+    let group = DictionaryGroup(name: trimmed)
+    groups.append(group)
+    save()
+  }
+
+  func renameGroup(id: UUID, to newName: String) {
+    let trimmed = newName.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !trimmed.isEmpty,
+          let idx = groups.firstIndex(where: { $0.id == id }) else { return }
+    groups[idx].name = trimmed
+    save()
+  }
+
+  func deleteGroup(id: UUID) {
+    // Unassign entries belonging to this group.
+    for i in entries.indices where entries[i].groupID == id {
+      entries[i].groupID = nil
+    }
+    groups.removeAll { $0.id == id }
+    save()
+  }
+
+  func groupName(for entry: DictionaryEntry) -> String? {
+    guard let gid = entry.groupID else { return nil }
+    return groups.first(where: { $0.id == gid })?.name
+  }
+
   // MARK: - Deck management
   
   /// Returns true iff `entry` already has a non-verb card in the active deck.
