@@ -35,7 +35,7 @@ struct LLMDefinition: Codable, Equatable {
 /// App-level facade over `MLXModelCoordinator` that runs EuroLLM with
 /// the structured-JSON prompts the model is known to behave well on.
 @MainActor
-final class EuroLLMTranslator: ObservableObject {
+final class EuroLLMTranslator: ObservableObject, LLMTranslating {
   static let shared = EuroLLMTranslator()
 
   private let harness = MLXMemoryHarness()

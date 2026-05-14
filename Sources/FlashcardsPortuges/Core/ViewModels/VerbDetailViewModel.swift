@@ -21,10 +21,10 @@ final class VerbDetailViewModel: ObservableObject {
   @Published private(set) var errorMessage: String?
   @Published private(set) var verbChips: [VerbChip] = []
 
-  let store: DictionaryStore
-  let translator: EuroLLMTranslator
+  let store: any DictionaryStoring
+  let translator: any LLMTranslating
 
-  init(store: DictionaryStore, translator: EuroLLMTranslator = .shared) {
+  init(store: any DictionaryStoring, translator: any LLMTranslating = EuroLLMTranslator.shared) {
     self.store = store
     self.translator = translator
   }

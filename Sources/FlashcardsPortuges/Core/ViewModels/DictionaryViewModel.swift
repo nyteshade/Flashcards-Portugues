@@ -34,10 +34,10 @@ final class DictionaryViewModel: ObservableObject {
   @Published var deleteCandidate: DictionaryEntry?
   @Published var showDeleteConfirmation: Bool = false
 
-  let store: DictionaryStore
+  let store: any DictionaryStoring
   let chatStore: ChatStore
 
-  init(store: DictionaryStore, chatStore: ChatStore) {
+  init(store: any DictionaryStoring, chatStore: ChatStore) {
     self.store = store
     self.chatStore = chatStore
   }

@@ -12,9 +12,9 @@ final class TranslateViewModel: ObservableObject {
   @Published private(set) var error: String?
   @Published private(set) var busy: Bool = false
 
-  let translator: EuroLLMTranslator
+  let translator: any LLMTranslating
 
-  init(translator: EuroLLMTranslator = .shared) {
+  init(translator: any LLMTranslating = EuroLLMTranslator.shared) {
     self.translator = translator
   }
 

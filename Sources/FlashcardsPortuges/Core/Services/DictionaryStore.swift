@@ -1,7 +1,7 @@
 import Foundation
 
 @MainActor
-class DictionaryStore: ObservableObject {
+class DictionaryStore: ObservableObject, DictionaryStoring {
   @Published var entries: [DictionaryEntry] = []
   @Published var decks: [Deck] = []
   @Published var activeDeckID: UUID

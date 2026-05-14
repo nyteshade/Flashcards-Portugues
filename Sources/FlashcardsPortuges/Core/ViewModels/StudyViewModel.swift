@@ -31,10 +31,10 @@ final class StudyViewModel: ObservableObject {
   @Published private(set) var verbEnglishCache: [String: String] = [:]
   private var inFlightVerbLookups: Set<String> = []
 
-  let store: DictionaryStore
-  let translator: EuroLLMTranslator
+  let store: any DictionaryStoring
+  let translator: any LLMTranslating
 
-  init(store: DictionaryStore, translator: EuroLLMTranslator = .shared) {
+  init(store: any DictionaryStoring, translator: any LLMTranslating = EuroLLMTranslator.shared) {
     self.store = store
     self.translator = translator
   }

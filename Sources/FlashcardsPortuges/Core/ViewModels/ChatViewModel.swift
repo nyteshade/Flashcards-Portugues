@@ -20,15 +20,15 @@ final class ChatViewModel: ObservableObject {
   @Published var translatingPhrase: Bool = false
   @Published var showAddSheet: Bool = false
 
-  let store: DictionaryStore
+  let store: any DictionaryStoring
   let chatStore: ChatStore
-  let translator: EuroLLMTranslator
+  let translator: any LLMTranslating
   let tracker: ActivityTracker
 
   init(
-    store: DictionaryStore,
+    store: any DictionaryStoring,
     chatStore: ChatStore,
-    translator: EuroLLMTranslator = .shared,
+    translator: any LLMTranslating = EuroLLMTranslator.shared,
     tracker: ActivityTracker = .shared
   ) {
     self.store = store

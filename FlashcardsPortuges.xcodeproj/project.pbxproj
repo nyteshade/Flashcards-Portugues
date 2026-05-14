@@ -12,10 +12,12 @@
 		1F1D32A1CF50DD562C819680 /* FlashcardsPortugesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF206BC1AF36DE7024F09144 /* FlashcardsPortugesApp.swift */; };
 		26F56D07EC966A35E96F2285 /* MLXModelCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D278F1E9893C34B745802057 /* MLXModelCoordinator.swift */; };
 		2C2113190DC2EFD82AE70386 /* DictionaryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24FEE3FC96A542553265338 /* DictionaryStore.swift */; };
+		38F3B474D38A0B50075F5A19 /* DictionaryStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33785B6BAA65575092BA4A6 /* DictionaryStoring.swift */; };
 		3C310330AC5C2603B5856F99 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17EB3A58AAF2AD62F8BBC79 /* ChatView.swift */; };
 		3DE808E55A75AF582134E459 /* DictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7F224AF87A918422BF0248 /* DictionaryView.swift */; };
 		3F70EE189928958082DA487E /* MLXHuggingFace in Frameworks */ = {isa = PBXBuildFile; productRef = D84D76FFD949C4A86C29FE2D /* MLXHuggingFace */; };
 		477F9FCFF80AA3D2C1D0E933 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C13DB1CD8948B7F9F1B6FB /* ContentView.swift */; };
+		482BFB459BD70F34BCFCBA50 /* LLMTranslating.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0B291F354C77B8B12FB773 /* LLMTranslating.swift */; };
 		49966CF9C3CD8F0AAFEFA42D /* TranslationActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0531A694F21606D67D23931 /* TranslationActionsView.swift */; };
 		4D8864803F43D1EC8C2F8092 /* MLX in Frameworks */ = {isa = PBXBuildFile; productRef = 1D757D01DDE13B58C69D2AEE /* MLX */; };
 		4DE617E6014260D64001D359 /* SmartTranslateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1111E350996B4ABF6535812 /* SmartTranslateButton.swift */; };
@@ -87,8 +89,10 @@
 		9E623D86833D71EA1D12DB2D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		A226709B9297FA3A46707D0B /* TranslationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationService.swift; sourceTree = "<group>"; };
 		A24FEE3FC96A542553265338 /* DictionaryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryStore.swift; sourceTree = "<group>"; };
+		A33785B6BAA65575092BA4A6 /* DictionaryStoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryStoring.swift; sourceTree = "<group>"; };
 		A5C13DB1CD8948B7F9F1B6FB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A833EE61200C245BE0CF0670 /* SpeechService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechService.swift; sourceTree = "<group>"; };
+		AB0B291F354C77B8B12FB773 /* LLMTranslating.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMTranslating.swift; sourceTree = "<group>"; };
 		AB20C362D56830742C81CF40 /* TranslateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateView.swift; sourceTree = "<group>"; };
 		ADECB3C3CF82F240D3704697 /* DeckDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDocument.swift; sourceTree = "<group>"; };
 		B2CBAA1ADD60B0172F2B392C /* StudyDeck.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = StudyDeck.icns; sourceTree = "<group>"; };
@@ -148,6 +152,7 @@
 				85CC279DE5F89B25FAB279AA /* DeckFileService.swift */,
 				682D0F18C27FFED9ACAAC902 /* DictionaryLookup.swift */,
 				A24FEE3FC96A542553265338 /* DictionaryStore.swift */,
+				A33785B6BAA65575092BA4A6 /* DictionaryStoring.swift */,
 				854E30ADD471B58D9A36B311 /* LocalTranslationService.swift */,
 				826FF9F4A76F8E02A467616B /* Logger.swift */,
 				FA326F4E8B4D57CC124225C5 /* PathProvider.swift */,
@@ -257,6 +262,7 @@
 			isa = PBXGroup;
 			children = (
 				8F91FED7CEEDB3F6B4A7E637 /* EuroLLMTranslator.swift */,
+				AB0B291F354C77B8B12FB773 /* LLMTranslating.swift */,
 				0FB917ABD4506486A58E82DB /* MLXMemoryHarness.swift */,
 				D278F1E9893C34B745802057 /* MLXModelCoordinator.swift */,
 				778ADA9B7857D12E680972F6 /* ModelCatalog.swift */,
@@ -380,11 +386,13 @@
 				CDB073218C1B8F50CDBCF5C0 /* DefinePopover.swift in Sources */,
 				8393C1F302837BA09588A7B4 /* DictionaryLookup.swift in Sources */,
 				2C2113190DC2EFD82AE70386 /* DictionaryStore.swift in Sources */,
+				38F3B474D38A0B50075F5A19 /* DictionaryStoring.swift in Sources */,
 				3DE808E55A75AF582134E459 /* DictionaryView.swift in Sources */,
 				568D511E399D3ED722D2940C /* DictionaryViewModel.swift in Sources */,
 				15FC8FD99D3F97FD39AB4C76 /* EuroLLMTranslator.swift in Sources */,
 				67161F94C05DFFBEC6211A21 /* Flashcard.swift in Sources */,
 				1F1D32A1CF50DD562C819680 /* FlashcardsPortugesApp.swift in Sources */,
+				482BFB459BD70F34BCFCBA50 /* LLMTranslating.swift in Sources */,
 				5529AD37DB88444DC0C85CA5 /* LocalTranslationService.swift in Sources */,
 				B203287F5A69D585A7D6C444 /* Logger.swift in Sources */,
 				F4482B95B2FA3ABA18A31E34 /* MLXMemoryHarness.swift in Sources */,
