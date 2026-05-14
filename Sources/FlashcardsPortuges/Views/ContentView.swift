@@ -19,6 +19,7 @@ struct ContentView: View {
       tabContent
     }
     .frame(minWidth: 700, minHeight: 500)
+    .background(tabShortcuts)
     .toolbar {
       ToolbarItem(placement: .primaryAction) {
         ModelStatusPill(translator: translator)
@@ -37,6 +38,32 @@ struct ContentView: View {
       // voice while the app was closed.
       voicePrompt.refresh()
     }
+  }
+
+  /// Hidden buttons owning ⌘1–⌘5 so the tabs are reachable from the
+  /// keyboard anywhere in the app. ⌘4/⌘5 no-op when the LLM isn't
+  /// loaded (the Translate/Chat tabs don't exist yet).
+  @ViewBuilder
+  private var tabShortcuts: some View {
+    ZStack {
+      Button { selectedTab = .study } label: { EmptyView() }
+        .keyboardShortcut("1", modifiers: .command)
+      Button { selectedTab = .dictionary } label: { EmptyView() }
+        .keyboardShortcut("2", modifiers: .command)
+      Button { selectedTab = .verbs } label: { EmptyView() }
+        .keyboardShortcut("3", modifiers: .command)
+      Button {
+        if translator.isReady { selectedTab = .translate }
+      } label: { EmptyView() }
+        .keyboardShortcut("4", modifiers: .command)
+      Button {
+        if translator.isReady { selectedTab = .chat }
+      } label: { EmptyView() }
+        .keyboardShortcut("5", modifiers: .command)
+    }
+    .opacity(0)
+    .frame(width: 0, height: 0)
+    .accessibilityHidden(true)
   }
 
   @ViewBuilder
