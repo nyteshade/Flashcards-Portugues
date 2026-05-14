@@ -267,25 +267,53 @@ struct DictionaryView: View {
   }
 }
 
+// MARK: - Part of Speech selection
+
+/// Picker selection type for the Add Entry dialog. `.auto` only
+/// appears when the LLM is loaded; picking it defers the actual
+/// `PartOfSpeech` choice to the model at add-time.
+enum POSSelection: Hashable {
+  case auto
+  case pos(PartOfSpeech)
+}
+
 // MARK: - Add Dictionary Entry View
 
 struct AddDictionaryEntryView: View {
   @ObservedObject var store: DictionaryStore
+  @ObservedObject private var translator = EuroLLMTranslator.shared
   @Environment(\.dismiss) var dismiss
   @State private var portuguese = ""
   @State private var english = ""
-  @State private var partOfSpeech: PartOfSpeech = .noun
+  @State private var posSelection: POSSelection
   @State private var notes = ""
   @State private var lookupStatus = ""
   @State private var isDictionaryLoaded = false
+  @State private var isAdding = false
   @State private var selectedGroupID: UUID?
 
   /// `initialGroupID` pre-selects the Group picker — passed the
   /// sidebar's currently-selected group so adding an entry while a
-  /// group is open targets that group by default.
+  /// group is open targets that group by default. When the LLM is
+  /// loaded the Part of Speech picker defaults to `.auto`.
   init(store: DictionaryStore, initialGroupID: UUID? = nil) {
     self.store = store
     _selectedGroupID = State(initialValue: initialGroupID)
+    let llmReady = EuroLLMTranslator.shared.isReady
+    _posSelection = State(initialValue: llmReady ? .auto : .pos(.noun))
+  }
+
+  /// Bridges `SmartTranslateButton`'s `Binding<PartOfSpeech>` to our
+  /// `POSSelection` state — when the smart-translate detects a part
+  /// of speech, the picker moves off `.auto` to that concrete value.
+  private var posBinding: Binding<PartOfSpeech> {
+    Binding(
+      get: {
+        if case .pos(let p) = posSelection { return p }
+        return .noun
+      },
+      set: { posSelection = .pos($0) }
+    )
   }
 
   var body: some View {
@@ -302,7 +330,7 @@ struct AddDictionaryEntryView: View {
           english: $english,
           side: .portuguese,
           status: $lookupStatus,
-          partOfSpeech: $partOfSpeech
+          partOfSpeech: posBinding
         )
       }
 
@@ -314,7 +342,7 @@ struct AddDictionaryEntryView: View {
           english: $english,
           side: .english,
           status: $lookupStatus,
-          partOfSpeech: $partOfSpeech
+          partOfSpeech: posBinding
         )
       }
 
@@ -324,9 +352,12 @@ struct AddDictionaryEntryView: View {
           .foregroundColor(.secondary)
       }
 
-      Picker("Part of Speech", selection: $partOfSpeech) {
+      Picker("Part of Speech", selection: $posSelection) {
+        if translator.isReady {
+          Text("Auto").tag(POSSelection.auto)
+        }
         ForEach(PartOfSpeech.allCases) { pos in
-          Text(pos.rawValue).tag(pos)
+          Text(pos.rawValue).tag(POSSelection.pos(pos))
         }
       }
 
@@ -345,20 +376,13 @@ struct AddDictionaryEntryView: View {
       HStack {
         Button("Cancel") { dismiss() }
         Spacer()
-        Button("Add Entry") {
-          guard !portuguese.trimmingCharacters(in: .whitespaces).isEmpty,
-                !english.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-          store.addEntry(
-            portuguese: portuguese.trimmingCharacters(in: .whitespaces),
-            english: english.trimmingCharacters(in: .whitespaces),
-            partOfSpeech: partOfSpeech,
-            notes: notes.trimmingCharacters(in: .whitespaces),
-            groupID: selectedGroupID
-          )
-          dismiss()
+        if isAdding {
+          ProgressView().controlSize(.small)
         }
+        Button("Add Entry") { addEntry() }
         .buttonStyle(.borderedProminent)
-        .disabled(portuguese.trimmingCharacters(in: .whitespaces).isEmpty ||
+        .disabled(isAdding ||
+                  portuguese.trimmingCharacters(in: .whitespaces).isEmpty ||
                   english.trimmingCharacters(in: .whitespaces).isEmpty)
       }
     }
@@ -379,13 +403,33 @@ struct AddDictionaryEntryView: View {
     }
   }
 
-  private func tryDetectPOS(_ definition: String) {
-    let lower = definition.lowercased()
-    if lower.contains("verbo") || lower.contains("verb") || definition.contains("v ") { partOfSpeech = .verb }
-    else if lower.contains("adjetivo") || lower.contains("adj") || definition.contains("adj ") { partOfSpeech = .adjective }
-    else if lower.contains("advérbio") || lower.contains("adv") { partOfSpeech = .adverb }
-    else if lower.contains("preposição") || lower.contains("prep") { partOfSpeech = .preposition }
-    else if lower.contains("substantivo") || lower.contains("noun") || lower.contains("s. f") || lower.contains("s. m") { partOfSpeech = .noun }
+  /// Resolve the part of speech (asking the LLM when `.auto` is
+  /// selected) and persist the entry. The LLM classify call is fast
+  /// but async, so the whole add runs in a Task with `isAdding`
+  /// gating the button.
+  private func addEntry() {
+    let pt = portuguese.trimmingCharacters(in: .whitespaces)
+    let en = english.trimmingCharacters(in: .whitespaces)
+    guard !pt.isEmpty, !en.isEmpty else { return }
+    isAdding = true
+    Task {
+      let resolvedPOS: PartOfSpeech
+      switch posSelection {
+      case .auto:
+        resolvedPOS = await translator.classifyPartOfSpeech(portuguese: pt) ?? .noun
+      case .pos(let p):
+        resolvedPOS = p
+      }
+      store.addEntry(
+        portuguese: pt,
+        english: en,
+        partOfSpeech: resolvedPOS,
+        notes: notes.trimmingCharacters(in: .whitespaces),
+        groupID: selectedGroupID
+      )
+      isAdding = false
+      dismiss()
+    }
   }
 }
 
