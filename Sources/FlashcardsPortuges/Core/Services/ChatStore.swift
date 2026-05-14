@@ -20,4 +20,14 @@ final class ChatStore: ObservableObject {
     input = text
     focusToken &+= 1
   }
+
+  /// Clear the conversation and input to start a fresh session with
+  /// Sofia. The LLM keeps no server-side state — the whole context is
+  /// these `messages`, rebuilt into the prompt on every send — so
+  /// emptying them is a complete reset, no app restart needed.
+  func startNewSession() {
+    messages.removeAll()
+    input = ""
+    focusToken &+= 1
+  }
 }

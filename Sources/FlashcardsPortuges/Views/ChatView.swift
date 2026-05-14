@@ -17,6 +17,8 @@ struct ChatView: View {
 
   var body: some View {
     VStack(spacing: 0) {
+      chatHeader
+      Divider()
       messageList
       Divider()
       inputBar
@@ -30,6 +32,25 @@ struct ChatView: View {
     .sheet(isPresented: $viewModel.showAddSheet) {
       addToDeckSheet
     }
+  }
+
+  // MARK: - Header
+
+  @ViewBuilder
+  private var chatHeader: some View {
+    HStack {
+      Spacer()
+      Button {
+        chatStore.startNewSession()
+      } label: {
+        Label("New Chat", systemImage: "square.and.pencil")
+      }
+      .buttonStyle(.borderless)
+      .help("Clear the conversation and start fresh with Sofia")
+      .disabled(chatStore.messages.isEmpty && chatStore.input.isEmpty)
+    }
+    .padding(.horizontal, 12)
+    .padding(.vertical, 6)
   }
 
   // MARK: - Message list
