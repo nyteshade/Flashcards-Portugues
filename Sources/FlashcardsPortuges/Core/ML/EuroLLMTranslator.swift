@@ -518,7 +518,9 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
     }
   }
   
-  static func extractJSONBody(from raw: String) -> String? {
+  /// Pure string brace-matcher — `nonisolated` so non-MainActor
+  /// callers (e.g. `ChatService.extractAction`) can reuse it.
+  nonisolated static func extractJSONBody(from raw: String) -> String? {
     guard let firstBrace = raw.firstIndex(of: "{") else { return nil }
     var depth = 0
     var idx = firstBrace

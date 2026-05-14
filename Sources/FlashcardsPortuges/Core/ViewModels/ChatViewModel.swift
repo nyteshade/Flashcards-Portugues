@@ -67,10 +67,23 @@ final class ChatViewModel: ObservableObject {
           elapsedSeconds: elapsed,
           estimatedTokens: max(1, response.count / 4)
         )
+        // Sofia may emit an <action> block to perform an app action
+        // on the student's behalf. Split it from the conversational
+        // text, show the prose, then run the action and append its
+        // result as its own message.
+        let (action, cleaned) = ChatService.extractAction(from: response)
         await MainActor.run {
-          self.chatStore.messages.append(
-            ChatMessage(role: .assistant, content: response, generation: stats)
-          )
+          if !cleaned.isEmpty {
+            self.chatStore.messages.append(
+              ChatMessage(role: .assistant, content: cleaned, generation: stats)
+            )
+          }
+          if let action {
+            let result = AppActionExecutor.execute(action, store: self.store)
+            self.chatStore.messages.append(
+              ChatMessage(role: .assistant, content: result.message)
+            )
+          }
         }
       } catch {
         await MainActor.run { self.error = error.localizedDescription }

@@ -14,6 +14,7 @@ import Foundation
 protocol DictionaryStoring: AnyObject {
   var entries: [DictionaryEntry] { get set }
   var groups: [DictionaryGroup] { get }
+  var decks: [Deck] { get }
   var studyDeck: Deck { get }
 
   func addEntry(
@@ -27,7 +28,10 @@ protocol DictionaryStoring: AnyObject {
   func createGroup(named name: String)
   func renameGroup(id: UUID, to newName: String)
   func deleteGroup(id: UUID)
+  func addToStudyDeck(entry: DictionaryEntry)
   func removeFromStudyDeck(_ card: Flashcard)
+  @discardableResult
+  func createDeck(named name: String) -> Deck
   func renameDeck(id: UUID, to newName: String)
   func adoptDeck(_ deck: Deck, makeActive: Bool)
   func save()
