@@ -37,7 +37,9 @@ struct ModelVariant: Identifiable, Hashable {
   let sizeOnDiskHint: String
 
   /// HuggingFace hub cache directory for this variant — used to check
-  /// "is it downloaded yet?" and to delete cached weights.
+  /// "is it downloaded yet?" and to delete cached weights. Rooted at
+  /// `PathProvider.modelCacheDirectory` so it tracks the App Sandbox
+  /// container automatically.
   var cacheDir: URL {
     let parts = huggingFaceRepo.split(separator: "/")
     let folder: String
@@ -46,8 +48,6 @@ struct ModelVariant: Identifiable, Hashable {
     } else {
       folder = "models--\(huggingFaceRepo.replacingOccurrences(of: "/", with: "--"))"
     }
-    return FileManager.default.homeDirectoryForCurrentUser
-      .appendingPathComponent(".cache/huggingface/hub")
-      .appendingPathComponent(folder)
+    return PathProvider.modelCacheDirectory.appendingPathComponent(folder)
   }
 }

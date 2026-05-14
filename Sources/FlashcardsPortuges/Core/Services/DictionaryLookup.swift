@@ -19,10 +19,7 @@ enum DictionaryLookup {
   private static let dictionaryURL = URL(string: "https://raw.githubusercontent.com/SMenigat/thousand-most-common-words/master/words/pt.json")!
   
   private static var dictionaryFileURL: URL {
-    let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-    let dir = appSupport.appendingPathComponent("FlashcardsPortuges", isDirectory: true)
-    try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-    return dir.appendingPathComponent("pt-en-dictionary.json")
+    PathProvider.appSupportDirectory.appendingPathComponent("pt-en-dictionary.json")
   }
   
   nonisolated(unsafe) private static var ptEnDict: [String: String]?

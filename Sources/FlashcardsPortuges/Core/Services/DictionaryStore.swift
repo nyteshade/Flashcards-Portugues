@@ -30,24 +30,15 @@ class DictionaryStore: ObservableObject {
   }
   
   private var fileURL: URL {
-    let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-    let dir = appSupport.appendingPathComponent("FlashcardsPortuges", isDirectory: true)
-    try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-    return dir.appendingPathComponent("dictionary.json")
+    PathProvider.appSupportDirectory.appendingPathComponent("dictionary.json")
   }
-  
+
   private var decksURL: URL {
-    let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-    let dir = appSupport.appendingPathComponent("FlashcardsPortuges", isDirectory: true)
-    try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-    return dir.appendingPathComponent("decks.json")
+    PathProvider.appSupportDirectory.appendingPathComponent("decks.json")
   }
 
   private var groupsURL: URL {
-    let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
-    let dir = appSupport.appendingPathComponent("FlashcardsPortuges", isDirectory: true)
-    try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
-    return dir.appendingPathComponent("groups.json")
+    PathProvider.appSupportDirectory.appendingPathComponent("groups.json")
   }
   
   init() {

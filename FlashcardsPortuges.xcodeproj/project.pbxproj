@@ -25,6 +25,7 @@
 		5C8B3DF8C43CD6D55FFA9AE6 /* Flashcards.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4865A0B248EAD240A942A70E /* Flashcards.icns */; };
 		6397AEA657C6C6020FEB3DE7 /* StudyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C9A6916CC1EB5490534012 /* StudyViewModel.swift */; };
 		67161F94C05DFFBEC6211A21 /* Flashcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8271019A4A13AC0F035C820F /* Flashcard.swift */; };
+		69CC4B0CA1F2D812D78522B3 /* PathProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA326F4E8B4D57CC124225C5 /* PathProvider.swift */; };
 		730CDEB2294EE06147AB55DB /* MLXOptimizers in Frameworks */ = {isa = PBXBuildFile; productRef = 527778BD6CF731D88367B822 /* MLXOptimizers */; };
 		76E3E4FADE9910A2E43BB22E /* ModelVariant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020640A3F1A2550B46080BD1 /* ModelVariant.swift */; };
 		7A1138296F955807DA37CF9D /* MLXLMCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 12E6357B74AB8A91A2FF4479 /* MLXLMCommon */; };
@@ -103,6 +104,7 @@
 		E9D14AF73A72972581B51151 /* VoicePromptBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePromptBanner.swift; sourceTree = "<group>"; };
 		F1111E350996B4ABF6535812 /* SmartTranslateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartTranslateButton.swift; sourceTree = "<group>"; };
 		F6DE7D4F870C7386064022D4 /* ChatStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatStore.swift; sourceTree = "<group>"; };
+		FA326F4E8B4D57CC124225C5 /* PathProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathProvider.swift; sourceTree = "<group>"; };
 		FF206BC1AF36DE7024F09144 /* FlashcardsPortugesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardsPortugesApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -148,6 +150,7 @@
 				A24FEE3FC96A542553265338 /* DictionaryStore.swift */,
 				854E30ADD471B58D9A36B311 /* LocalTranslationService.swift */,
 				826FF9F4A76F8E02A467616B /* Logger.swift */,
+				FA326F4E8B4D57CC124225C5 /* PathProvider.swift */,
 				A833EE61200C245BE0CF0670 /* SpeechService.swift */,
 				A226709B9297FA3A46707D0B /* TranslationService.swift */,
 				00A99659C624616ABD8B5B86 /* VerbConjugator.swift */,
@@ -389,6 +392,7 @@
 				A388A35AC4115FE53C96B8E6 /* ModelCatalog.swift in Sources */,
 				C3390E7A4A734EBD2FC553F8 /* ModelStatusPill.swift in Sources */,
 				76E3E4FADE9910A2E43BB22E /* ModelVariant.swift in Sources */,
+				69CC4B0CA1F2D812D78522B3 /* PathProvider.swift in Sources */,
 				805D14AA1653B8CAF8185DA5 /* SettingsView.swift in Sources */,
 				4DE617E6014260D64001D359 /* SmartTranslateButton.swift in Sources */,
 				C7C8288BA4BA8467BEB7ACB1 /* SpeechService.swift in Sources */,
