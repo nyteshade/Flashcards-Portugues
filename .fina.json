@@ -1,7 +1,8 @@
 {
-  "created_at" : "2026-05-08T23:14:00Z",
-  "fina_guid" : "f7a3d91e2c4b4e8a9d6f1c3e5b7a820d",
+  "created_at" : "2026-05-11T21:50:00Z",
+  "fina_guid" : "e55128d398b945539e370f4b5fcf6f35",
   "kind" : "project",
+  "partition_id" : "partition:4hyk0w92oxhzqzgfxs7g",
   "partition_name" : "Flashcards-Portugues",
   "schema_version" : 1
 }

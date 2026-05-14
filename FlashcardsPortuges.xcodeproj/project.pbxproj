@@ -8,80 +8,102 @@
 
 /* Begin PBXBuildFile section */
 		042D246BDEADA4531AB84F11 /* Tokenizers in Frameworks */ = {isa = PBXBuildFile; productRef = BE32FEFCD7AFA75BC37E672B /* Tokenizers */; };
-		2972DBEEF2F679B5C0B30D50 /* SpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6957AC9FF6E584D0388197BA /* SpeechService.swift */; };
-		2C940A469BD26D102E73B81F /* LocalTranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1696E050DFDF7FC37E9C77 /* LocalTranslationService.swift */; };
-		2C9AA41D2C222A51E0A0BCFC /* DeckDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036B3BD8D665A4C00B2EC5A1 /* DeckDocument.swift */; };
-		309E72620FD452F5E26C9E07 /* VoicePreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF6E3AFDAB768DC859C52876 /* VoicePreferences.swift */; };
+		15FC8FD99D3F97FD39AB4C76 /* EuroLLMTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F91FED7CEEDB3F6B4A7E637 /* EuroLLMTranslator.swift */; };
+		1F1D32A1CF50DD562C819680 /* FlashcardsPortugesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF206BC1AF36DE7024F09144 /* FlashcardsPortugesApp.swift */; };
+		26F56D07EC966A35E96F2285 /* MLXModelCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D278F1E9893C34B745802057 /* MLXModelCoordinator.swift */; };
+		2C2113190DC2EFD82AE70386 /* DictionaryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24FEE3FC96A542553265338 /* DictionaryStore.swift */; };
 		3C310330AC5C2603B5856F99 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17EB3A58AAF2AD62F8BBC79 /* ChatView.swift */; };
 		3DE808E55A75AF582134E459 /* DictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7F224AF87A918422BF0248 /* DictionaryView.swift */; };
 		3F70EE189928958082DA487E /* MLXHuggingFace in Frameworks */ = {isa = PBXBuildFile; productRef = D84D76FFD949C4A86C29FE2D /* MLXHuggingFace */; };
-		45346F2A56C2D2C371AACE69 /* DeckFileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A8CA2668364B2C8EF3DC173 /* DeckFileService.swift */; };
 		477F9FCFF80AA3D2C1D0E933 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C13DB1CD8948B7F9F1B6FB /* ContentView.swift */; };
 		49966CF9C3CD8F0AAFEFA42D /* TranslationActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0531A694F21606D67D23931 /* TranslationActionsView.swift */; };
-		4C70D1D1BCF1390B24477790 /* MLXMemoryHarness.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1318FACAFA18908F316E0DC /* MLXMemoryHarness.swift */; };
 		4D8864803F43D1EC8C2F8092 /* MLX in Frameworks */ = {isa = PBXBuildFile; productRef = 1D757D01DDE13B58C69D2AEE /* MLX */; };
 		4DE617E6014260D64001D359 /* SmartTranslateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1111E350996B4ABF6535812 /* SmartTranslateButton.swift */; };
-		54B3DDCF19E8C60DAE8CB8C9 /* DictionaryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B90501A9CF6DCE93C6953CF /* DictionaryStore.swift */; };
+		5529AD37DB88444DC0C85CA5 /* LocalTranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854E30ADD471B58D9A36B311 /* LocalTranslationService.swift */; };
+		568D511E399D3ED722D2940C /* DictionaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC46C1AB39A4485E72DB5E02 /* DictionaryViewModel.swift */; };
 		56DFFA2339327138425456E5 /* VerbDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542B65576CA6F13D5608C62B /* VerbDetailView.swift */; };
-		576489EA53028080996596AD /* EuroLLMTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F751F6934F0C807D5F1DA80 /* EuroLLMTranslator.swift */; };
-		5C4F7D25D6D2AE9CF269CCE2 /* ActivityTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB077EB13DD36598BEFD8D3 /* ActivityTracker.swift */; };
 		5C8B3DF8C43CD6D55FFA9AE6 /* Flashcards.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4865A0B248EAD240A942A70E /* Flashcards.icns */; };
-		601B44807FB862D280B48A32 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5E660BD7E687E0A17AA98C /* ChatService.swift */; };
-		64255821B51BCF0CCD472B8D /* TranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52294922EC4EAA110F91CBC2 /* TranslationService.swift */; };
+		6397AEA657C6C6020FEB3DE7 /* StudyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C9A6916CC1EB5490534012 /* StudyViewModel.swift */; };
+		67161F94C05DFFBEC6211A21 /* Flashcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8271019A4A13AC0F035C820F /* Flashcard.swift */; };
 		730CDEB2294EE06147AB55DB /* MLXOptimizers in Frameworks */ = {isa = PBXBuildFile; productRef = 527778BD6CF731D88367B822 /* MLXOptimizers */; };
-		7462D464DBC4A6164430DD34 /* Flashcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3302D199D72C70FAA6D7442D /* Flashcard.swift */; };
+		76E3E4FADE9910A2E43BB22E /* ModelVariant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020640A3F1A2550B46080BD1 /* ModelVariant.swift */; };
 		7A1138296F955807DA37CF9D /* MLXLMCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 12E6357B74AB8A91A2FF4479 /* MLXLMCommon */; };
-		97AB249B0229E33FFEC1D5B9 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91FDC63357E92728A614013 /* SettingsView.swift */; };
+		805D14AA1653B8CAF8185DA5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E623D86833D71EA1D12DB2D /* SettingsView.swift */; };
+		8393C1F302837BA09588A7B4 /* DictionaryLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682D0F18C27FFED9ACAAC902 /* DictionaryLookup.swift */; };
+		8D0C36BB58FC339F940E6239 /* TranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A226709B9297FA3A46707D0B /* TranslationService.swift */; };
+		9057A0930D21D3B81ED12E74 /* VoiceAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367E8D38ABB18C51A331120E /* VoiceAvailability.swift */; };
+		91B44796426BEA8B4ED8D218 /* VerbEnglishFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C7178FF274DD62F709EC5E /* VerbEnglishFormatter.swift */; };
+		97AE1C77569FDFE5BFEACDEB /* VerbConjugator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A99659C624616ABD8B5B86 /* VerbConjugator.swift */; };
+		98BF9A5F6046E1D07C0AD2FA /* VoicePromptBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D14AF73A72972581B51151 /* VoicePromptBanner.swift */; };
 		9B15F3A1976A868CF97AA1B0 /* MLXLLM in Frameworks */ = {isa = PBXBuildFile; productRef = D0DC95B14FEFB8D984846E68 /* MLXLLM */; };
-		9E04538A9510240EFF7B5ED0 /* DictionaryLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = C20B050E72593EE7FA4EB8EF /* DictionaryLookup.swift */; };
-		A504219F5B3ED1321B0E2991 /* VerbEnglishFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69F023B02C2499C8F234209 /* VerbEnglishFormatter.swift */; };
+		A388A35AC4115FE53C96B8E6 /* ModelCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778ADA9B7857D12E680972F6 /* ModelCatalog.swift */; };
 		A6B8BE0934D7DC1A29C245E2 /* StudyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0C65DCD09A903710E07C98 /* StudyView.swift */; };
-		A74C4A38D2F6F8DB5B135106 /* VerbConjugator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594B2C08D119C507EF67E077 /* VerbConjugator.swift */; };
-		C00418C6ED154C62C499E89A /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2534080EC43FA86C3DE74507 /* Logger.swift */; };
+		A76D8BA7D88DF470411F1E41 /* VoicePromptViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9843D68C30A2DB3DBA38BC09 /* VoicePromptViewModel.swift */; };
+		A7A96D8D0EEEA025EC33BE7B /* ActivityTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CEA4DB4ADFF28D0000B131 /* ActivityTracker.swift */; };
+		AA6735AC7445D95405987A8A /* DeckFileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CC279DE5F89B25FAB279AA /* DeckFileService.swift */; };
+		B203287F5A69D585A7D6C444 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826FF9F4A76F8E02A467616B /* Logger.swift */; };
+		BEB85E91BBBABCFD106B0DA0 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C8422A4033A094929F18DB /* ChatService.swift */; };
 		C06A48803A623C0DFE086DBD /* TranslateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB20C362D56830742C81CF40 /* TranslateView.swift */; };
 		C3390E7A4A734EBD2FC553F8 /* ModelStatusPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8843478178F699C32FD7DF48 /* ModelStatusPill.swift */; };
-		CB5D9F3FB7D4B95A97894897 /* FlashcardsPortugesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45005C3C594B9C0256835551 /* FlashcardsPortugesApp.swift */; };
+		C7C8288BA4BA8467BEB7ACB1 /* SpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A833EE61200C245BE0CF0670 /* SpeechService.swift */; };
+		CC79BBCE920BF97498BCA98D /* VerbDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027D02FE89E93819FB90BA07 /* VerbDetailViewModel.swift */; };
 		CDB073218C1B8F50CDBCF5C0 /* DefinePopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6751FDB84B4B302FBF6A2C /* DefinePopover.swift */; };
+		D2FD244F0E7C0E7D87E3649E /* DeckDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADECB3C3CF82F240D3704697 /* DeckDocument.swift */; };
 		D42718090809242DC37FA1B1 /* MLXRandom in Frameworks */ = {isa = PBXBuildFile; productRef = 7317197404699E0BDF37B849 /* MLXRandom */; };
+		D6EA9F481DD50B58F28F9C06 /* VoicePreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94C0DCC4EF06284681448AF /* VoicePreferences.swift */; };
 		E9186979B846D93804493A89 /* StudyDeck.icns in Resources */ = {isa = PBXBuildFile; fileRef = B2CBAA1ADD60B0172F2B392C /* StudyDeck.icns */; };
+		EBC6129EF99AB3F75CC86C66 /* TranslateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AED2F0B664A164CF8BA4816 /* TranslateViewModel.swift */; };
 		ED48122A374FE30AFBBC6804 /* MLXNN in Frameworks */ = {isa = PBXBuildFile; productRef = 3ED34B2E477A810C2597C660 /* MLXNN */; };
 		EEF034052A9D23CB084821A0 /* HuggingFace in Frameworks */ = {isa = PBXBuildFile; productRef = 261D7AFE31C0B36FF839A997 /* HuggingFace */; };
-		F9529AF742E57071AFE4B60E /* MLXModelCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0027A0B1EC04711D611F45BB /* MLXModelCoordinator.swift */; };
+		F0516873F3E3B00AB2EA557B /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D9754B47B590A5D2531E98 /* ChatViewModel.swift */; };
+		F4482B95B2FA3ABA18A31E34 /* MLXMemoryHarness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB917ABD4506486A58E82DB /* MLXMemoryHarness.swift */; };
+		FAC70D3EBEE5F4D94A2D6A26 /* ChatStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DE7D4F870C7386064022D4 /* ChatStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0027A0B1EC04711D611F45BB /* MLXModelCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLXModelCoordinator.swift; sourceTree = "<group>"; };
-		036B3BD8D665A4C00B2EC5A1 /* DeckDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDocument.swift; sourceTree = "<group>"; };
-		0E1696E050DFDF7FC37E9C77 /* LocalTranslationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalTranslationService.swift; sourceTree = "<group>"; };
+		00A99659C624616ABD8B5B86 /* VerbConjugator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbConjugator.swift; sourceTree = "<group>"; };
+		020640A3F1A2550B46080BD1 /* ModelVariant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelVariant.swift; sourceTree = "<group>"; };
+		027D02FE89E93819FB90BA07 /* VerbDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbDetailViewModel.swift; sourceTree = "<group>"; };
+		0FB917ABD4506486A58E82DB /* MLXMemoryHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLXMemoryHarness.swift; sourceTree = "<group>"; };
 		1DACC4A4DACAC34578A250C9 /* FlashcardsPortuges.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlashcardsPortuges.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E0C65DCD09A903710E07C98 /* StudyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyView.swift; sourceTree = "<group>"; };
-		2534080EC43FA86C3DE74507 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		21C9A6916CC1EB5490534012 /* StudyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyViewModel.swift; sourceTree = "<group>"; };
+		29C8422A4033A094929F18DB /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
 		2B6751FDB84B4B302FBF6A2C /* DefinePopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefinePopover.swift; sourceTree = "<group>"; };
-		3302D199D72C70FAA6D7442D /* Flashcard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flashcard.swift; sourceTree = "<group>"; };
-		3B90501A9CF6DCE93C6953CF /* DictionaryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryStore.swift; sourceTree = "<group>"; };
-		45005C3C594B9C0256835551 /* FlashcardsPortugesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardsPortugesApp.swift; sourceTree = "<group>"; };
+		367E8D38ABB18C51A331120E /* VoiceAvailability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceAvailability.swift; sourceTree = "<group>"; };
 		4865A0B248EAD240A942A70E /* Flashcards.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Flashcards.icns; sourceTree = "<group>"; };
-		4F751F6934F0C807D5F1DA80 /* EuroLLMTranslator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EuroLLMTranslator.swift; sourceTree = "<group>"; };
-		52294922EC4EAA110F91CBC2 /* TranslationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationService.swift; sourceTree = "<group>"; };
 		542B65576CA6F13D5608C62B /* VerbDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbDetailView.swift; sourceTree = "<group>"; };
-		594B2C08D119C507EF67E077 /* VerbConjugator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbConjugator.swift; sourceTree = "<group>"; };
-		6957AC9FF6E584D0388197BA /* SpeechService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechService.swift; sourceTree = "<group>"; };
-		7A8CA2668364B2C8EF3DC173 /* DeckFileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckFileService.swift; sourceTree = "<group>"; };
+		682D0F18C27FFED9ACAAC902 /* DictionaryLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryLookup.swift; sourceTree = "<group>"; };
+		778ADA9B7857D12E680972F6 /* ModelCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelCatalog.swift; sourceTree = "<group>"; };
+		826FF9F4A76F8E02A467616B /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		8271019A4A13AC0F035C820F /* Flashcard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flashcard.swift; sourceTree = "<group>"; };
+		854E30ADD471B58D9A36B311 /* LocalTranslationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalTranslationService.swift; sourceTree = "<group>"; };
+		85CC279DE5F89B25FAB279AA /* DeckFileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckFileService.swift; sourceTree = "<group>"; };
 		8843478178F699C32FD7DF48 /* ModelStatusPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStatusPill.swift; sourceTree = "<group>"; };
-		9FB077EB13DD36598BEFD8D3 /* ActivityTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTracker.swift; sourceTree = "<group>"; };
+		8F91FED7CEEDB3F6B4A7E637 /* EuroLLMTranslator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EuroLLMTranslator.swift; sourceTree = "<group>"; };
+		9843D68C30A2DB3DBA38BC09 /* VoicePromptViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePromptViewModel.swift; sourceTree = "<group>"; };
+		9AED2F0B664A164CF8BA4816 /* TranslateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateViewModel.swift; sourceTree = "<group>"; };
+		9E623D86833D71EA1D12DB2D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		A226709B9297FA3A46707D0B /* TranslationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationService.swift; sourceTree = "<group>"; };
+		A24FEE3FC96A542553265338 /* DictionaryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryStore.swift; sourceTree = "<group>"; };
 		A5C13DB1CD8948B7F9F1B6FB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A833EE61200C245BE0CF0670 /* SpeechService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechService.swift; sourceTree = "<group>"; };
 		AB20C362D56830742C81CF40 /* TranslateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateView.swift; sourceTree = "<group>"; };
-		AF6E3AFDAB768DC859C52876 /* VoicePreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePreferences.swift; sourceTree = "<group>"; };
-		B1318FACAFA18908F316E0DC /* MLXMemoryHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLXMemoryHarness.swift; sourceTree = "<group>"; };
+		ADECB3C3CF82F240D3704697 /* DeckDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDocument.swift; sourceTree = "<group>"; };
 		B2CBAA1ADD60B0172F2B392C /* StudyDeck.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = StudyDeck.icns; sourceTree = "<group>"; };
-		B69F023B02C2499C8F234209 /* VerbEnglishFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbEnglishFormatter.swift; sourceTree = "<group>"; };
-		B91FDC63357E92728A614013 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		B2CEA4DB4ADFF28D0000B131 /* ActivityTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTracker.swift; sourceTree = "<group>"; };
 		BA7F224AF87A918422BF0248 /* DictionaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryView.swift; sourceTree = "<group>"; };
+		BC46C1AB39A4485E72DB5E02 /* DictionaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryViewModel.swift; sourceTree = "<group>"; };
 		C0531A694F21606D67D23931 /* TranslationActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationActionsView.swift; sourceTree = "<group>"; };
-		C20B050E72593EE7FA4EB8EF /* DictionaryLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryLookup.swift; sourceTree = "<group>"; };
+		C94C0DCC4EF06284681448AF /* VoicePreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePreferences.swift; sourceTree = "<group>"; };
+		D1C7178FF274DD62F709EC5E /* VerbEnglishFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbEnglishFormatter.swift; sourceTree = "<group>"; };
+		D278F1E9893C34B745802057 /* MLXModelCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLXModelCoordinator.swift; sourceTree = "<group>"; };
 		E17EB3A58AAF2AD62F8BBC79 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
-		EF5E660BD7E687E0A17AA98C /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
+		E3D9754B47B590A5D2531E98 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
+		E9D14AF73A72972581B51151 /* VoicePromptBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePromptBanner.swift; sourceTree = "<group>"; };
 		F1111E350996B4ABF6535812 /* SmartTranslateButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmartTranslateButton.swift; sourceTree = "<group>"; };
+		F6DE7D4F870C7386064022D4 /* ChatStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatStore.swift; sourceTree = "<group>"; };
+		FF206BC1AF36DE7024F09144 /* FlashcardsPortugesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardsPortugesApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +126,51 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0C95390A42B7353070BD3D2D /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				E147907A35F64689EE47BD3D /* ML */,
+				F3E3D7919721F9A88EC7302C /* Models */,
+				0CC0F884FA4A0B60D97D671A /* Services */,
+				1279269A9BF008CC43413BDC /* ViewModels */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		0CC0F884FA4A0B60D97D671A /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				B2CEA4DB4ADFF28D0000B131 /* ActivityTracker.swift */,
+				29C8422A4033A094929F18DB /* ChatService.swift */,
+				F6DE7D4F870C7386064022D4 /* ChatStore.swift */,
+				85CC279DE5F89B25FAB279AA /* DeckFileService.swift */,
+				682D0F18C27FFED9ACAAC902 /* DictionaryLookup.swift */,
+				A24FEE3FC96A542553265338 /* DictionaryStore.swift */,
+				854E30ADD471B58D9A36B311 /* LocalTranslationService.swift */,
+				826FF9F4A76F8E02A467616B /* Logger.swift */,
+				A833EE61200C245BE0CF0670 /* SpeechService.swift */,
+				A226709B9297FA3A46707D0B /* TranslationService.swift */,
+				00A99659C624616ABD8B5B86 /* VerbConjugator.swift */,
+				D1C7178FF274DD62F709EC5E /* VerbEnglishFormatter.swift */,
+				367E8D38ABB18C51A331120E /* VoiceAvailability.swift */,
+				C94C0DCC4EF06284681448AF /* VoicePreferences.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		1279269A9BF008CC43413BDC /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				E3D9754B47B590A5D2531E98 /* ChatViewModel.swift */,
+				BC46C1AB39A4485E72DB5E02 /* DictionaryViewModel.swift */,
+				21C9A6916CC1EB5490534012 /* StudyViewModel.swift */,
+				9AED2F0B664A164CF8BA4816 /* TranslateViewModel.swift */,
+				027D02FE89E93819FB90BA07 /* VerbDetailViewModel.swift */,
+				9843D68C30A2DB3DBA38BC09 /* VoicePromptViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		1A6C59043C3081A09F1DDB0B /* Sources */ = {
 			isa = PBXGroup;
 			children = (
@@ -112,13 +179,20 @@
 			path = Sources;
 			sourceTree = "<group>";
 		};
-		1B6A25B0FE79A7290540DA2B /* MLX */ = {
+		2E6828A32434243D62AE7893 /* macOS */ = {
 			isa = PBXGroup;
 			children = (
-				B1318FACAFA18908F316E0DC /* MLXMemoryHarness.swift */,
-				0027A0B1EC04711D611F45BB /* MLXModelCoordinator.swift */,
+				FF206BC1AF36DE7024F09144 /* FlashcardsPortugesApp.swift */,
 			);
-			path = MLX;
+			path = macOS;
+			sourceTree = "<group>";
+		};
+		3BCBB0DAC195C2B3325C54D1 /* macOS */ = {
+			isa = PBXGroup;
+			children = (
+				9E623D86833D71EA1D12DB2D /* SettingsView.swift */,
+			);
+			path = macOS;
 			sourceTree = "<group>";
 		};
 		53599541A1562B3FFFF66204 /* icons */ = {
@@ -130,11 +204,19 @@
 			path = icons;
 			sourceTree = "<group>";
 		};
+		55ACF47BA45B962DFE3CC0F0 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				2E6828A32434243D62AE7893 /* macOS */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
 		6F02BE57CF45910B1A31E3D4 /* FlashcardsPortuges */ = {
 			isa = PBXGroup;
 			children = (
-				45005C3C594B9C0256835551 /* FlashcardsPortugesApp.swift */,
-				91E6800FF4BC8BBDCC6351B2 /* Models */,
+				55ACF47BA45B962DFE3CC0F0 /* App */,
+				0C95390A42B7353070BD3D2D /* Core */,
 				C92D498A35B7971E67623F27 /* Views */,
 			);
 			path = FlashcardsPortuges;
@@ -149,29 +231,6 @@
 			);
 			sourceTree = "<group>";
 		};
-		91E6800FF4BC8BBDCC6351B2 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				9FB077EB13DD36598BEFD8D3 /* ActivityTracker.swift */,
-				EF5E660BD7E687E0A17AA98C /* ChatService.swift */,
-				036B3BD8D665A4C00B2EC5A1 /* DeckDocument.swift */,
-				7A8CA2668364B2C8EF3DC173 /* DeckFileService.swift */,
-				C20B050E72593EE7FA4EB8EF /* DictionaryLookup.swift */,
-				3B90501A9CF6DCE93C6953CF /* DictionaryStore.swift */,
-				4F751F6934F0C807D5F1DA80 /* EuroLLMTranslator.swift */,
-				3302D199D72C70FAA6D7442D /* Flashcard.swift */,
-				0E1696E050DFDF7FC37E9C77 /* LocalTranslationService.swift */,
-				2534080EC43FA86C3DE74507 /* Logger.swift */,
-				6957AC9FF6E584D0388197BA /* SpeechService.swift */,
-				52294922EC4EAA110F91CBC2 /* TranslationService.swift */,
-				594B2C08D119C507EF67E077 /* VerbConjugator.swift */,
-				B69F023B02C2499C8F234209 /* VerbEnglishFormatter.swift */,
-				AF6E3AFDAB768DC859C52876 /* VoicePreferences.swift */,
-				1B6A25B0FE79A7290540DA2B /* MLX */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
 		C92D498A35B7971E67623F27 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -180,14 +239,27 @@
 				2B6751FDB84B4B302FBF6A2C /* DefinePopover.swift */,
 				BA7F224AF87A918422BF0248 /* DictionaryView.swift */,
 				8843478178F699C32FD7DF48 /* ModelStatusPill.swift */,
-				B91FDC63357E92728A614013 /* SettingsView.swift */,
 				F1111E350996B4ABF6535812 /* SmartTranslateButton.swift */,
 				1E0C65DCD09A903710E07C98 /* StudyView.swift */,
 				AB20C362D56830742C81CF40 /* TranslateView.swift */,
 				C0531A694F21606D67D23931 /* TranslationActionsView.swift */,
 				542B65576CA6F13D5608C62B /* VerbDetailView.swift */,
+				E9D14AF73A72972581B51151 /* VoicePromptBanner.swift */,
+				3BCBB0DAC195C2B3325C54D1 /* macOS */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		E147907A35F64689EE47BD3D /* ML */ = {
+			isa = PBXGroup;
+			children = (
+				8F91FED7CEEDB3F6B4A7E637 /* EuroLLMTranslator.swift */,
+				0FB917ABD4506486A58E82DB /* MLXMemoryHarness.swift */,
+				D278F1E9893C34B745802057 /* MLXModelCoordinator.swift */,
+				778ADA9B7857D12E680972F6 /* ModelCatalog.swift */,
+				020640A3F1A2550B46080BD1 /* ModelVariant.swift */,
+			);
+			path = ML;
 			sourceTree = "<group>";
 		};
 		EF25A0DD14C31E25AE9B3811 /* Products */ = {
@@ -196,6 +268,15 @@
 				1DACC4A4DACAC34578A250C9 /* FlashcardsPortuges.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		F3E3D7919721F9A88EC7302C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				ADECB3C3CF82F240D3704697 /* DeckDocument.swift */,
+				8271019A4A13AC0F035C820F /* Flashcard.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -285,35 +366,46 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5C4F7D25D6D2AE9CF269CCE2 /* ActivityTracker.swift in Sources */,
-				601B44807FB862D280B48A32 /* ChatService.swift in Sources */,
+				A7A96D8D0EEEA025EC33BE7B /* ActivityTracker.swift in Sources */,
+				BEB85E91BBBABCFD106B0DA0 /* ChatService.swift in Sources */,
+				FAC70D3EBEE5F4D94A2D6A26 /* ChatStore.swift in Sources */,
 				3C310330AC5C2603B5856F99 /* ChatView.swift in Sources */,
+				F0516873F3E3B00AB2EA557B /* ChatViewModel.swift in Sources */,
 				477F9FCFF80AA3D2C1D0E933 /* ContentView.swift in Sources */,
-				2C9AA41D2C222A51E0A0BCFC /* DeckDocument.swift in Sources */,
-				45346F2A56C2D2C371AACE69 /* DeckFileService.swift in Sources */,
+				D2FD244F0E7C0E7D87E3649E /* DeckDocument.swift in Sources */,
+				AA6735AC7445D95405987A8A /* DeckFileService.swift in Sources */,
 				CDB073218C1B8F50CDBCF5C0 /* DefinePopover.swift in Sources */,
-				9E04538A9510240EFF7B5ED0 /* DictionaryLookup.swift in Sources */,
-				54B3DDCF19E8C60DAE8CB8C9 /* DictionaryStore.swift in Sources */,
+				8393C1F302837BA09588A7B4 /* DictionaryLookup.swift in Sources */,
+				2C2113190DC2EFD82AE70386 /* DictionaryStore.swift in Sources */,
 				3DE808E55A75AF582134E459 /* DictionaryView.swift in Sources */,
-				576489EA53028080996596AD /* EuroLLMTranslator.swift in Sources */,
-				7462D464DBC4A6164430DD34 /* Flashcard.swift in Sources */,
-				CB5D9F3FB7D4B95A97894897 /* FlashcardsPortugesApp.swift in Sources */,
-				2C940A469BD26D102E73B81F /* LocalTranslationService.swift in Sources */,
-				C00418C6ED154C62C499E89A /* Logger.swift in Sources */,
-				4C70D1D1BCF1390B24477790 /* MLXMemoryHarness.swift in Sources */,
-				F9529AF742E57071AFE4B60E /* MLXModelCoordinator.swift in Sources */,
+				568D511E399D3ED722D2940C /* DictionaryViewModel.swift in Sources */,
+				15FC8FD99D3F97FD39AB4C76 /* EuroLLMTranslator.swift in Sources */,
+				67161F94C05DFFBEC6211A21 /* Flashcard.swift in Sources */,
+				1F1D32A1CF50DD562C819680 /* FlashcardsPortugesApp.swift in Sources */,
+				5529AD37DB88444DC0C85CA5 /* LocalTranslationService.swift in Sources */,
+				B203287F5A69D585A7D6C444 /* Logger.swift in Sources */,
+				F4482B95B2FA3ABA18A31E34 /* MLXMemoryHarness.swift in Sources */,
+				26F56D07EC966A35E96F2285 /* MLXModelCoordinator.swift in Sources */,
+				A388A35AC4115FE53C96B8E6 /* ModelCatalog.swift in Sources */,
 				C3390E7A4A734EBD2FC553F8 /* ModelStatusPill.swift in Sources */,
-				97AB249B0229E33FFEC1D5B9 /* SettingsView.swift in Sources */,
+				76E3E4FADE9910A2E43BB22E /* ModelVariant.swift in Sources */,
+				805D14AA1653B8CAF8185DA5 /* SettingsView.swift in Sources */,
 				4DE617E6014260D64001D359 /* SmartTranslateButton.swift in Sources */,
-				2972DBEEF2F679B5C0B30D50 /* SpeechService.swift in Sources */,
+				C7C8288BA4BA8467BEB7ACB1 /* SpeechService.swift in Sources */,
 				A6B8BE0934D7DC1A29C245E2 /* StudyView.swift in Sources */,
+				6397AEA657C6C6020FEB3DE7 /* StudyViewModel.swift in Sources */,
 				C06A48803A623C0DFE086DBD /* TranslateView.swift in Sources */,
+				EBC6129EF99AB3F75CC86C66 /* TranslateViewModel.swift in Sources */,
 				49966CF9C3CD8F0AAFEFA42D /* TranslationActionsView.swift in Sources */,
-				64255821B51BCF0CCD472B8D /* TranslationService.swift in Sources */,
-				A74C4A38D2F6F8DB5B135106 /* VerbConjugator.swift in Sources */,
+				8D0C36BB58FC339F940E6239 /* TranslationService.swift in Sources */,
+				97AE1C77569FDFE5BFEACDEB /* VerbConjugator.swift in Sources */,
 				56DFFA2339327138425456E5 /* VerbDetailView.swift in Sources */,
-				A504219F5B3ED1321B0E2991 /* VerbEnglishFormatter.swift in Sources */,
-				309E72620FD452F5E26C9E07 /* VoicePreferences.swift in Sources */,
+				CC79BBCE920BF97498BCA98D /* VerbDetailViewModel.swift in Sources */,
+				91B44796426BEA8B4ED8D218 /* VerbEnglishFormatter.swift in Sources */,
+				9057A0930D21D3B81ED12E74 /* VoiceAvailability.swift in Sources */,
+				D6EA9F481DD50B58F28F9C06 /* VoicePreferences.swift in Sources */,
+				98BF9A5F6046E1D07C0AD2FA /* VoicePromptBanner.swift in Sources */,
+				A76D8BA7D88DF470411F1E41 /* VoicePromptViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

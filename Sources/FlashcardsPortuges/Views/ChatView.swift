@@ -3,21 +3,17 @@ import SwiftUI
 // MARK: - Main view
 
 struct ChatView: View {
-  @ObservedObject var store: DictionaryStore
-  @ObservedObject private var translator = EuroLLMTranslator.shared
-  @ObservedObject private var tracker = ActivityTracker.shared
-
-  @State private var messages: [ChatMessage] = []
-  @State private var input: String = ""
-  @State private var busy = false
-  @State private var error: String?
-
-  @State private var addToDeckPhrase: String = ""
-  @State private var addToDeckEnglish: String = ""
-  @State private var translatingPhrase = false
-  @State private var showAddSheet = false
+  @StateObject private var viewModel: ChatViewModel
+  @ObservedObject var chatStore: ChatStore
 
   @FocusState private var inputFocused: Bool
+
+  init(store: DictionaryStore, chatStore: ChatStore) {
+    self.chatStore = chatStore
+    _viewModel = StateObject(
+      wrappedValue: ChatViewModel(store: store, chatStore: chatStore)
+    )
+  }
 
   var body: some View {
     VStack(spacing: 0) {
@@ -26,7 +22,12 @@ struct ChatView: View {
       inputBar
     }
     .onAppear { inputFocused = true }
-    .sheet(isPresented: $showAddSheet) {
+    .onChange(of: chatStore.focusToken) { _, _ in
+      // Another tab (e.g. Dictionary's "Chat about this" button)
+      // pre-filled the input — pull focus back to the editor.
+      inputFocused = true
+    }
+    .sheet(isPresented: $viewModel.showAddSheet) {
       addToDeckSheet
     }
   }
@@ -38,34 +39,18 @@ struct ChatView: View {
     ScrollViewReader { proxy in
       ScrollView {
         LazyVStack(alignment: .leading, spacing: 12) {
-          if messages.isEmpty { emptyState }
+          if chatStore.messages.isEmpty { emptyState }
 
-          ForEach(messages) { msg in
+          ForEach(chatStore.messages) { msg in
             MessageBubble(message: msg, onAddToDeck: { phrase in
-              addToDeckPhrase = phrase
-              addToDeckEnglish = ""
-              translatingPhrase = true
-              showAddSheet = true
-              // Fire off LLM translation in background.
-              Task {
-                defer {
-                  Task { @MainActor in translatingPhrase = false }
-                }
-                if let result = try? await translator.translate(
-                  phrase, direction: .portugueseToEnglish
-                ) {
-                  await MainActor.run {
-                    addToDeckEnglish = result.translation.colloquial
-                  }
-                }
-              }
+              viewModel.startAddToDeck(phrase: phrase)
             })
             .id(msg.id)
           }
 
-          if busy { thinkingRow }
+          if viewModel.busy { thinkingRow }
 
-          if let error = error {
+          if let error = viewModel.error {
             Text(error)
               .font(.system(size: 13))
               .foregroundStyle(.red)
@@ -78,10 +63,10 @@ struct ChatView: View {
         .frame(maxWidth: .infinity)
       }
       .defaultScrollAnchor(.bottom)
-      .onChange(of: messages.count) { _, _ in
+      .onChange(of: chatStore.messages.count) { _, _ in
         withAnimation { proxy.scrollTo("bottomAnchor", anchor: .bottom) }
       }
-      .onChange(of: busy) { _, newValue in
+      .onChange(of: viewModel.busy) { _, newValue in
         if newValue { withAnimation { proxy.scrollTo("bottomAnchor", anchor: .bottom) } }
       }
     }
@@ -119,7 +104,7 @@ struct ChatView: View {
   @ViewBuilder
   private var inputBar: some View {
     HStack(alignment: .center, spacing: 8) {
-      TextEditor(text: $input)
+      TextEditor(text: $chatStore.input)
         .font(.system(size: 15))
         .frame(minHeight: 36, maxHeight: 120)
         .fixedSize(horizontal: false, vertical: true)
@@ -140,10 +125,18 @@ struct ChatView: View {
           .font(.system(size: 24))
       }
       .buttonStyle(.plain)
-      .disabled(busy || input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+      .disabled(viewModel.busy || chatStore.input.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
       .help("Send (Enter)")
     }
     .padding(12)
+  }
+
+  /// Thin wrapper that delegates to the ViewModel and re-focuses the
+  /// editor so the user can keep typing. Focus is a per-view concept
+  /// (`@FocusState`), so it stays here rather than in the VM.
+  private func send() {
+    viewModel.send()
+    inputFocused = true
   }
 
   // MARK: - Add to deck sheet
@@ -156,7 +149,7 @@ struct ChatView: View {
 
       VStack(alignment: .leading, spacing: 6) {
         Text("Portuguese").font(.caption).foregroundStyle(.secondary)
-        Text(addToDeckPhrase)
+        Text(viewModel.addToDeckPhrase)
           .font(.system(size: 15, weight: .medium))
           .italic()
           .padding(8)
@@ -167,10 +160,10 @@ struct ChatView: View {
       VStack(alignment: .leading, spacing: 6) {
         Text("English translation").font(.caption).foregroundStyle(.secondary)
         HStack(spacing: 6) {
-          TextField("Enter English translation…", text: $addToDeckEnglish)
+          TextField("Enter English translation…", text: $viewModel.addToDeckEnglish)
             .textFieldStyle(.roundedBorder)
             .font(.system(size: 15))
-          if translatingPhrase {
+          if viewModel.translatingPhrase {
             ProgressView()
               .controlSize(.small)
           }
@@ -178,52 +171,18 @@ struct ChatView: View {
       }
 
       HStack(spacing: 12) {
-        Button("Cancel") { showAddSheet = false }
+        Button("Cancel") { viewModel.showAddSheet = false }
           .keyboardShortcut(.escape)
         Spacer()
         Button("Add to Deck") {
-          store.addEntry(
-            portuguese: addToDeckPhrase,
-            english: addToDeckEnglish.isEmpty ? addToDeckPhrase : addToDeckEnglish,
-            partOfSpeech: .phrase
-          )
-          showAddSheet = false
+          viewModel.confirmAddToDeck()
         }
         .buttonStyle(.borderedProminent)
-        .disabled(addToDeckEnglish.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+        .disabled(viewModel.addToDeckEnglish.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
       }
     }
     .padding()
     .frame(width: 380)
-  }
-
-  // MARK: - Send
-
-  private func send() {
-    let trimmed = input.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !trimmed.isEmpty, !busy else { return }
-
-    let userMessage = ChatMessage(role: .user, content: trimmed)
-    messages.append(userMessage)
-    input = ""
-    error = nil
-    busy = true
-    inputFocused = true
-
-    let summary = tracker.contextualSummary()
-    let prompt = ChatService.buildPrompt(messages: messages, activitySummary: summary)
-
-    Task {
-      defer { Task { @MainActor in busy = false } }
-      do {
-        let response = try await translator.chat(prompt: prompt)
-        await MainActor.run {
-          messages.append(ChatMessage(role: .assistant, content: response))
-        }
-      } catch {
-        await MainActor.run { self.error = error.localizedDescription }
-      }
-    }
   }
 }
 
@@ -267,6 +226,19 @@ struct MessageBubble: View {
 
   @ViewBuilder
   private var assistantBubble: some View {
+    VStack(alignment: .leading, spacing: 4) {
+      bubbleBody
+      if let gen = message.generation, gen.elapsedSeconds > 0 {
+        Text(String(format: "~%.1f tok/s · %.1fs", gen.tokensPerSecond, gen.elapsedSeconds))
+          .font(.caption2)
+          .foregroundStyle(.tertiary)
+          .padding(.leading, 4)
+      }
+    }
+  }
+
+  @ViewBuilder
+  private var bubbleBody: some View {
     let paragraphs = message.content
       .components(separatedBy: "\n")
       .filter { !$0.trimmingCharacters(in: .whitespaces).isEmpty }

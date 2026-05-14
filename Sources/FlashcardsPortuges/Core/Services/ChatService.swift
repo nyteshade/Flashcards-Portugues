@@ -4,10 +4,28 @@ struct ChatMessage: Identifiable, Equatable {
   let id = UUID()
   let role: Role
   let content: String
+  /// Generation telemetry for assistant messages. Always nil for user
+  /// messages; nil-on-assistant means "couldn't measure" (e.g. an
+  /// imported history message).
+  var generation: GenerationStats? = nil
 
   enum Role: String, CaseIterable {
     case user
     case assistant
+  }
+
+  /// Lightweight tok/s estimate so the user can eyeball one variant's
+  /// throughput vs another. Token count is a *rough* approximation —
+  /// MLX's session.respond doesn't return a real token count and the
+  /// tokenizer isn't exposed here. We use characters ÷ 4, which is
+  /// close enough for cross-variant comparison.
+  struct GenerationStats: Equatable {
+    let elapsedSeconds: Double
+    let estimatedTokens: Int
+
+    var tokensPerSecond: Double {
+      elapsedSeconds > 0 ? Double(estimatedTokens) / elapsedSeconds : 0
+    }
   }
 }
 

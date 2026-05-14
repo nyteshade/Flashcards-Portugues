@@ -37,21 +37,10 @@ struct LLMDefinition: Codable, Equatable {
 @MainActor
 final class EuroLLMTranslator: ObservableObject {
   static let shared = EuroLLMTranslator()
-  
-  /// HuggingFace repo path. Matches the LM Studio variant the user
-  /// has been validating against.
-  static let huggingFaceRepo = "stelterlab/EuroLLM-9B-Instruct-MLX-4bit"
-  static let modelID = "eurollm-9b-instruct-mlx-4bit"
-  
-  /// Approximate resident weight footprint at 4-bit quantization.
-  /// Used by the harness pre-load gate so a 16 GB Mac doesn't try
-  /// to load this against, say, an already-loaded second model.
-  /// Real on-disk size is ~5.4 GB; bumped slightly for runtime overhead.
-  static let estimatedBytes = 6 * 1024 * 1024 * 1024
-  
+
   private let harness = MLXMemoryHarness()
   private lazy var coordinator = MLXModelCoordinator(harness: harness)
-  
+
   enum Status: Equatable {
     case notLoaded
     case loading(fraction: Double)
@@ -59,22 +48,40 @@ final class EuroLLMTranslator: ObservableObject {
     case processing
     case failed(message: String)
   }
-  
+
   @Published private(set) var status: Status = .notLoaded
   @Published private(set) var statusMessage: String = "Not loaded"
-  
+
+  /// Which `ModelCatalog` variant is currently resident in the
+  /// coordinator. nil iff status is `.notLoaded` or `.failed`.
+  @Published private(set) var activeVariant: ModelVariant?
+
+  /// Which variant is currently being loaded (downloading + loading
+  /// into MLX). nil unless `status == .loading`. Settings UI uses
+  /// this to keep a row in "downloading" state instead of flipping
+  /// to Load/Delete the moment HuggingFace creates the snapshot dir.
+  @Published private(set) var pendingVariant: ModelVariant?
+
   var isReady: Bool {
     if case .ready = status { return true }
     if case .processing = status { return true }
     return false
   }
-  
+
   var loadProgress: Double {
     if case .loading(let f) = status { return f }
     return 0
   }
-  
+
   private var configured = false
+
+  /// Current user preference for default variant, read from
+  /// UserDefaults. `"auto"` means "best fit for hardware", anything
+  /// else is a `ModelVariant.id`. SettingsView writes this via
+  /// `@AppStorage`.
+  private var activeVariantPreference: String {
+    UserDefaults.standard.string(forKey: ModelCatalog.activeVariantDefaultsKey) ?? "auto"
+  }
   
   /// Configure the harness with this machine's physical RAM. Safe
   /// to call multiple times — idempotent.
@@ -86,55 +93,93 @@ final class EuroLLMTranslator: ObservableObject {
     Logger.log("EuroLLM harness configured: physRAM=\(ram) bytes")
   }
   
-  /// True iff the model weights appear to already be cached on disk
-  /// at `~/.cache/huggingface/hub/models--<owner>--<repo>/`. The
-  /// snapshot subdir presence is enough — first call after boot may
-  /// still hit a partial cache if a previous download was cancelled,
-  /// but `loadContainer` will recover by re-fetching missing files.
-  static func isModelOnDisk() -> Bool {
-    let owner = "stelterlab"
-    let repo = "EuroLLM-9B-Instruct-MLX-4bit"
-    let home = FileManager.default.homeDirectoryForCurrentUser
-    let dir = home
-      .appendingPathComponent(".cache/huggingface/hub")
-      .appendingPathComponent("models--\(owner)--\(repo)")
-      .appendingPathComponent("snapshots")
-    var isDir: ObjCBool = false
-    guard FileManager.default.fileExists(atPath: dir.path, isDirectory: &isDir),
-          isDir.boolValue else { return false }
-    let contents = (try? FileManager.default.contentsOfDirectory(atPath: dir.path)) ?? []
-    return !contents.isEmpty
-  }
-  
-  /// Auto-load if the weights are already on disk. Called from app
-  /// startup. Silent on failure — the user can still trigger a
-  /// load from Settings if this no-ops or the cache turns out broken.
+  /// Auto-load on app startup if (a) the user's active-variant
+  /// preference resolves to something already on disk, and (b) we can
+  /// fit it without forcing a harness-rejection. Silent on failure:
+  /// the user can still trigger a load explicitly from Settings.
   func autoLoadIfCached() {
     Task {
-      guard Self.isModelOnDisk() else {
-        Logger.log("EuroLLM auto-load skipped: model not on disk")
+      let physRAM = Int(ProcessInfo.processInfo.physicalMemory)
+      guard let variant = ModelCatalog.resolveActive(
+        preference: activeVariantPreference,
+        physicalRAMBytes: physRAM
+      ) else {
+        Logger.log("EuroLLM auto-load skipped: no on-disk variant matches preference '\(activeVariantPreference)'")
         return
       }
-      Logger.log("EuroLLM auto-load: model present on disk, loading…")
+      Logger.log("EuroLLM auto-load resolved to \(variant.id); loading…")
       do {
-        try await ensureLoaded()
+        try await load(variant: variant)
       } catch {
         Logger.log("EuroLLM auto-load failed: \(error.localizedDescription)")
       }
     }
   }
-  
-  /// Load EuroLLM into the coordinator. First call downloads (~5.4 GB);
-  /// subsequent calls hit the swift-transformers disk cache.
+
+  /// Lazy-load gate used by translate/chat/define/etc. If `isReady`,
+  /// no-op. Otherwise resolve the active-variant preference (must be
+  /// on disk) and load. Never auto-swaps a running variant — that's
+  /// the explicit Load button's job.
   func ensureLoaded() async throws {
-    await bootstrap()
-    if await coordinator.isLoaded() {
-      status = .ready
-      statusMessage = "Ready"
-      return
+    if isReady { return }
+    let physRAM = Int(ProcessInfo.processInfo.physicalMemory)
+    guard let variant = ModelCatalog.resolveActive(
+      preference: activeVariantPreference,
+      physicalRAMBytes: physRAM
+    ) else {
+      throw MLXTranslatorError.noModelLoaded
     }
+    try await load(variant: variant)
+  }
+
+  /// Load `variant` into the coordinator. If another variant is
+  /// already loaded, unload it first (Settings "Load" semantics).
+  /// Honors the harness pre-load admission check — throws
+  /// `MLXTranslatorError.harnessRejection` if RAM is insufficient.
+  /// Use `forceLoad` to bypass that check (after a user confirms via
+  /// the warning sheet).
+  func load(variant: ModelVariant) async throws {
+    try await loadInternal(variant: variant, force: false)
+  }
+
+  /// Same as `load`, but skips the harness admission check. Used by
+  /// the "Continue anyway" path on the insufficient-RAM warning
+  /// sheet. The actual MLX load may still fail at OS level if the
+  /// machine truly can't fit the weights; that surfaces as a
+  /// `modelLoadFailed` error.
+  func forceLoad(variant: ModelVariant) async throws {
+    try await loadInternal(variant: variant, force: true)
+  }
+
+  private func loadInternal(variant: ModelVariant, force: Bool) async throws {
+    await bootstrap()
+
+    if await coordinator.isLoaded() {
+      // Unload whatever's resident before swapping. If it's already
+      // this variant, skip the round-trip.
+      if activeVariant?.id == variant.id {
+        status = .ready
+        statusMessage = "Ready (\(variant.displayName))"
+        return
+      }
+      await coordinator.unload()
+      activeVariant = nil
+    }
+
+    if !force {
+      let admission = await harness.canAccept(
+        estimatedAdditionalBytes: variant.estimatedBytes
+      )
+      if case .rejected(let reason) = admission {
+        status = .notLoaded
+        statusMessage = "Not loaded"
+        throw MLXTranslatorError.harnessRejection(reason: reason)
+      }
+    }
+
+    pendingVariant = variant
     status = .loading(fraction: 0)
-    statusMessage = "Loading EuroLLM-9B-Instruct (4-bit)…"
+    statusMessage = "Loading \(variant.displayName)…"
     let progressPoller = Task { [weak self] in
       while !Task.isCancelled {
         guard let self else { return }
@@ -142,54 +187,57 @@ final class EuroLLMTranslator: ObservableObject {
           await MainActor.run {
             if case .loading = self.status {
               self.status = .loading(fraction: fraction)
-              self.statusMessage = "Downloading… \(Int(fraction * 100))%"
+              self.statusMessage = "Downloading \(variant.parameterScale.rawValue)… \(Int(fraction * 100))%"
             }
           }
         }
         try? await Task.sleep(for: .milliseconds(250))
       }
     }
-    defer { progressPoller.cancel() }
-    
+    defer {
+      progressPoller.cancel()
+      pendingVariant = nil
+    }
+
     do {
       try await coordinator.load(
-        modelID: Self.modelID,
-        huggingFaceRepo: Self.huggingFaceRepo,
-        estimatedBytes: Self.estimatedBytes
+        modelID: variant.id,
+        huggingFaceRepo: variant.huggingFaceRepo,
+        estimatedBytes: variant.estimatedBytes
       )
+      activeVariant = variant
       status = .ready
-      statusMessage = "Ready"
-      Logger.log("EuroLLM loaded successfully")
+      statusMessage = "Ready (\(variant.displayName))"
+      Logger.log("EuroLLM loaded: \(variant.id)")
     } catch {
+      activeVariant = nil
       status = .failed(message: error.localizedDescription)
       statusMessage = "Load failed: \(error.localizedDescription)"
-      Logger.log("EuroLLM load failed: \(error.localizedDescription)")
+      Logger.log("EuroLLM load failed for \(variant.id): \(error.localizedDescription)")
       throw error
     }
   }
-  
-  /// Unload the model from memory. Does NOT remove cached files.
+
+  /// Unload the active variant from memory. Does NOT remove cached
+  /// files. Safe to call when nothing is loaded.
   func unload() async {
     await coordinator.unload()
+    let previous = activeVariant?.displayName
+    activeVariant = nil
     status = .notLoaded
     statusMessage = "Unloaded"
-    Logger.log("EuroLLM unloaded")
+    Logger.log("EuroLLM unloaded\(previous.map { " (\($0))" } ?? "")")
   }
-  
-  /// Remove the cached model files from disk. Unloads first if loaded.
-  func deleteCachedModel() async {
-    if await coordinator.isLoaded() {
-      await coordinator.unload()
+
+  /// Remove `variant`'s cached weights from disk. If it's the active
+  /// variant, unload it first.
+  func delete(variant: ModelVariant) async {
+    if activeVariant?.id == variant.id {
+      await unload()
     }
-    let home = FileManager.default.homeDirectoryForCurrentUser
-    let dir = home
-      .appendingPathComponent(".cache/huggingface/hub")
-      .appendingPathComponent("models--stelterlab--EuroLLM-9B-Instruct-MLX-4bit")
-    try? FileManager.default.removeItem(at: dir)
-    try? FileManager.default.removeItem(at: dir.appendingPathExtension("incomplete"))
-    status = .notLoaded
-    statusMessage = "Not loaded"
-    Logger.log("EuroLLM cached model deleted")
+    try? FileManager.default.removeItem(at: variant.cacheDir)
+    try? FileManager.default.removeItem(at: variant.cacheDir.appendingPathExtension("incomplete"))
+    Logger.log("EuroLLM cached model deleted: \(variant.id)")
   }
   
   /// Ask the LLM to classify the Portuguese phrase/word into one

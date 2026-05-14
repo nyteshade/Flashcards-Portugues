@@ -48,9 +48,12 @@ targets:
     type: application
     platform: macOS
     sources:
+      # macOS target excludes iOS-only sources. See
+      # docs/ios-separation-plan.md for the full layout.
       - path: Sources/FlashcardsPortuges
         excludes:
-          - "Models/ML/**"
+          - "App/iOS/**"
+          - "Views/iOS/**"
       - path: icons/Flashcards.icns
         buildPhase: resources
       - path: icons/StudyDeck.icns

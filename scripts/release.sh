@@ -1,4 +1,12 @@
 #!/bin/bash
+# RELEASE (notarized) — slow path. Use for hand-offs to other Macs.
+# For everyday "build and install on this Mac" workflow, use
+# ./scripts/deploy.sh instead — it's ad-hoc signed, no Apple round-trip,
+# typically ~3-5x faster end-to-end.
+#
+# Notarization is per-build, not one-time. Every submission goes to
+# Apple's queue independently; expect 2-15 min per run.
+#
 # Builds a Release .app, signs it with a Developer ID Application
 # certificate, and (optionally) submits it for notarization + staples
 # the ticket. Designed for "build on Mac A, run on Mac B" hand-off.
@@ -72,10 +80,58 @@ if [[ -n "${NOTARY_PROFILE:-}" ]]; then
     rm -f "$ZIP_PATH"
     /usr/bin/ditto -c -k --keepParent "$APP_PATH" "$ZIP_PATH"
 
-    echo "▸ Submitting to Apple notary service (this can take 1–10 minutes)…"
-    xcrun notarytool submit "$ZIP_PATH" \
+    echo "▸ Submitting to Apple notary service…"
+    SUBMIT_JSON=$(xcrun notarytool submit "$ZIP_PATH" \
         --keychain-profile "$NOTARY_PROFILE" \
-        --wait
+        --output-format json)
+    SUBMIT_ID=$(echo "$SUBMIT_JSON" | /usr/bin/python3 -c 'import json,sys; print(json.load(sys.stdin).get("id",""))')
+    if [[ -z "$SUBMIT_ID" ]]; then
+        echo "ERROR: Could not extract notarytool submission id." >&2
+        echo "$SUBMIT_JSON" >&2
+        exit 1
+    fi
+    echo "  submission id: $SUBMIT_ID"
+    echo "▸ Polling Apple for status every 15s (typically 2–10 min)…"
+
+    POLL_INTERVAL=15
+    POLL_COUNT=0
+    while true; do
+        sleep "$POLL_INTERVAL"
+        POLL_COUNT=$((POLL_COUNT + 1))
+        STATUS_JSON=$(xcrun notarytool info "$SUBMIT_ID" \
+            --keychain-profile "$NOTARY_PROFILE" \
+            --output-format json 2>/dev/null || echo "{}")
+        STATUS=$(echo "$STATUS_JSON" | /usr/bin/python3 -c 'import json,sys; print(json.load(sys.stdin).get("status","Unknown"))')
+        ELAPSED=$((POLL_COUNT * POLL_INTERVAL))
+        printf "  [%s] +%3ds  status: %s\n" "$(date +%H:%M:%S)" "$ELAPSED" "$STATUS"
+        case "$STATUS" in
+            Accepted)
+                echo "✓ Apple accepted the submission."
+                break
+                ;;
+            Invalid|Rejected)
+                echo "ERROR: Notarization $STATUS. Fetching log…" >&2
+                xcrun notarytool log "$SUBMIT_ID" \
+                    --keychain-profile "$NOTARY_PROFILE" 2>&1 | head -80 >&2 || true
+                exit 1
+                ;;
+            "In Progress"|Pending|Unknown)
+                # keep polling
+                ;;
+            *)
+                echo "WARNING: unrecognized notary status '$STATUS' — continuing to poll." >&2
+                ;;
+        esac
+        # Hard safety cap: 30 minutes. Apple usually finishes well under
+        # 10, but the queue spikes around major releases. Fail loud
+        # rather than hang the script forever.
+        if [[ "$ELAPSED" -ge 1800 ]]; then
+            echo "ERROR: Notarization did not complete within 30 minutes." >&2
+            echo "  Submission id $SUBMIT_ID is still pending; check later with:" >&2
+            echo "  xcrun notarytool info $SUBMIT_ID --keychain-profile $NOTARY_PROFILE" >&2
+            exit 1
+        fi
+    done
 
     echo "▸ Stapling ticket to .app…"
     xcrun stapler staple "$APP_PATH"

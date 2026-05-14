@@ -1,18 +1,22 @@
-import AppKit
 import Foundation
 import UniformTypeIdentifiers
 
-/// Glue between the app and the macOS file dialogs. Each call shows
-/// the appropriate panel and either runs the underlying read/write or
-/// surfaces an alert on failure. Callers receive the result on the
-/// main actor.
+#if os(macOS)
+import AppKit
+#endif
+
+/// Glue between the app and the host OS file dialogs. On macOS this
+/// drives `NSSavePanel` / `NSOpenPanel`; an iOS target will need
+/// `UIDocumentPicker`-backed implementations behind the same surface.
+/// The symbol is present on both platforms so callers compile
+/// unchanged; iOS bodies are no-op stubs until that target is wired up.
 @MainActor
 enum DeckFileService {
   /// Prompt for a save location and write the deck as a `.flcd`.
-  /// After writing, stamps the file with the bundled `StudyDeck.icns`
-  /// so it shows the deck icon in Finder regardless of how aggressive
-  /// macOS's icon cache is for newly-introduced UTIs.
+  /// macOS: stamps the file with the bundled `StudyDeck.icns` so it
+  /// shows the deck icon in Finder.
   static func saveDeckAs(_ deck: Deck) {
+    #if os(macOS)
     let panel = NSSavePanel()
     panel.title = "Save Deck"
     panel.nameFieldStringValue = "\(deck.name).\(DeckDocument.fileExtension)"
@@ -25,22 +29,14 @@ enum DeckFileService {
     } catch {
       presentError(title: "Could not save deck", error: error)
     }
+    #else
+    Logger.log("DeckFileService.saveDeckAs: not implemented on this platform")
+    #endif
   }
-  
-  /// Apply the bundled StudyDeck icon as a custom Finder icon on
-  /// `url`. No-op if the icon resource isn't present in the bundle.
-  /// Failures here are non-fatal — the file is already saved; the
-  /// icon is cosmetic.
-  private static func applyDeckIcon(to url: URL) {
-    guard let iconURL = Bundle.main.url(forResource: "StudyDeck", withExtension: "icns"),
-          let icon = NSImage(contentsOf: iconURL) else {
-      return
-    }
-    NSWorkspace.shared.setIcon(icon, forFile: url.path, options: [])
-  }
-  
+
   /// Prompt for a `.flcd` file and return the decoded deck.
   static func openDeck() -> Deck? {
+    #if os(macOS)
     let panel = NSOpenPanel()
     panel.title = "Open Deck"
     panel.allowedContentTypes = [Self.flcdType, .json]
@@ -53,10 +49,15 @@ enum DeckFileService {
       presentError(title: "Could not open deck", error: error)
       return nil
     }
+    #else
+    Logger.log("DeckFileService.openDeck: not implemented on this platform")
+    return nil
+    #endif
   }
-  
+
   /// Prompt for a destination and write a Markdown rendering of `deck`.
   static func exportDeckAsMarkdown(_ deck: Deck) {
+    #if os(macOS)
     let panel = NSSavePanel()
     panel.title = "Export Deck as Markdown"
     panel.nameFieldStringValue = "\(deck.name).md"
@@ -69,19 +70,34 @@ enum DeckFileService {
     } catch {
       presentError(title: "Could not export deck", error: error)
     }
+    #else
+    Logger.log("DeckFileService.exportDeckAsMarkdown: not implemented on this platform")
+    #endif
   }
-  
+
   // MARK: - File type
-  
-  /// `.flcd` UTType. Declared as exported in Info.plist would let us
-  /// double-click open from Finder; for now this is enough to drive
-  /// the save / open panels.
+
+  /// `.flcd` UTType. Cross-platform — `UTType` is in
+  /// UniformTypeIdentifiers, available on iOS too.
   static var flcdType: UTType {
     UTType(filenameExtension: DeckDocument.fileExtension, conformingTo: .json) ?? .json
   }
-  
-  // MARK: - Error surfacing
-  
+
+  #if os(macOS)
+  // MARK: - macOS-only helpers
+
+  /// Apply the bundled StudyDeck icon as a custom Finder icon on
+  /// `url`. No-op if the icon resource isn't present in the bundle.
+  /// Failures here are non-fatal — the file is already saved; the
+  /// icon is cosmetic.
+  private static func applyDeckIcon(to url: URL) {
+    guard let iconURL = Bundle.main.url(forResource: "StudyDeck", withExtension: "icns"),
+          let icon = NSImage(contentsOf: iconURL) else {
+      return
+    }
+    NSWorkspace.shared.setIcon(icon, forFile: url.path, options: [])
+  }
+
   private static func presentError(title: String, error: Error) {
     let alert = NSAlert()
     alert.alertStyle = .warning
@@ -90,4 +106,5 @@ enum DeckFileService {
     alert.addButton(withTitle: "OK")
     alert.runModal()
   }
+  #endif
 }

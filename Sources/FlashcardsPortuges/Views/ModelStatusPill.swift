@@ -51,17 +51,26 @@ struct ModelStatusPill: View {
   }
   
   private var label: String {
+    let tag: String = {
+      if let v = translator.activeVariant {
+        return "EuroLLM-\(v.parameterScale.rawValue)"
+      }
+      if let p = translator.pendingVariant {
+        return "EuroLLM-\(p.parameterScale.rawValue)"
+      }
+      return "EuroLLM"
+    }()
     switch translator.status {
     case .notLoaded:
-      return "EuroLLM-9B: not loaded"
+      return "\(tag): not loaded"
     case .loading(let fraction):
-      return "EuroLLM-9B: loading \(Int(fraction * 100))%"
+      return "\(tag): loading \(Int(fraction * 100))%"
     case .ready:
-      return "EuroLLM-9B: ready"
+      return "\(tag): ready"
     case .processing:
-      return "EuroLLM-9B: processing…"
+      return "\(tag): processing…"
     case .failed:
-      return "EuroLLM-9B: failed"
+      return "\(tag): failed"
     }
   }
 }

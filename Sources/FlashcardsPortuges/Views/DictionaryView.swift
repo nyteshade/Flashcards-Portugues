@@ -1,44 +1,19 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-enum GroupFilter: Hashable {
-  case all
-  case ungrouped
-  case group(UUID)
-}
-
 struct DictionaryView: View {
   @ObservedObject var store: DictionaryStore
-  @State private var showAddSheet = false
-  @State private var showEditSheet = false
-  @State private var editingEntry: DictionaryEntry?
-  @State private var deleteCandidate: DictionaryEntry?
-  @State private var showDeleteConfirmation = false
-  @State private var selectedFilter: GroupFilter = .all
-  @State private var searchText = ""
-  @State private var showDefinition = false
-  @State private var definitionResult: String?
-  @State private var defineWord = ""
+  @Binding var selectedTab: ContentView.Tab
+  @ObservedObject private var translator = EuroLLMTranslator.shared
+  @StateObject private var viewModel: DictionaryViewModel
   @State private var dictionaryLoaded = false
-  @State private var newGroupName = ""
-  @State private var editingGroupID: UUID? = nil
-  @State private var editingGroupName = ""
 
-  var filteredEntries: [DictionaryEntry] {
-    let base: [DictionaryEntry]
-    switch selectedFilter {
-    case .all:
-      base = store.entries
-    case .ungrouped:
-      base = store.entries.filter { $0.groupID == nil }
-    case .group(let gid):
-      base = store.entries.filter { $0.groupID == gid }
-    }
-    if searchText.isEmpty { return base }
-    return base.filter {
-      $0.portuguese.localizedCaseInsensitiveContains(searchText) ||
-      $0.english.localizedCaseInsensitiveContains(searchText)
-    }
+  init(store: DictionaryStore, chatStore: ChatStore, selectedTab: Binding<ContentView.Tab>) {
+    self.store = store
+    self._selectedTab = selectedTab
+    _viewModel = StateObject(
+      wrappedValue: DictionaryViewModel(store: store, chatStore: chatStore)
+    )
   }
 
   var body: some View {
@@ -48,11 +23,11 @@ struct DictionaryView: View {
     } detail: {
       detailView
     }
-    .sheet(isPresented: $showAddSheet) {
+    .sheet(isPresented: $viewModel.showAddSheet) {
       AddDictionaryEntryView(store: store)
     }
-    .sheet(isPresented: $showEditSheet) {
-      if let entry = editingEntry {
+    .sheet(isPresented: $viewModel.showEditSheet) {
+      if let entry = viewModel.editingEntry {
         EditDictionaryEntryView(store: store, entry: entry)
       }
     }
@@ -71,43 +46,40 @@ struct DictionaryView: View {
   private var sidebar: some View {
     VStack(spacing: 0) {
       HStack {
-        TextField("New group...", text: $newGroupName)
+        TextField("New group...", text: $viewModel.newGroupName)
           .textFieldStyle(.roundedBorder)
         Button {
-          store.createGroup(named: newGroupName)
-          newGroupName = ""
+          viewModel.createGroupFromDraft()
         } label: {
           Image(systemName: "plus.circle.fill")
         }
         .buttonStyle(.borderless)
-        .disabled(newGroupName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+        .disabled(viewModel.newGroupName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
       }
       .padding(.horizontal, 8)
       .padding(.vertical, 6)
 
-      List(selection: $selectedFilter) {
+      List(selection: $viewModel.selectedFilter) {
         Section {
           Label("All Entries", systemImage: "character.book.closed")
             .tag(GroupFilter.all)
           Label("Ungrouped", systemImage: "tray")
             .tag(GroupFilter.ungrouped)
             .onDrop(of: [.text], isTargeted: nil) { providers in
-              handleEntryDrop(providers, groupID: nil)
+              viewModel.handleEntryDrop(providers, groupID: nil)
             }
         }
 
         Section("Groups") {
           ForEach(store.groups) { group in
-            if editingGroupID == group.id {
+            if viewModel.editingGroupID == group.id {
               HStack {
-                TextField("Name", text: $editingGroupName, onCommit: {
-                  store.renameGroup(id: group.id, to: editingGroupName)
-                  editingGroupID = nil
+                TextField("Name", text: $viewModel.editingGroupName, onCommit: {
+                  viewModel.commitGroupRename(id: group.id)
                 })
                 .textFieldStyle(.plain)
                 Button {
-                  store.renameGroup(id: group.id, to: editingGroupName)
-                  editingGroupID = nil
+                  viewModel.commitGroupRename(id: group.id)
                 } label: {
                   Image(systemName: "checkmark.circle.fill")
                 }
@@ -124,21 +96,17 @@ struct DictionaryView: View {
               }
               .tag(GroupFilter.group(group.id))
               .onDrop(of: [.text], isTargeted: nil) { providers in
-                handleEntryDrop(providers, groupID: group.id)
+                viewModel.handleEntryDrop(providers, groupID: group.id)
               }
               .contextMenu {
                 Button {
-                  editingGroupID = group.id
-                  editingGroupName = group.name
+                  viewModel.beginRenamingGroup(group)
                 } label: {
                   Label("Rename", systemImage: "pencil")
                 }
                 Divider()
                 Button(role: .destructive) {
-                  store.deleteGroup(id: group.id)
-                  if case .group(let gid) = selectedFilter, gid == group.id {
-                    selectedFilter = .all
-                  }
+                  viewModel.deleteGroup(id: group.id)
                 } label: {
                   Label("Delete", systemImage: "trash")
                 }
@@ -166,87 +134,37 @@ struct DictionaryView: View {
   private var detailView: some View {
     VStack(spacing: 0) {
       HStack {
-        Text(titleForSelectedGroup)
+        Text(viewModel.titleForSelectedGroup)
           .font(.title2)
         Spacer()
-        Button("Add Entry") { showAddSheet = true }
+        Button("Add Entry") { viewModel.showAddSheet = true }
       }
       .padding()
 
-      TextField("Search dictionary...", text: $searchText)
+      TextField("Search dictionary...", text: $viewModel.searchText)
         .textFieldStyle(.roundedBorder)
         .padding(.horizontal)
         .padding(.bottom, 8)
 
       List {
-        ForEach(filteredEntries) { entry in
+        let entries = viewModel.filteredEntries()
+        ForEach(entries) { entry in
           entryRow(entry)
         }
         .onDelete { indexSet in
           for index in indexSet {
-            store.removeEntry(filteredEntries[index])
+            store.removeEntry(entries[index])
           }
         }
-      }
-      .sheet(isPresented: $showDefinition) {
-        VStack(alignment: .leading, spacing: 8) {
-          Text(defineWord).font(.headline)
-          Divider()
-          if let def = definitionResult {
-            ScrollView {
-              Text(def).font(.body)
-            }
-            .frame(maxHeight: 300)
-          }
-          Spacer()
-          HStack {
-            Spacer()
-            Button("Close") { showDefinition = false }
-          }
-        }
-        .padding()
-        .frame(width: 350, height: 280)
       }
     }
-    .alert("Delete Entry?", isPresented: $showDeleteConfirmation, presenting: deleteCandidate) { candidate in
+    .alert("Delete Entry?", isPresented: $viewModel.showDeleteConfirmation, presenting: viewModel.deleteCandidate) { candidate in
       Button("Cancel", role: .cancel) { }
       Button("Delete", role: .destructive) {
-        store.removeEntry(candidate)
+        viewModel.confirmDelete(candidate)
       }
     } message: { candidate in
       Text("Remove \"\(candidate.portuguese)\" (\(candidate.english)) from the dictionary?")
-    }
-  }
-
-  // MARK: - Drag & Drop
-
-  private func handleEntryDrop(_ providers: [NSItemProvider], groupID: UUID?) -> Bool {
-    guard let provider = providers.first(where: { $0.canLoadObject(ofClass: String.self) })
-    else { return false }
-    _ = provider.loadObject(ofClass: String.self) { uuidString, error in
-      guard let uuidString = uuidString,
-            let entryID = UUID(uuidString: uuidString) else { return }
-      DispatchQueue.main.async {
-        if let idx = store.entries.firstIndex(where: { $0.id == entryID }) {
-          store.entries[idx].groupID = groupID
-          store.save()
-        }
-      }
-    }
-    return true
-  }
-
-  private var titleForSelectedGroup: String {
-    switch selectedFilter {
-    case .all:
-      return "Dictionary (\(store.entries.count) entries)"
-    case .ungrouped:
-      return "Dictionary — Ungrouped"
-    case .group(let gid):
-      if let group = store.groups.first(where: { $0.id == gid }) {
-        return "Dictionary — \(group.name)"
-      }
-      return "Dictionary (\(store.entries.count) entries)"
     }
   }
 
@@ -288,8 +206,7 @@ struct DictionaryView: View {
       Spacer()
 
       Button {
-        editingEntry = entry
-        showEditSheet = true
+        viewModel.beginEditing(entry)
       } label: {
         Image(systemName: "pencil")
       }
@@ -315,25 +232,19 @@ struct DictionaryView: View {
       .buttonStyle(.borderless)
       .help("Pronounce (European Portuguese)")
 
-      Button {
-        let result = DictionaryLookup.define(entry.portuguese)
-        definitionResult = result ?? "No definition found in local dictionary."
-        defineWord = entry.portuguese
-        showDefinition = true
-        ActivityTracker.shared.record(
-          category: .lookup,
-          action: "Looked up definition",
-          detail: "'\(entry.portuguese)' (\(entry.partOfSpeech.rawValue): \(entry.english))"
-        )
-      } label: {
-        Image(systemName: "book.closed")
+      if translator.isReady {
+        Button {
+          viewModel.prefillChat(about: entry)
+          selectedTab = .chat
+        } label: {
+          Image(systemName: "bubble.left.and.bubble.right")
+        }
+        .buttonStyle(.borderless)
+        .help("Ask Sofia about this entry")
       }
-      .buttonStyle(.borderless)
-      .help("Define in Dictionary")
 
       Button {
-        deleteCandidate = entry
-        showDeleteConfirmation = true
+        viewModel.requestDelete(entry)
       } label: {
         Image(systemName: "trash")
       }
