@@ -21,7 +21,6 @@ final class DictionaryViewModel: ObservableObject {
   @Published var searchText: String = ""
 
   // Group sidebar editing
-  @Published var newGroupName: String = ""
   @Published var editingGroupID: UUID? = nil
   @Published var editingGroupName: String = ""
 
@@ -80,11 +79,40 @@ final class DictionaryViewModel: ObservableObject {
 
   // MARK: - Group actions
 
-  func createGroupFromDraft() {
-    let trimmed = newGroupName.trimmingCharacters(in: .whitespacesAndNewlines)
-    guard !trimmed.isEmpty else { return }
-    store.createGroup(named: trimmed)
-    newGroupName = ""
+  /// Create a new group from the sidebar toolbar (+). Mirrors the
+  /// Study tab's deck toolbar: a default-named group is created
+  /// rather than requiring a name up front. We go one better than
+  /// Study and drop straight into inline rename on the new group, so
+  /// the user keeps the "name it now" affordance the old top-of-
+  /// sidebar text field gave them.
+  func createGroup() {
+    let name = uniqueGroupName(base: "New Group")
+    store.createGroup(named: name)
+    guard let newGroup = store.groups.last else { return }
+    selectedFilter = .group(newGroup.id)
+    editingGroupID = newGroup.id
+    editingGroupName = newGroup.name
+  }
+
+  /// Delete whichever group is currently selected in the sidebar.
+  /// No-op unless `selectedFilter` is a `.group`.
+  func deleteSelectedGroup() {
+    guard case .group(let gid) = selectedFilter else { return }
+    deleteGroup(id: gid)
+  }
+
+  /// True when the (−) toolbar button should be enabled.
+  var canDeleteSelectedGroup: Bool {
+    if case .group = selectedFilter { return true }
+    return false
+  }
+
+  private func uniqueGroupName(base: String) -> String {
+    let existing = Set(store.groups.map { $0.name })
+    if !existing.contains(base) { return base }
+    var n = 2
+    while existing.contains("\(base) \(n)") { n += 1 }
+    return "\(base) \(n)"
   }
 
   func commitGroupRename(id: UUID) {

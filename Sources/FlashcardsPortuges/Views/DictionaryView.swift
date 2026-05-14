@@ -44,88 +44,94 @@ struct DictionaryView: View {
   // MARK: - Sidebar
 
   private var sidebar: some View {
-    VStack(spacing: 0) {
-      HStack {
-        TextField("New group...", text: $viewModel.newGroupName)
-          .textFieldStyle(.roundedBorder)
-        Button {
-          viewModel.createGroupFromDraft()
-        } label: {
-          Image(systemName: "plus.circle.fill")
-        }
-        .buttonStyle(.borderless)
-        .disabled(viewModel.newGroupName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+    List(selection: $viewModel.selectedFilter) {
+      Section {
+        Label("All Entries", systemImage: "character.book.closed")
+          .tag(GroupFilter.all)
+        Label("Ungrouped", systemImage: "tray")
+          .tag(GroupFilter.ungrouped)
+          .onDrop(of: [.text], isTargeted: nil) { providers in
+            viewModel.handleEntryDrop(providers, groupID: nil)
+          }
       }
-      .padding(.horizontal, 8)
-      .padding(.vertical, 6)
 
-      List(selection: $viewModel.selectedFilter) {
-        Section {
-          Label("All Entries", systemImage: "character.book.closed")
-            .tag(GroupFilter.all)
-          Label("Ungrouped", systemImage: "tray")
-            .tag(GroupFilter.ungrouped)
-            .onDrop(of: [.text], isTargeted: nil) { providers in
-              viewModel.handleEntryDrop(providers, groupID: nil)
+      Section("Groups") {
+        ForEach(store.groups) { group in
+          if viewModel.editingGroupID == group.id {
+            HStack {
+              TextField("Name", text: $viewModel.editingGroupName, onCommit: {
+                viewModel.commitGroupRename(id: group.id)
+              })
+              .textFieldStyle(.plain)
+              Button {
+                viewModel.commitGroupRename(id: group.id)
+              } label: {
+                Image(systemName: "checkmark.circle.fill")
+              }
+              .buttonStyle(.borderless)
             }
-        }
-
-        Section("Groups") {
-          ForEach(store.groups) { group in
-            if viewModel.editingGroupID == group.id {
-              HStack {
-                TextField("Name", text: $viewModel.editingGroupName, onCommit: {
-                  viewModel.commitGroupRename(id: group.id)
-                })
-                .textFieldStyle(.plain)
-                Button {
-                  viewModel.commitGroupRename(id: group.id)
-                } label: {
-                  Image(systemName: "checkmark.circle.fill")
-                }
-                .buttonStyle(.borderless)
+            .padding(.vertical, 2)
+            .tag(GroupFilter.group(group.id))
+          } else {
+            HStack {
+              Image(systemName: "folder")
+                .foregroundColor(.accentColor)
+              Text(group.name)
+              Spacer()
+            }
+            .tag(GroupFilter.group(group.id))
+            .onDrop(of: [.text], isTargeted: nil) { providers in
+              viewModel.handleEntryDrop(providers, groupID: group.id)
+            }
+            .contextMenu {
+              Button {
+                viewModel.beginRenamingGroup(group)
+              } label: {
+                Label("Rename", systemImage: "pencil")
               }
-              .padding(.vertical, 2)
-              .tag(GroupFilter.group(group.id))
-            } else {
-              HStack {
-                Image(systemName: "folder")
-                  .foregroundColor(.accentColor)
-                Text(group.name)
-                Spacer()
-              }
-              .tag(GroupFilter.group(group.id))
-              .onDrop(of: [.text], isTargeted: nil) { providers in
-                viewModel.handleEntryDrop(providers, groupID: group.id)
-              }
-              .contextMenu {
-                Button {
-                  viewModel.beginRenamingGroup(group)
-                } label: {
-                  Label("Rename", systemImage: "pencil")
-                }
-                Divider()
-                Button(role: .destructive) {
-                  viewModel.deleteGroup(id: group.id)
-                } label: {
-                  Label("Delete", systemImage: "trash")
-                }
+              Divider()
+              Button(role: .destructive) {
+                viewModel.deleteGroup(id: group.id)
+              } label: {
+                Label("Delete", systemImage: "trash")
               }
             }
           }
         }
       }
-      .listStyle(.sidebar)
+    }
+    .listStyle(.sidebar)
+    .safeAreaInset(edge: .bottom) {
+      HStack(spacing: 0) {
+        Button {
+          viewModel.createGroup()
+        } label: {
+          Image(systemName: "plus")
+            .frame(minWidth: 28, minHeight: 28)
+        }
+        .help("New group")
+        .buttonStyle(.borderless)
+        .contentShape(Rectangle())
 
-      HStack {
+        Button {
+          viewModel.deleteSelectedGroup()
+        } label: {
+          Image(systemName: "minus")
+            .frame(minWidth: 28, minHeight: 28)
+        }
+        .help("Delete selected group")
+        .buttonStyle(.borderless)
+        .contentShape(Rectangle())
+        .disabled(!viewModel.canDeleteSelectedGroup)
+
+        Spacer()
+
         Text("\(store.entries.count) entries")
           .font(.caption)
           .foregroundColor(.secondary)
-        Spacer()
       }
-      .padding(.leading, 16)
-      .padding(.bottom, 12)
-      .padding(.top, 4)
+      .padding(8)
+      .background(.bar)
     }
   }
 
