@@ -33,6 +33,32 @@ AppKit — every AppKit call is wrapped in `#if os(macOS)` and the iOS branch
 logs a not-implemented stub. Replace the stub with `UIDocumentPicker` when the
 iOS target lands.
 
+## Storage: sandboxed + container-relative
+
+The macOS app **is sandboxed** (`FlashcardsPortuges.entitlements` →
+`com.apple.security.app-sandbox`). All storage resolves into the app
+container and `Core/Services/PathProvider.swift` is the single source of
+truth:
+
+- `PathProvider.appSupportDirectory` — `<container>/Data/Library/Application
+  Support/FlashcardsPortuges`. `FileManager`'s `applicationSupportDirectory`
+  auto-resolves into the container under the sandbox.
+- `PathProvider.modelCacheDirectory` — mirrors swift-huggingface's
+  `CacheLocationProvider` resolution (`HF_HUB_CACHE` → `HF_HOME/hub` →
+  sandbox-aware default). swift-huggingface detects the sandbox via
+  `APP_SANDBOX_CONTAINER_ID` and downloads into
+  `<container>/Data/Library/Caches/huggingface/hub`; PathProvider returns
+  the same path so `ModelCatalog.isOnDisk` checks the right place.
+
+iOS inherits this for free — the same `FileManager` + swift-huggingface
+resolution lands in the iOS app container with zero code changes.
+
+**Decision history:** an earlier draft considered keeping macOS unsandboxed
+(to reuse a shared `~/.cache/huggingface`). That was dropped — sandboxing
+both platforms keeps the storage layer symmetric, and the one cost
+(existing macOS users redownload models into the container on first
+sandboxed launch) was accepted by the project owner.
+
 ## Done (this session)
 
 - **Phase 1** Reorganized everything into Core/Views/App layers (`git mv`).

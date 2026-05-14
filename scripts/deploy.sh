@@ -55,11 +55,19 @@ echo "▸ Installing to $INSTALL_PATH (clean overwrite)…"
 rm -rf "$INSTALL_PATH"
 /usr/bin/ditto "$APP_PATH" "$INSTALL_PATH"
 
-echo "▸ Ad-hoc re-signing in place…"
-codesign --force --deep --sign - "$INSTALL_PATH" 2>&1 | tail -2
+# Re-sign ad-hoc, carrying the entitlements file forward. Without
+# --entitlements this strips the App Sandbox + hardened-runtime
+# entitlements, silently producing a non-sandboxed install.
+ENTITLEMENTS="$(pwd)/FlashcardsPortuges.entitlements"
+echo "▸ Ad-hoc re-signing in place (with entitlements)…"
+codesign --force --deep --sign - \
+  --entitlements "$ENTITLEMENTS" \
+  "$INSTALL_PATH" 2>&1 | tail -2
 
 echo "▸ Verifying signature…"
 codesign --verify --deep --strict --verbose=2 "$INSTALL_PATH" 2>&1 | tail -2
+echo "▸ Sandbox check:"
+codesign -d --entitlements - "$INSTALL_PATH" 2>/dev/null | grep -A1 "app-sandbox" || echo "  (app-sandbox entitlement not found — check signing)"
 
 echo "▸ Launching…"
 open "$INSTALL_PATH"

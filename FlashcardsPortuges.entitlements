@@ -2,15 +2,27 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <!-- App is not sandboxed: model files live in ~/.cache/huggingface, the
-         user picks arbitrary deck file locations via Save panels, and MLX's
-         Metal pipeline expects free filesystem access. -->
+    <!-- Sandboxed. App-support storage and the HuggingFace model cache
+         resolve into the app container automatically: DictionaryStore
+         uses FileManager's applicationSupportDirectory (container-scoped
+         under the sandbox), and swift-huggingface detects the sandbox
+         via APP_SANDBOX_CONTAINER_ID and downloads into the container's
+         Caches dir. PathProvider mirrors that resolution so on-disk
+         checks match. Deck open/save panels grant per-file access via
+         the user-selected entitlement below. -->
     <key>com.apple.security.app-sandbox</key>
-    <false/>
+    <true/>
+
+    <!-- Deck files: NSOpenPanel / NSSavePanel hand back security-scoped
+         URLs the user explicitly picked (Save Deck As…, Open Deck…,
+         Export to Markdown…). -->
+    <key>com.apple.security.files.user-selected.read-write</key>
+    <true/>
 
     <!-- MLX needs JIT + dynamically-loaded shaders. Without these,
          notarization succeeds but the app crashes on first GPU op
-         with a "default metallib" / mmap error. -->
+         with a "default metallib" / mmap error. These are hardened-
+         runtime entitlements and coexist with the sandbox. -->
     <key>com.apple.security.cs.allow-jit</key>
     <true/>
     <key>com.apple.security.cs.allow-unsigned-executable-memory</key>
