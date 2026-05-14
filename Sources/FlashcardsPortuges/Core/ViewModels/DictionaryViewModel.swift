@@ -63,6 +63,13 @@ final class DictionaryViewModel: ObservableObject {
     }
   }
 
+  /// The group an "Add Entry" action should pre-target: the sidebar's
+  /// selected group, or nil when All Entries / Ungrouped is selected.
+  var selectedGroupIDForNewEntry: UUID? {
+    if case .group(let gid) = selectedFilter { return gid }
+    return nil
+  }
+
   var titleForSelectedGroup: String {
     switch selectedFilter {
     case .all:

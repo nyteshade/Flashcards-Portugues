@@ -24,7 +24,10 @@ struct DictionaryView: View {
       detailView
     }
     .sheet(isPresented: $viewModel.showAddSheet) {
-      AddDictionaryEntryView(store: store)
+      AddDictionaryEntryView(
+        store: store,
+        initialGroupID: viewModel.selectedGroupIDForNewEntry
+      )
     }
     .sheet(isPresented: $viewModel.showEditSheet) {
       if let entry = viewModel.editingEntry {
@@ -275,7 +278,15 @@ struct AddDictionaryEntryView: View {
   @State private var notes = ""
   @State private var lookupStatus = ""
   @State private var isDictionaryLoaded = false
-  @State private var selectedGroupID: UUID? = nil
+  @State private var selectedGroupID: UUID?
+
+  /// `initialGroupID` pre-selects the Group picker — passed the
+  /// sidebar's currently-selected group so adding an entry while a
+  /// group is open targets that group by default.
+  init(store: DictionaryStore, initialGroupID: UUID? = nil) {
+    self.store = store
+    _selectedGroupID = State(initialValue: initialGroupID)
+  }
 
   var body: some View {
     VStack(spacing: 16) {
