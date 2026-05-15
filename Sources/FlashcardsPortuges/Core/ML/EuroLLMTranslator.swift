@@ -1,4 +1,5 @@
 import Foundation
+import NaturalLanguage
 
 struct LLMTranslation: Codable, Equatable {
   struct Variants: Codable, Equatable {
@@ -291,61 +292,44 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
     return nil
   }
   
-  /// Single-field translate: detect the source language ("English"
-  /// or "Portuguese") and translate to the other. Returns the same
-  /// `LLMTranslation` shape the dual-direction call uses, plus the
-  /// detected direction.
+  /// Single-field translate: detect the source language in Swift
+  /// (NLLanguageRecognizer + Portuguese-diacritic check) and translate
+  /// to the other. Returns the same `LLMTranslation` shape the
+  /// directional call uses, plus the detected direction.
+  ///
+  /// Detecting in Swift instead of asking the model also avoids a
+  /// failure mode the 1.7B variant hit on every call: it could not
+  /// reliably produce the nested {sourceLanguage, translation:{…},
+  /// original} envelope. Now the model only has to produce the
+  /// translation envelope — same shape `translate(_:direction:)` is
+  /// already validated against on 9B.
   func autoTranslate(_ text: String) async throws -> (translation: LLMTranslation, direction: LLMDirection) {
-    try await ensureLoaded()
     let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
-    let prompt = """
-        Detect whether the following text is in English or European Portuguese, then translate it to the other language.
-        Reply in JSON ONLY. The format is:
-        {
-          "sourceLanguage": "English" | "Portuguese",
-          "translation": {
-            "direct": "<literal translation in the target language>",
-            "colloquial": "<idiomatic translation in the target language>",
-            "relatedExamples": [
-              { "english": "<example in English>", "portuguese": "<example in European Portuguese>" }
-            ]
-          },
-          "original": "<the original input>"
-        }
-        Provide 2–3 related examples that illustrate the term in natural use.
-        <text>\(trimmed)</text>
-        """
-    Logger.log("EuroLLM auto-translate prompt: \(prompt)")
-    status = .processing
-    statusMessage = "Translating…"
-    defer {
-      status = .ready
-      statusMessage = "Ready"
+    let direction = Self.detectDirection(forInput: trimmed)
+    let translation = try await translate(trimmed, direction: direction)
+    return (translation, direction)
+  }
+
+  /// Heuristic source-language detection. Order:
+  ///   1. Any Portuguese-distinctive diacritic → Portuguese.
+  ///   2. NLLanguageRecognizer reports English with confidence ≥ 0.85
+  ///      → English.
+  ///   3. Default to Portuguese (the app is for learning Portuguese,
+  ///      so PT-input is the more common ambiguous case).
+  nonisolated static func detectDirection(forInput text: String) -> LLMDirection {
+    let portugueseSignals: Set<Character> = [
+      "ã", "õ", "â", "ê", "ô", "ç", "á", "í", "ó", "ú", "à"
+    ]
+    if text.lowercased().contains(where: { portugueseSignals.contains($0) }) {
+      return .portugueseToEnglish
     }
-    let raw = try await coordinator.infer(prompt: prompt, maxTokens: 768, temperature: 0.2)
-    Logger.log("EuroLLM auto-translate raw: \(raw)")
-    
-    let body = Self.extractJSONBody(from: raw) ?? raw
-    guard let data = body.data(using: .utf8) else {
-      throw MLXTranslatorError.responseParseFailed(raw: raw)
+    let recognizer = NLLanguageRecognizer()
+    recognizer.processString(text)
+    let hypotheses = recognizer.languageHypotheses(withMaximum: 2)
+    if let englishConfidence = hypotheses[.english], englishConfidence >= 0.85 {
+      return .englishToPortuguese
     }
-    // Decode as a permissive intermediate so the existing
-    // LLMTranslation type stays single-purpose.
-    struct AutoEnvelope: Codable {
-      let sourceLanguage: String
-      let translation: LLMTranslation.Variants
-      let original: String
-    }
-    do {
-      let env = try JSONDecoder().decode(AutoEnvelope.self, from: data)
-      let direction: LLMDirection = env.sourceLanguage.lowercased().hasPrefix("en")
-      ? .englishToPortuguese
-      : .portugueseToEnglish
-      let translation = LLMTranslation(translation: env.translation, original: env.original)
-      return (translation, direction)
-    } catch {
-      throw MLXTranslatorError.responseParseFailed(raw: raw)
-    }
+    return .portugueseToEnglish
   }
   
   /// Resolve a possibly-English verb input to its Portuguese
@@ -505,17 +489,47 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
   
   /// Tolerate leading/trailing prose around the JSON body, plus
   /// optional ```json fenced blocks. Picks the first balanced
-  /// `{...}` substring and decodes it.
+  /// `{...}` substring and decodes it. When strict decode fails
+  /// (1.7B EuroLLM often emits malformed/partial JSON), falls back
+  /// to a regex extractor that pulls out `direct` and `colloquial`
+  /// from anywhere in the raw text. relatedExamples is dropped on
+  /// the fallback path — small models almost never produce a clean
+  /// array of objects, and the rest of the UI handles it being nil.
   static func parseJSON(_ raw: String, fallbackOriginal: String) throws -> LLMTranslation {
     let body = extractJSONBody(from: raw) ?? raw
-    guard let data = body.data(using: .utf8) else {
+    if let data = body.data(using: .utf8),
+       let strict = try? JSONDecoder().decode(LLMTranslation.self, from: data) {
+      return strict
+    }
+    let direct = firstCapturedString(in: raw, key: "direct")
+    let colloquial = firstCapturedString(in: raw, key: "colloquial")
+    let original = firstCapturedString(in: raw, key: "original") ?? fallbackOriginal
+    guard direct != nil || colloquial != nil else {
       throw MLXTranslatorError.responseParseFailed(raw: raw)
     }
-    do {
-      return try JSONDecoder().decode(LLMTranslation.self, from: data)
-    } catch {
-      throw MLXTranslatorError.responseParseFailed(raw: raw)
-    }
+    let variants = LLMTranslation.Variants(
+      direct: direct ?? colloquial ?? "",
+      colloquial: colloquial ?? direct ?? "",
+      relatedExamples: nil
+    )
+    return LLMTranslation(translation: variants, original: original)
+  }
+
+  /// Pull the first string value associated with `"key": "<value>"`
+  /// anywhere in `haystack`. Tolerates whitespace, line breaks, and
+  /// escaped quotes inside the value.
+  nonisolated static func firstCapturedString(in haystack: String, key: String) -> String? {
+    let pattern = "\"\(NSRegularExpression.escapedPattern(for: key))\"\\s*:\\s*\"((?:[^\"\\\\]|\\\\.)*)\""
+    guard let regex = try? NSRegularExpression(pattern: pattern, options: []) else { return nil }
+    let range = NSRange(haystack.startIndex..., in: haystack)
+    guard let match = regex.firstMatch(in: haystack, options: [], range: range),
+          match.numberOfRanges > 1,
+          let captured = Range(match.range(at: 1), in: haystack) else { return nil }
+    // Unescape \" and \\ which JSON would normally handle.
+    return String(haystack[captured])
+      .replacingOccurrences(of: "\\\"", with: "\"")
+      .replacingOccurrences(of: "\\\\", with: "\\")
+      .replacingOccurrences(of: "\\n", with: "\n")
   }
   
   /// Pure string brace-matcher — `nonisolated` so non-MainActor
