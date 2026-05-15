@@ -463,6 +463,10 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
 
   /// Translate `text` in the given direction. Returns the parsed
   /// JSON body — `direct` (literal) and `colloquial` (idiomatic).
+  /// If the JSON path produces empty strings (a known failure mode
+  /// for small instruction-tuned models, which sometimes echo back
+  /// the prompt's placeholder structure verbatim), retries with a
+  /// plain-text prompt and uses that as `direct`.
   func translate(_ text: String, direction: LLMDirection) async throws -> LLMTranslation {
     try await ensureLoaded()
     let prompt = Self.buildPrompt(text: text, direction: direction)
@@ -475,26 +479,102 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
     }
     let raw = try await coordinator.infer(prompt: prompt, maxTokens: 512, temperature: 0.2)
     Logger.log("EuroLLM raw response: \(raw)")
-    return try Self.parseJSON(raw, fallbackOriginal: text)
+    let parsed = try Self.parseJSON(raw, fallbackOriginal: text)
+    if !parsed.translation.direct.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
+       !parsed.translation.colloquial.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+      return parsed
+    }
+    // JSON parsed but both fields are blank — the model echoed our
+    // template. Retry with a plain-text prompt and accept the line
+    // as the direct translation.
+    Logger.log("EuroLLM JSON returned empty values; retrying with plain-text prompt")
+    let plainPrompt = Self.buildPlainTextPrompt(text: text, direction: direction)
+    let plainRaw = try await coordinator.infer(prompt: plainPrompt, maxTokens: 256, temperature: 0.2)
+    Logger.log("EuroLLM plain-text retry raw: \(plainRaw)")
+    let cleaned = Self.cleanPlainTranslation(plainRaw)
+    guard !cleaned.isEmpty else {
+      throw MLXTranslatorError.responseParseFailed(raw: plainRaw)
+    }
+    return LLMTranslation(
+      translation: LLMTranslation.Variants(
+        direct: cleaned,
+        colloquial: cleaned,
+        relatedExamples: nil
+      ),
+      original: text
+    )
   }
-  
+
   static func buildPrompt(text: String, direction: LLMDirection) -> String {
     switch direction {
     case .englishToPortuguese:
       return """
-            Translate the following contents in the english tag to European Portuguese. Reply in JSON with a few related or example sentences.
-            with the format of { "translation": { "direct": "", "colloquial": "", "relatedExamples": [ { "english": "", "portuguese": "" } ] }, "original":
-            "<contents of source string>" }
+            Translate the English text in the <english> tag to European Portuguese.
+            Reply with valid JSON ONLY, no prose, no markdown, no code fences. Use this exact shape:
+            { "translation": { "direct": "<literal translation, in European Portuguese>", "colloquial": "<natural idiomatic translation, in European Portuguese>" }, "original": "<the original English input>" }
             <english>\(text)</english>
             """
     case .portugueseToEnglish:
       return """
-            Translate the following contents in the portuguese tag to American English. Reply in JSON with a few related or example sentences.
-            with the format of { "translation": { "direct": "", "colloquial": "", "relatedExamples": [ { "english": "", "portuguese": "" } ] }, "original":
-            "<contents of source string>" }
+            Translate the European Portuguese text in the <portuguese> tag to American English.
+            Reply with valid JSON ONLY, no prose, no markdown, no code fences. Use this exact shape:
+            { "translation": { "direct": "<literal translation, in English>", "colloquial": "<natural idiomatic translation, in English>" }, "original": "<the original Portuguese input>" }
             <portuguese>\(text)</portuguese>
             """
     }
+  }
+
+  /// Plain-text fallback prompt used when the JSON path returns empty
+  /// fields. Designed to maximize the chance a small model just emits
+  /// the translated sentence and nothing else.
+  static func buildPlainTextPrompt(text: String, direction: LLMDirection) -> String {
+    switch direction {
+    case .englishToPortuguese:
+      return """
+            Translate this English sentence to European Portuguese. Reply with the translated sentence only — no quotes, no labels, no explanation, no JSON.
+            English: \(text)
+            European Portuguese:
+            """
+    case .portugueseToEnglish:
+      return """
+            Translate this European Portuguese sentence to American English. Reply with the translated sentence only — no quotes, no labels, no explanation, no JSON.
+            European Portuguese: \(text)
+            English:
+            """
+    }
+  }
+
+  /// Strip the wrapping the model often adds around a single-line
+  /// answer: leading labels ("English:", "Portuguese:"), surrounding
+  /// quotes, markdown fences, and trailing prose after a blank line.
+  nonisolated static func cleanPlainTranslation(_ raw: String) -> String {
+    var s = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+    // Take just the first non-empty line — the model sometimes
+    // continues with explanation after the translation.
+    if let firstLine = s.components(separatedBy: .newlines)
+      .first(where: { !$0.trimmingCharacters(in: .whitespaces).isEmpty }) {
+      s = firstLine
+    }
+    // Strip common label prefixes the model leaks past our prompt.
+    let labelPrefixes = [
+      "European Portuguese:", "Portuguese:", "American English:", "English:",
+      "Translation:", "Tradução:",
+    ]
+    for prefix in labelPrefixes {
+      if s.lowercased().hasPrefix(prefix.lowercased()) {
+        s = String(s.dropFirst(prefix.count)).trimmingCharacters(in: .whitespaces)
+      }
+    }
+    // Strip surrounding quotes (straight and curly).
+    let quotePairs: [(Character, Character)] = [
+      ("\"", "\""), ("'", "'"), ("“", "”"), ("‘", "’"),
+    ]
+    for (open, close) in quotePairs {
+      if s.first == open && s.last == close && s.count >= 2 {
+        s = String(s.dropFirst().dropLast()).trimmingCharacters(in: .whitespaces)
+      }
+    }
+    return s
   }
   
   /// Tolerate leading/trailing prose around the JSON body, plus
