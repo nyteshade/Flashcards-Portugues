@@ -27,6 +27,7 @@ struct ChatView: View {
         .navigationTitle("Sofia")
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.visible, for: .tabBar)
+        .scrollDismissesKeyboard(.interactively)
         .toolbar {
           ToolbarItem(placement: .topBarLeading) {
             Button {
@@ -41,6 +42,10 @@ struct ChatView: View {
             Button { showSettings = true } label: {
               Image(systemName: "gearshape")
             }
+          }
+          ToolbarItemGroup(placement: .keyboard) {
+            Spacer()
+            Button("Done") { inputFocused = false }
           }
         }
         .safeAreaInset(edge: .bottom) {
