@@ -135,6 +135,23 @@ targets:
           - "Views/macOS/**"
     info:
       path: Info-iOS.plist
+      # xcodegen overwrites Info-iOS.plist on every `xcodegen
+      # generate` from these properties. Manual edits to the .plist
+      # file don't survive — declare keys here instead.
+      properties:
+        # Without UILaunchScreen, iOS treats the app as designed for
+        # iPhone 8 and renders it in a letterboxed compatibility
+        # canvas on every modern device.
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
     settings:
       base:
         PRODUCT_NAME: FlashcardsPortuges
