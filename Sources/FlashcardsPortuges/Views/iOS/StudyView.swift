@@ -45,6 +45,14 @@ struct StudyView: View {
                 Label("Randomize", systemImage: "shuffle")
               }
               .disabled(store.studyDeck.cards.count < 2)
+              Button {
+                withAnimation { viewModel.toggleReversed() }
+              } label: {
+                Label(
+                  viewModel.defaultSideIsEnglish ? "Portuguese First" : "English First",
+                  systemImage: "arrow.left.arrow.right"
+                )
+              }
               Divider()
               Button(role: .destructive) {
                 viewModel.removeCurrentCardFromDeck()
@@ -130,66 +138,85 @@ struct StudyView: View {
   @ViewBuilder
   private var cardArea: some View {
     let current = viewModel.currentCard
-    let flipped = viewModel.flipped
+    let isEnglishSide = viewModel.currentSideIsEnglish
     ZStack {
       RoundedRectangle(cornerRadius: 16)
-        .fill(flipped ? Color.blue.opacity(0.1) : Color.green.opacity(0.1))
+        .fill(isEnglishSide ? Color.blue.opacity(0.1) : Color.green.opacity(0.1))
         .overlay(
           RoundedRectangle(cornerRadius: 16)
             .stroke(Color.gray.opacity(0.3), lineWidth: 1)
         )
 
       if current.isVerbCard {
-        verbCardContent(current: current, flipped: flipped)
+        verbCardContent(current: current, isEnglishSide: isEnglishSide)
       } else {
-        plainCardContent(current: current, flipped: flipped)
+        plainCardContent(current: current, isEnglishSide: isEnglishSide)
       }
     }
     .frame(maxWidth: .infinity, minHeight: 280)
   }
 
   @ViewBuilder
-  private func verbCardContent(current: Flashcard, flipped: Bool) -> some View {
-    if flipped {
-      VStack(spacing: 8) {
-        HStack(spacing: 6) {
-          Text(current.verbInfinitive).font(.title3.bold())
-          let resolved = viewModel.resolvedEnglishForVerbCard(current)
-          if !resolved.isEmpty {
-            Text("(\(VerbEnglishFormatter.normalize(resolved)))")
-              .font(.subheadline)
-              .foregroundStyle(.secondary)
-          }
-          Button {
-            SpeechService.speak(current.verbInfinitive)
-          } label: {
-            Image(systemName: "speaker.wave.2")
-          }
-          .buttonStyle(.borderless)
-        }
-        ScrollView {
-          conjugationTable(forms: current.conjugationForms)
-        }
-      }
-      .padding(8)
-      .onAppear { viewModel.backfillVerbEnglishIfNeeded(current) }
+  private func verbCardContent(current: Flashcard, isEnglishSide: Bool) -> some View {
+    if isEnglishSide {
+      verbMeaningSide(current: current)
     } else {
-      VStack(spacing: 8) {
-        Text(current.verbInfinitive)
-          .font(.title.bold())
-          .multilineTextAlignment(.center)
-        Text(current.tenseName)
-          .font(.headline)
-          .foregroundStyle(.secondary)
-      }
-      .padding()
+      verbConjugationSide(current: current)
     }
   }
 
+  /// Portuguese-side of a verb card: infinitive top-left, tense
+  /// top-right, conjugation table below.
   @ViewBuilder
-  private func plainCardContent(current: Flashcard, flipped: Bool) -> some View {
+  private func verbConjugationSide(current: Flashcard) -> some View {
+    VStack(spacing: 8) {
+      HStack(alignment: .firstTextBaseline) {
+        Text(current.verbInfinitive).font(.title3.bold())
+        Button {
+          SpeechService.speak(current.verbInfinitive)
+        } label: {
+          Image(systemName: "speaker.wave.2").font(.caption)
+        }
+        .buttonStyle(.borderless)
+        Spacer()
+        Text(current.tenseName)
+          .font(.subheadline)
+          .foregroundStyle(.secondary)
+      }
+      .padding(.horizontal, 4)
+      ScrollView {
+        conjugationTable(forms: current.conjugationForms)
+      }
+    }
+    .padding(8)
+    .onAppear { viewModel.backfillVerbEnglishIfNeeded(current) }
+  }
+
+  /// English-side of a verb card: the meaning. Falls back to the
+  /// Portuguese infinitive when we don't have an English translation
+  /// for this verb yet.
+  @ViewBuilder
+  private func verbMeaningSide(current: Flashcard) -> some View {
+    let resolved = viewModel.resolvedEnglishForVerbCard(current)
+    let display = resolved.isEmpty
+      ? current.verbInfinitive
+      : VerbEnglishFormatter.normalize(resolved)
     VStack(spacing: 6) {
-      Text(flipped ? current.english : current.portuguese)
+      Text(display)
+        .font(.title.bold())
+        .multilineTextAlignment(.center)
+      Text(current.tenseName)
+        .font(.caption)
+        .foregroundStyle(.secondary)
+    }
+    .padding()
+    .onAppear { viewModel.backfillVerbEnglishIfNeeded(current) }
+  }
+
+  @ViewBuilder
+  private func plainCardContent(current: Flashcard, isEnglishSide: Bool) -> some View {
+    VStack(spacing: 6) {
+      Text(isEnglishSide ? current.english : current.portuguese)
         .font(.title.bold())
         .multilineTextAlignment(.center)
       Text(current.partOfSpeech.rawValue)

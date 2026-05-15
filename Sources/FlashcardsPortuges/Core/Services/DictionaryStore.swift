@@ -225,6 +225,15 @@ class DictionaryStore: ObservableObject, DictionaryStoring {
     decks[idx].name = uniqueDeckName(from: trimmed, ignoring: id)
     save()
   }
+
+  /// Per-deck study direction. `false` = Portuguese first (tap →
+  /// English/meaning side); `true` = English first (tap → Portuguese
+  /// / conjugation side). Persisted with the deck.
+  func setDeckReversed(_ reversed: Bool, deckID: UUID) {
+    guard let idx = decks.firstIndex(where: { $0.id == deckID }) else { return }
+    decks[idx].reversed = reversed
+    save()
+  }
   
   func deleteDeck(id: UUID) {
     decks.removeAll { $0.id == id }

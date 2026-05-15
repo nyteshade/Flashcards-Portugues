@@ -71,7 +71,34 @@ final class StudyViewModel: ObservableObject {
   }
 
   var wordForDefine: String {
-    flipped ? currentCard.english : currentCard.portuguese
+    currentSideIsEnglish ? currentCard.english : currentCard.portuguese
+  }
+
+  /// `true` when the currently rendered side is the English/meaning
+  /// side. Combines the deck's default direction with the user's
+  /// `flipped` state — XOR semantics:
+  /// - `reversed == false`: tap flips PT → EN, so EN side = flipped.
+  /// - `reversed == true`: EN is the default side, so EN side = !flipped.
+  var currentSideIsEnglish: Bool {
+    flipped != store.studyDeck.reversed
+  }
+
+  /// `true` when the deck is in English-first mode. The View uses this
+  /// to label the toggle (e.g. "English First" ↔ "Portuguese First").
+  var defaultSideIsEnglish: Bool {
+    store.studyDeck.reversed
+  }
+
+  /// Flip the deck's default-side preference and reset the per-card
+  /// flipped state so the user immediately sees the new default side.
+  func toggleReversed() {
+    store.setDeckReversed(!store.studyDeck.reversed, deckID: store.studyDeck.id)
+    flipped = false
+    ActivityTracker.shared.record(
+      category: .study,
+      action: "Toggled deck direction",
+      detail: store.studyDeck.reversed ? "English first" : "Portuguese first"
+    )
   }
 
   // MARK: - Navigation

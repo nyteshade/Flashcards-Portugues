@@ -33,6 +33,7 @@ protocol DictionaryStoring: AnyObject {
   @discardableResult
   func createDeck(named name: String) -> Deck
   func renameDeck(id: UUID, to newName: String)
+  func setDeckReversed(_ reversed: Bool, deckID: UUID)
   func adoptDeck(_ deck: Deck, makeActive: Bool)
   func save()
 }

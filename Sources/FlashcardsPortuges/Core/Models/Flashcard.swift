@@ -51,4 +51,27 @@ struct Deck: Identifiable, Codable, Hashable {
   var id = UUID()
   var name: String
   var cards: [Flashcard]
+  /// Default study direction. `false` = Portuguese-first (tap to
+  /// reveal English); `true` = English-first (tap to reveal Portuguese
+  /// / conjugation side). Per-deck so different decks can be studied
+  /// in different directions.
+  var reversed: Bool = false
+
+  init(id: UUID = UUID(), name: String, cards: [Flashcard], reversed: Bool = false) {
+    self.id = id
+    self.name = name
+    self.cards = cards
+    self.reversed = reversed
+  }
+
+  enum CodingKeys: CodingKey { case id, name, cards, reversed }
+
+  // Custom decoder so old `.flcd` files without `reversed` still load.
+  init(from decoder: Decoder) throws {
+    let c = try decoder.container(keyedBy: CodingKeys.self)
+    self.id = try c.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
+    self.name = try c.decode(String.self, forKey: .name)
+    self.cards = try c.decode([Flashcard].self, forKey: .cards)
+    self.reversed = try c.decodeIfPresent(Bool.self, forKey: .reversed) ?? false
+  }
 }

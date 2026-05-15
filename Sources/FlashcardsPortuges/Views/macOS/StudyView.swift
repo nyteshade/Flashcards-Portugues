@@ -174,6 +174,16 @@ struct StudyView: View {
       .keyboardShortcut("r", modifiers: [])
       .disabled(store.studyDeck.cards.count < 2)
 
+      Button {
+        withAnimation { viewModel.toggleReversed() }
+      } label: {
+        Label(
+          viewModel.defaultSideIsEnglish ? "Portuguese First" : "English First",
+          systemImage: "arrow.left.arrow.right"
+        )
+      }
+      .help("Swap the default study direction for this deck")
+
       Button("Add from Dictionary") { viewModel.showAddSheet = true }
         .sheet(isPresented: $viewModel.showAddSheet) {
           AddCardFromDictionaryView(store: store)
@@ -208,104 +218,107 @@ struct StudyView: View {
   @ViewBuilder
   private var cardArea: some View {
     let current = viewModel.currentCard
-    let flipped = viewModel.flipped
+    let isEnglishSide = viewModel.currentSideIsEnglish
+    let showConjugation = current.isVerbCard && !isEnglishSide
     ZStack {
       RoundedRectangle(cornerRadius: 16)
-        .fill(flipped ? Color.blue.opacity(0.1) : Color.green.opacity(0.1))
+        .fill(isEnglishSide ? Color.blue.opacity(0.1) : Color.green.opacity(0.1))
         .overlay(
           RoundedRectangle(cornerRadius: 16)
             .stroke(Color.gray.opacity(0.3), lineWidth: 1)
         )
 
       if current.isVerbCard {
-        if flipped {
-          VStack(spacing: 8) {
-            HStack(spacing: 6) {
-              Text(current.verbInfinitive)
-                .font(.title2)
-                .fontWeight(.bold)
-              let resolved = viewModel.resolvedEnglishForVerbCard(current)
-              if !resolved.isEmpty {
-                Text("(\(VerbEnglishFormatter.normalize(resolved)))")
-                  .font(.title2)
-                  .foregroundColor(.secondary)
-              }
-              Button {
-                SpeechService.speak(current.verbInfinitive)
-              } label: {
-                Image(systemName: "speaker.wave.2")
-                  .foregroundColor(.accentColor)
-              }
-              .buttonStyle(.borderless)
-              .help("Pronounce infinitive")
-            }
-            conjugationTable(forms: current.conjugationForms)
-          }
-          .padding()
-          .onAppear { viewModel.backfillVerbEnglishIfNeeded(current) }
+        if isEnglishSide {
+          verbMeaningSide(current: current)
         } else {
-          VStack(spacing: 12) {
-            HStack {
-              Text(current.verbInfinitive)
-                .font(.title)
-                .fontWeight(.bold)
-              Button {
-                SpeechService.speak(current.verbInfinitive)
-              } label: {
-                Image(systemName: "speaker.wave.2")
-                  .foregroundColor(.accentColor)
-              }
-              .buttonStyle(.borderless)
-              .help("Pronounce infinitive")
-            }
-            HStack {
-              Text(current.tenseName)
-                .font(.title2)
-                .foregroundColor(.secondary)
-              Button {
-                SpeechService.speak(current.tenseName)
-              } label: {
-                Image(systemName: "speaker.wave.2")
-                  .foregroundColor(.accentColor)
-              }
-              .buttonStyle(.borderless)
-              .help("Pronounce tense name")
-            }
-          }
-          .padding()
+          verbConjugationSide(current: current)
         }
       } else {
-        VStack(spacing: 8) {
-          if flipped {
-            Text(current.english)
-              .font(.title)
-              .foregroundColor(.primary)
-            Text(current.partOfSpeech.rawValue)
-              .font(.caption)
-              .foregroundColor(.secondary)
-          } else {
-            Text(current.portuguese)
-              .font(.title)
-              .foregroundColor(.primary)
-            Text(current.partOfSpeech.rawValue)
-              .font(.caption)
-              .foregroundColor(.secondary)
-          }
-          if !current.notes.isEmpty {
-            Text(current.notes)
-              .font(.body)
-              .foregroundColor(.secondary)
-              .padding(.top, 4)
-          }
-        }
-        .padding()
+        plainCardContent(current: current, isEnglishSide: isEnglishSide)
       }
     }
     .frame(
       minWidth: 400, idealWidth: 400, maxWidth: 400,
-      minHeight: flipped && current.isVerbCard ? 320 : 250
+      minHeight: showConjugation ? 320 : 250
     )
     .onTapGesture { withAnimation(.spring) { viewModel.flip() } }
+  }
+
+  /// Portuguese side of a verb card: infinitive top-left, tense
+  /// top-right, conjugation table below.
+  @ViewBuilder
+  private func verbConjugationSide(current: Flashcard) -> some View {
+    VStack(spacing: 8) {
+      HStack(alignment: .firstTextBaseline) {
+        Text(current.verbInfinitive)
+          .font(.title2)
+          .fontWeight(.bold)
+        Button {
+          SpeechService.speak(current.verbInfinitive)
+        } label: {
+          Image(systemName: "speaker.wave.2").foregroundColor(.accentColor)
+        }
+        .buttonStyle(.borderless)
+        .help("Pronounce infinitive")
+        Spacer()
+        Text(current.tenseName)
+          .font(.title3)
+          .foregroundColor(.secondary)
+      }
+      .padding(.horizontal, 4)
+      conjugationTable(forms: current.conjugationForms)
+    }
+    .padding()
+    .onAppear { viewModel.backfillVerbEnglishIfNeeded(current) }
+  }
+
+  /// English side of a verb card: the meaning. Falls back to the
+  /// Portuguese infinitive when we don't yet have an English
+  /// translation for this verb.
+  @ViewBuilder
+  private func verbMeaningSide(current: Flashcard) -> some View {
+    let resolved = viewModel.resolvedEnglishForVerbCard(current)
+    let display = resolved.isEmpty
+      ? current.verbInfinitive
+      : VerbEnglishFormatter.normalize(resolved)
+    VStack(spacing: 8) {
+      HStack {
+        Text(display)
+          .font(.title)
+          .fontWeight(.bold)
+        Button {
+          SpeechService.speak(resolved.isEmpty ? current.verbInfinitive : display)
+        } label: {
+          Image(systemName: "speaker.wave.2").foregroundColor(.accentColor)
+        }
+        .buttonStyle(.borderless)
+      }
+      Text(current.tenseName)
+        .font(.caption)
+        .foregroundColor(.secondary)
+    }
+    .padding()
+    .onAppear { viewModel.backfillVerbEnglishIfNeeded(current) }
+  }
+
+  @ViewBuilder
+  private func plainCardContent(current: Flashcard, isEnglishSide: Bool) -> some View {
+    VStack(spacing: 8) {
+      Text(isEnglishSide ? current.english : current.portuguese)
+        .font(.title)
+        .foregroundColor(.primary)
+      Text(current.partOfSpeech.rawValue)
+        .font(.caption)
+        .foregroundColor(.secondary)
+      if !current.notes.isEmpty {
+        Text(current.notes)
+          .font(.body)
+          .foregroundColor(.secondary)
+          .padding(.top, 4)
+      }
+    }
+    .padding()
   }
 
   private var navigationArea: some View {
