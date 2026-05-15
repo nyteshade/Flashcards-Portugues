@@ -40,7 +40,7 @@ struct ContentView: View {
         .tag(Tab.verbs)
 
       if translator.isReady {
-        TranslateTabStub(showSettings: $showSettings)
+        TranslateView(store: store, showSettings: $showSettings)
           .tabItem { Label("Translate", systemImage: "wand.and.stars") }
           .tag(Tab.translate)
 
@@ -119,11 +119,6 @@ private struct StubTab: View {
       }
     }
   }
-}
-
-private struct TranslateTabStub: View {
-  @Binding var showSettings: Bool
-  var body: some View { StubTab(title: "Translate", showSettings: $showSettings) }
 }
 
 private struct ChatTabStub: View {

@@ -112,6 +112,7 @@
 		ED48122A374FE30AFBBC6804 /* MLXNN in Frameworks */ = {isa = PBXBuildFile; productRef = 3ED34B2E477A810C2597C660 /* MLXNN */; };
 		EEF034052A9D23CB084821A0 /* HuggingFace in Frameworks */ = {isa = PBXBuildFile; productRef = 261D7AFE31C0B36FF839A997 /* HuggingFace */; };
 		F0516873F3E3B00AB2EA557B /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D9754B47B590A5D2531E98 /* ChatViewModel.swift */; };
+		F2776173D980D73277CBEBCB /* TranslateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12717331997540B9A4C33536 /* TranslateView.swift */; };
 		F4482B95B2FA3ABA18A31E34 /* MLXMemoryHarness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB917ABD4506486A58E82DB /* MLXMemoryHarness.swift */; };
 		FA8EDD5CCB4D8AE00674D699 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF948C523DA16290780E7D7 /* ContentView.swift */; };
 		FAC70D3EBEE5F4D94A2D6A26 /* ChatStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DE7D4F870C7386064022D4 /* ChatStore.swift */; };
@@ -125,6 +126,7 @@
 		027D02FE89E93819FB90BA07 /* VerbDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbDetailViewModel.swift; sourceTree = "<group>"; };
 		0D7E28A77D7F67E3459331FC /* FlashcardsPortugesIOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardsPortugesIOSApp.swift; sourceTree = "<group>"; };
 		0FB917ABD4506486A58E82DB /* MLXMemoryHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLXMemoryHarness.swift; sourceTree = "<group>"; };
+		12717331997540B9A4C33536 /* TranslateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateView.swift; sourceTree = "<group>"; };
 		14742B44E4624B2C6BB79472 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		1DACC4A4DACAC34578A250C9 /* FlashcardsPortuges.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlashcardsPortuges.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EDDB2A9136DC0FCCEF5439D /* VerbDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbDetailView.swift; sourceTree = "<group>"; };
@@ -300,6 +302,7 @@
 				BB5A857B208EB704FB7002F9 /* DictionaryView.swift */,
 				14742B44E4624B2C6BB79472 /* SettingsView.swift */,
 				C226D9512B1D90EA20F7D6EA /* StudyView.swift */,
+				12717331997540B9A4C33536 /* TranslateView.swift */,
 				8F2969F00D949C561ED227C1 /* VerbDetailView.swift */,
 			);
 			path = iOS;
@@ -547,6 +550,7 @@
 				8A978AE8EA16262DA2232E8A /* SpeechService.swift in Sources */,
 				2787976A475DC2968203C6A1 /* StudyView.swift in Sources */,
 				16A50B603FEF2C3192A8940D /* StudyViewModel.swift in Sources */,
+				F2776173D980D73277CBEBCB /* TranslateView.swift in Sources */,
 				9A6CADC78F5E83A2C270C51C /* TranslateViewModel.swift in Sources */,
 				0A84FEA84D1B7331CC630CD5 /* TranslationActionsView.swift in Sources */,
 				C8C44B72CE7D8ACB5099DD76 /* TranslationService.swift in Sources */,
