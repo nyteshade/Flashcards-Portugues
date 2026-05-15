@@ -15,25 +15,47 @@ struct FlashcardsPortugesIOSApp: App {
     EuroLLMTranslator.shared.autoLoadIfCached()
   }
 
-  /// Pre-populate the HuggingFace hub env vars so the C++ side of
-  /// MLX / swift-transformers always has a non-null `getenv` result
-  /// when it constructs `std::string`. The download crash on iOS
-  /// surfaces as `_LIBCPP_ASSERT_NON_NULL(__s != nullptr,
-  /// "basic_string(const char*) detected nullptr")` — libc++ catching
-  /// a `getenv("HF_HUB_CACHE")` returning NULL because iOS apps don't
-  /// inherit the user's shell environment. Setting these here makes
-  /// PathProvider's cache path the authoritative location on iOS too.
+  /// Pre-populate the env vars that MLX / swift-huggingface /
+  /// swift-transformers consult so the C++ side never hits
+  /// `_LIBCPP_ASSERT_NON_NULL(__s != nullptr,
+  /// "basic_string(const char*) detected nullptr")`. iOS apps don't
+  /// inherit a user shell environment, so any C++ call site that
+  /// wraps `getenv(...)` directly in `std::string` blows up. We set
+  /// everything plausibly read by the HF stack to a non-null value:
+  ///
+  ///   - HF_HUB_CACHE / HF_HOME / TRANSFORMERS_CACHE → our cache dir
+  ///   - HF_TOKEN / HUGGING_FACE_HUB_TOKEN → empty string (public)
+  ///   - XDG_CACHE_HOME → app caches root
+  ///   - HOME / USER / LOGNAME → harmless non-empty fallbacks if
+  ///     they happen to be unset (Apple usually provides HOME)
+  ///
+  /// Existing values are NOT overwritten — `overwrite: 0`.
   private static func prepareHuggingFaceEnvironment() {
     let cache = PathProvider.modelCacheDirectory.path
+    let cacheParent = PathProvider.modelCacheDirectory
+      .deletingLastPathComponent().path
+    let xdgCache = URL.cachesDirectory.path
     try? FileManager.default.createDirectory(
       at: PathProvider.modelCacheDirectory,
       withIntermediateDirectories: true
     )
     setenv("HF_HUB_CACHE", cache, 1)
-    if ProcessInfo.processInfo.environment["HF_HOME"] == nil {
-      setenv("HF_HOME", PathProvider.modelCacheDirectory.deletingLastPathComponent().path, 1)
+    setIfUnset("HF_HOME", cacheParent)
+    setIfUnset("TRANSFORMERS_CACHE", cache)
+    setIfUnset("XDG_CACHE_HOME", xdgCache)
+    setIfUnset("HF_TOKEN", "")
+    setIfUnset("HUGGING_FACE_HUB_TOKEN", "")
+    setIfUnset("HUGGINGFACE_HUB_TOKEN", "")
+    setIfUnset("HOME", NSHomeDirectory())
+    setIfUnset("USER", "mobile")
+    setIfUnset("LOGNAME", "mobile")
+    Logger.log("HuggingFace env prepared (cache=\(cache))")
+  }
+
+  private static func setIfUnset(_ key: String, _ value: String) {
+    if ProcessInfo.processInfo.environment[key] == nil {
+      setenv(key, value, 1)
     }
-    Logger.log("HuggingFace cache prepared at \(cache)")
   }
 
   var body: some Scene {
