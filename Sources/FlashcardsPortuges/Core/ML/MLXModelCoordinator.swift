@@ -128,7 +128,8 @@ enum MLXTranslatorError: Error {
   case modelLoadFailed(modelID: String, reason: String)
   case appleSiliconRequired
   case responseParseFailed(raw: String)
-  
+  case simulatorUnsupported
+
   var localizedDescription: String {
     switch self {
     case .noModelLoaded:
@@ -141,6 +142,8 @@ enum MLXTranslatorError: Error {
       return "EuroLLM requires Apple Silicon."
     case .responseParseFailed(let raw):
       return "Could not parse model response as JSON. Raw: \(raw.prefix(200))"
+    case .simulatorUnsupported:
+      return "MLX inference is not supported in the iOS Simulator. The Metal backend's device init reads a property that is NULL on the simulator and crashes the process. Install on a real iPhone or iPad to download and run models."
     }
   }
 }

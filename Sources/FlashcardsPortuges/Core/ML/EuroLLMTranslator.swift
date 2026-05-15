@@ -85,13 +85,23 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
   }
   
   /// Configure the harness with this machine's physical RAM. Safe
-  /// to call multiple times — idempotent.
-  func bootstrap() async {
+  /// to call multiple times — idempotent. Throws on the iOS Simulator
+  /// because MLX's Metal backend Device init reads a NULL property
+  /// and crashes the process inside `std::string` (mlx/backend/metal/
+  /// device.cpp:328). The first call into MLX from the simulator
+  /// (`Memory.memoryLimit.setter` inside the harness) is what
+  /// triggers it; bailing here surfaces a clean error before we touch
+  /// MLX at all.
+  func bootstrap() async throws {
     guard !configured else { return }
+    #if targetEnvironment(simulator) && os(iOS)
+    throw MLXTranslatorError.simulatorUnsupported
+    #else
     let ram = Int(ProcessInfo.processInfo.physicalMemory)
     await harness.configure(physicalRAMBytes: ram)
     configured = true
     Logger.log("EuroLLM harness configured: physRAM=\(ram) bytes")
+    #endif
   }
   
   /// Auto-load on app startup if (a) the user's active-variant
@@ -153,7 +163,7 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
   }
 
   private func loadInternal(variant: ModelVariant, force: Bool) async throws {
-    await bootstrap()
+    try await bootstrap()
 
     if await coordinator.isLoaded() {
       // Unload whatever's resident before swapping. If it's already
