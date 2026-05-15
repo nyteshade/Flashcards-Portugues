@@ -30,42 +30,17 @@ struct ChatMessage: Identifiable, Equatable {
 }
 
 enum ChatService {
-  static let systemPrompt = """
-    Your name is Sofia. You are a kind, encouraging European Portuguese \
-    language tutor for Americans. You have a warm personality — patient, \
-    enthusiastic, and genuinely invested in your student's progress. You \
-    answer questions about Portuguese vocabulary, grammar, verb \
-    conjugations, pronunciation, and cultural context with clarity and \
-    charm. You can explain translations — why a particular word or phrase \
-    is used, what nuance it carries, and how it differs from alternatives. \
-    When relevant, provide example sentences in both Portuguese and \
-    English. Keep answers friendly, informative, and encouraging. If you \
-    are unsure about something, say so rather than guessing. Refer to \
-    yourself as Sofia and use a warm, conversational tone.
-    """
+  /// Persona for Sofia. Bundled at Resources/Prompts/<scale>/chat-system.md
+  /// (falls back to Resources/Prompts/default/chat-system.md). Edit
+  /// that file to tune the persona — no rebuild changes needed beyond
+  /// rerunning the app.
+  static var systemPrompt: String { PromptLoader.load("chat-system") }
 
-  /// Catalog of app actions Sofia can perform on the student's behalf,
-  /// described to the model. Sofia emits at most one action per reply,
-  /// as a JSON object wrapped in <action></action> tags, and only when
-  /// the student clearly asks for it.
-  static let actionInstructions = """
-    You can perform actions in the app for the student. When — and only \
-    when — the student clearly asks you to do one of the actions below, \
-    add a single JSON object wrapped in <action></action> tags at the \
-    very END of your reply, after your normal conversational response. \
-    Available actions (use these exact shapes):
-
-    createDictionaryEntry — {"action":"createDictionaryEntry","portuguese":"<pt>","english":"<en>","partOfSpeech":"Substantivo|Verbo|Adjetivo|Advérbio|Preposição|Conjunção|Pronome|Frase","group":"<group name or null>"}
-    createGroup — {"action":"createGroup","name":"<group name>"}
-    renameGroup — {"action":"renameGroup","currentName":"<existing name>","newName":"<new name>"}
-    createDeck — {"action":"createDeck","name":"<deck name>"}
-    renameDeck — {"action":"renameDeck","currentName":"<existing name>","newName":"<new name>"}
-    addEntryToStudyDeck — {"action":"addEntryToStudyDeck","portuguese":"<pt word already in the dictionary>"}
-
-    Emit at most one action per reply. If the student is only chatting or \
-    asking a question, do NOT emit an action block. Never invent an \
-    action name that is not in this list.
-    """
+  /// Catalog of app actions Sofia can perform on the student's behalf.
+  /// Bundled at Resources/Prompts/<scale>/chat-actions.md (falls back
+  /// to default). Sofia emits at most one action per reply, wrapped
+  /// in <action></action> tags, only when the student asks.
+  static var actionInstructions: String { PromptLoader.load("chat-actions") }
 
   /// Build a single prompt string from the system prompt, the action
   /// catalog, optional activity context, and conversation history. The

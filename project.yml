@@ -133,6 +133,9 @@ targets:
         excludes:
           - "App/macOS/**"
           - "Views/macOS/**"
+    resources:
+      - path: Sources/FlashcardsPortuges/Resources
+        optional: true
     info:
       path: Info-iOS.plist
       # xcodegen overwrites Info-iOS.plist on every `xcodegen

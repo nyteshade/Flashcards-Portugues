@@ -218,6 +218,7 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
         force: force
       )
       activeVariant = variant
+      PromptLoader.currentScale = variant.parameterScale
       status = .ready
       statusMessage = "Ready (\(variant.displayName))"
       Logger.log("EuroLLM loaded: \(variant.id)")
@@ -262,12 +263,10 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
     guard !trimmed.isEmpty else { return nil }
     
     let labels = PartOfSpeech.allCases.map { $0.rawValue }.joined(separator: ", ")
-    let prompt = """
-        Classify the following European Portuguese text into exactly one of these categories:
-        \(labels).
-        Reply with ONLY the category name in JSON format: { "category": "<one of the labels>" }
-        <portuguese>\(trimmed)</portuguese>
-        """
+    let prompt = PromptLoader.load(
+      "classify-pos",
+      vars: ["labels": labels, "text": trimmed]
+    )
     do {
       status = .processing
       statusMessage = "Classifying…"
@@ -355,17 +354,7 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
     guard isReady else { return nil }
     let trimmed = input.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !trimmed.isEmpty else { return nil }
-    let prompt = """
-        You translate a single English verb to its European Portuguese infinitive.
-        Reply in JSON ONLY. No prose. Format:
-        { "isVerb": true|false, "infinitive": "<portuguese infinitive ending in -ar, -er, or -ir>" }
-        If the input is not a verb, set isVerb to false and leave infinitive as "".
-        Examples:
-          input "to go"  -> { "isVerb": true, "infinitive": "ir" }
-          input "speak"  -> { "isVerb": true, "infinitive": "falar" }
-          input "house"  -> { "isVerb": false, "infinitive": "" }
-        <english>\(trimmed)</english>
-        """
+    let prompt = PromptLoader.load("verb-infinitive", vars: ["text": trimmed])
     do {
       status = .processing
       statusMessage = "Resolving infinitive…"
@@ -406,21 +395,7 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
   func defineWithExamples(portuguese term: String) async throws -> LLMDefinition {
     try await ensureLoaded()
     let trimmed = term.trimmingCharacters(in: .whitespacesAndNewlines)
-    let prompt = """
-        You are a European Portuguese-English dictionary assistant. Define the term inside the <term> tag.
-        Reply in JSON ONLY. No surrounding prose. The format is:
-        {
-          "term": "<the term>",
-          "partOfSpeech": "<one of: Verbo, Substantivo, Adjetivo, Advérbio, Preposição, Conjunção, Pronome, Frase>",
-          "definition": "<a clear English definition, 1–2 sentences>",
-          "examples": [
-            { "portuguese": "<example sentence in European Portuguese>", "english": "<English translation>" },
-            { "portuguese": "<another example sentence>", "english": "<English translation>" }
-          ]
-        }
-        Provide 2–3 examples that show the term in natural use. Keep definitions concise.
-        <term>\(trimmed)</term>
-        """
+    let prompt = PromptLoader.load("define-with-examples", vars: ["text": trimmed])
     Logger.log("EuroLLM define prompt: \(prompt)")
     status = .processing
     statusMessage = "Defining…"
@@ -507,42 +482,24 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
   }
 
   static func buildPrompt(text: String, direction: LLMDirection) -> String {
+    let name: String
     switch direction {
-    case .englishToPortuguese:
-      return """
-            Translate the English text in the <english> tag to European Portuguese.
-            Reply with valid JSON ONLY, no prose, no markdown, no code fences. Use this exact shape:
-            { "translation": { "direct": "<literal translation, in European Portuguese>", "colloquial": "<natural idiomatic translation, in European Portuguese>" }, "original": "<the original English input>" }
-            <english>\(text)</english>
-            """
-    case .portugueseToEnglish:
-      return """
-            Translate the European Portuguese text in the <portuguese> tag to American English.
-            Reply with valid JSON ONLY, no prose, no markdown, no code fences. Use this exact shape:
-            { "translation": { "direct": "<literal translation, in English>", "colloquial": "<natural idiomatic translation, in English>" }, "original": "<the original Portuguese input>" }
-            <portuguese>\(text)</portuguese>
-            """
+    case .englishToPortuguese: name = "translate-en-to-pt"
+    case .portugueseToEnglish: name = "translate-pt-to-en"
     }
+    return PromptLoader.load(name, vars: ["text": text])
   }
 
   /// Plain-text fallback prompt used when the JSON path returns empty
   /// fields. Designed to maximize the chance a small model just emits
   /// the translated sentence and nothing else.
   static func buildPlainTextPrompt(text: String, direction: LLMDirection) -> String {
+    let name: String
     switch direction {
-    case .englishToPortuguese:
-      return """
-            Translate this English sentence to European Portuguese. Reply with the translated sentence only — no quotes, no labels, no explanation, no JSON.
-            English: \(text)
-            European Portuguese:
-            """
-    case .portugueseToEnglish:
-      return """
-            Translate this European Portuguese sentence to American English. Reply with the translated sentence only — no quotes, no labels, no explanation, no JSON.
-            European Portuguese: \(text)
-            English:
-            """
+    case .englishToPortuguese: name = "translate-plain-en-to-pt"
+    case .portugueseToEnglish: name = "translate-plain-pt-to-en"
     }
+    return PromptLoader.load(name, vars: ["text": text])
   }
 
   /// Strip the wrapping the model often adds around a single-line
