@@ -78,6 +78,7 @@
 		9A6CADC78F5E83A2C270C51C /* TranslateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AED2F0B664A164CF8BA4816 /* TranslateViewModel.swift */; };
 		9B15F3A1976A868CF97AA1B0 /* MLXLLM in Frameworks */ = {isa = PBXBuildFile; productRef = D0DC95B14FEFB8D984846E68 /* MLXLLM */; };
 		A1739A3554775EECD22E81A3 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D9754B47B590A5D2531E98 /* ChatViewModel.swift */; };
+		A2A60CC5598EC70BC33E1B32 /* DictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5A857B208EB704FB7002F9 /* DictionaryView.swift */; };
 		A388A35AC4115FE53C96B8E6 /* ModelCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778ADA9B7857D12E680972F6 /* ModelCatalog.swift */; };
 		A76D8BA7D88DF470411F1E41 /* VoicePromptViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9843D68C30A2DB3DBA38BC09 /* VoicePromptViewModel.swift */; };
 		A7A96D8D0EEEA025EC33BE7B /* ActivityTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CEA4DB4ADFF28D0000B131 /* ActivityTracker.swift */; };
@@ -158,6 +159,7 @@
 		ADECB3C3CF82F240D3704697 /* DeckDocument.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckDocument.swift; sourceTree = "<group>"; };
 		B2CBAA1ADD60B0172F2B392C /* StudyDeck.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = StudyDeck.icns; sourceTree = "<group>"; };
 		B2CEA4DB4ADFF28D0000B131 /* ActivityTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTracker.swift; sourceTree = "<group>"; };
+		BB5A857B208EB704FB7002F9 /* DictionaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryView.swift; sourceTree = "<group>"; };
 		BC46C1AB39A4485E72DB5E02 /* DictionaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryViewModel.swift; sourceTree = "<group>"; };
 		C0531A694F21606D67D23931 /* TranslationActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationActionsView.swift; sourceTree = "<group>"; };
 		C226D9512B1D90EA20F7D6EA /* StudyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyView.swift; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 			isa = PBXGroup;
 			children = (
 				713C6C23DEC1EC07D6B36004 /* ContentView.swift */,
+				BB5A857B208EB704FB7002F9 /* DictionaryView.swift */,
 				14742B44E4624B2C6BB79472 /* SettingsView.swift */,
 				C226D9512B1D90EA20F7D6EA /* StudyView.swift */,
 			);
@@ -521,6 +524,7 @@
 				60C6188D0D7BF93F73CC72AA /* DictionaryLookup.swift in Sources */,
 				CD4603B79A098227ECAB9018 /* DictionaryStore.swift in Sources */,
 				0CA64FD6C646F92F796F9EE5 /* DictionaryStoring.swift in Sources */,
+				A2A60CC5598EC70BC33E1B32 /* DictionaryView.swift in Sources */,
 				FE3804813E4CBE54B03D67D4 /* DictionaryViewModel.swift in Sources */,
 				59629E4330752DB891349DDB /* EuroLLMTranslator.swift in Sources */,
 				3803DED1BDB6971CE7BA053D /* Flashcard.swift in Sources */,
