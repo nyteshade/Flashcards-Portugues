@@ -35,7 +35,7 @@ struct ContentView: View {
         .tabItem { Label("Dictionary", systemImage: "book.fill") }
         .tag(Tab.dictionary)
 
-      VerbsTabStub(showSettings: $showSettings)
+      VerbDetailView(store: store, showSettings: $showSettings)
         .tabItem { Label("Verbs", systemImage: "character.phonetic") }
         .tag(Tab.verbs)
 
@@ -119,11 +119,6 @@ private struct StubTab: View {
       }
     }
   }
-}
-
-private struct VerbsTabStub: View {
-  @Binding var showSettings: Bool
-  var body: some View { StubTab(title: "Verbs", showSettings: $showSettings) }
 }
 
 private struct TranslateTabStub: View {

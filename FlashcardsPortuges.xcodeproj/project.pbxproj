@@ -18,6 +18,7 @@
 		16A50B603FEF2C3192A8940D /* StudyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C9A6916CC1EB5490534012 /* StudyViewModel.swift */; };
 		193D6E5D590118E8EADD16C3 /* SmartTranslateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1111E350996B4ABF6535812 /* SmartTranslateButton.swift */; };
 		1AEDF18B85B986957978B4CE /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C8422A4033A094929F18DB /* ChatService.swift */; };
+		1DA91505A6F4BBCFF72C17A8 /* VerbDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F2969F00D949C561ED227C1 /* VerbDetailView.swift */; };
 		1F1D32A1CF50DD562C819680 /* FlashcardsPortugesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF206BC1AF36DE7024F09144 /* FlashcardsPortugesApp.swift */; };
 		252AE18060D37288B811A1D8 /* LocalTranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854E30ADD471B58D9A36B311 /* LocalTranslationService.swift */; };
 		26F56D07EC966A35E96F2285 /* MLXModelCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D278F1E9893C34B745802057 /* MLXModelCoordinator.swift */; };
@@ -146,6 +147,7 @@
 		8843478178F699C32FD7DF48 /* ModelStatusPill.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelStatusPill.swift; sourceTree = "<group>"; };
 		8997C91F81CA8DD421E7981A /* AppAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAction.swift; sourceTree = "<group>"; };
 		8BD1F3E9F1E9B3BC9998F835 /* DictionaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryView.swift; sourceTree = "<group>"; };
+		8F2969F00D949C561ED227C1 /* VerbDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbDetailView.swift; sourceTree = "<group>"; };
 		8F91FED7CEEDB3F6B4A7E637 /* EuroLLMTranslator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EuroLLMTranslator.swift; sourceTree = "<group>"; };
 		9843D68C30A2DB3DBA38BC09 /* VoicePromptViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePromptViewModel.swift; sourceTree = "<group>"; };
 		9AED2F0B664A164CF8BA4816 /* TranslateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateViewModel.swift; sourceTree = "<group>"; };
@@ -298,6 +300,7 @@
 				BB5A857B208EB704FB7002F9 /* DictionaryView.swift */,
 				14742B44E4624B2C6BB79472 /* SettingsView.swift */,
 				C226D9512B1D90EA20F7D6EA /* StudyView.swift */,
+				8F2969F00D949C561ED227C1 /* VerbDetailView.swift */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -548,6 +551,7 @@
 				0A84FEA84D1B7331CC630CD5 /* TranslationActionsView.swift in Sources */,
 				C8C44B72CE7D8ACB5099DD76 /* TranslationService.swift in Sources */,
 				0048EC3351EDA1C2B159E069 /* VerbConjugator.swift in Sources */,
+				1DA91505A6F4BBCFF72C17A8 /* VerbDetailView.swift in Sources */,
 				4016B16EF82E46E2D10EA670 /* VerbDetailViewModel.swift in Sources */,
 				55FFE1896306EBB5FE464590 /* VerbEnglishFormatter.swift in Sources */,
 				801B3B42C22AD8AC092ED78C /* VoiceAvailability.swift in Sources */,
