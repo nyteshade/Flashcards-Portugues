@@ -42,6 +42,7 @@ struct TranslateView: View {
       }
       .navigationTitle("Translate")
       .navigationBarTitleDisplayMode(.inline)
+      .toolbarBackground(.visible, for: .tabBar)
       .toolbar {
         ToolbarItem(placement: .topBarTrailing) {
           Button { showSettings = true } label: {

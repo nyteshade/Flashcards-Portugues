@@ -30,6 +30,7 @@ struct VerbDetailView: View {
       }
       .navigationTitle("Verb Conjugator")
       .navigationBarTitleDisplayMode(.inline)
+      .toolbarBackground(.visible, for: .tabBar)
       .toolbar {
         ToolbarItem(placement: .topBarTrailing) {
           Button { showSettings = true } label: {
@@ -46,7 +47,7 @@ struct VerbDetailView: View {
 
   @ViewBuilder
   private var inputRow: some View {
-    VStack(spacing: 8) {
+    HStack(spacing: 8) {
       TextField("Type a verb (e.g. falar, comer, partir)", text: $viewModel.verbInput)
         .textFieldStyle(.roundedBorder)
         .focused($inputFocused)
@@ -55,17 +56,15 @@ struct VerbDetailView: View {
         .autocorrectionDisabled()
         .textInputAutocapitalization(.never)
 
-      Button {
+      Button("Conjugar") {
         inputFocused = false
         viewModel.lookupVerb()
-      } label: {
-        Label("Conjugar", systemImage: "wand.and.stars")
-          .frame(maxWidth: .infinity, minHeight: 44)
       }
       .buttonStyle(.borderedProminent)
       .disabled(viewModel.verbInput.trimmingCharacters(in: .whitespaces).isEmpty)
     }
-    .padding()
+    .padding(.horizontal)
+    .padding(.vertical, 8)
   }
 
   // MARK: - Chip strip
@@ -152,35 +151,34 @@ struct VerbDetailView: View {
 
       ForEach(conj.tenses) { tense in
         Section {
-          DisclosureGroup {
-            ForEach(tense.forms) { form in
-              HStack {
-                Text(form.pronoun)
-                  .font(.body)
-                  .foregroundStyle(.secondary)
-                  .frame(width: 100, alignment: .leading)
-                Text(form.form)
-                  .font(.body.monospaced())
-                Spacer()
-                Button {
-                  SpeechService.speakConjugation(pronoun: form.pronoun, form: form.form)
-                  ActivityTracker.shared.record(
-                    category: .verb,
-                    action: "Listened to conjugation",
-                    detail: "\(conj.infinitive) — \(form.pronoun) \(form.form)"
-                  )
-                } label: {
-                  Image(systemName: "speaker.wave.2")
-                    .font(.caption)
-                }
-                .buttonStyle(.borderless)
+          ForEach(tense.forms) { form in
+            HStack(spacing: 8) {
+              Text(form.pronoun)
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+                .fixedSize(horizontal: true, vertical: false)
+              Text(form.form)
+                .font(.callout.monospaced())
+              Spacer()
+              Button {
+                SpeechService.speakConjugation(pronoun: form.pronoun, form: form.form)
+                ActivityTracker.shared.record(
+                  category: .verb,
+                  action: "Listened to conjugation",
+                  detail: "\(conj.infinitive) — \(form.pronoun) \(form.form)"
+                )
+              } label: {
+                Image(systemName: "speaker.wave.2")
+                  .font(.caption)
               }
-              .padding(.vertical, 2)
-              .listRowBackground(form.pronoun == "eu" ? Color.accentColor.opacity(0.08) : nil)
+              .buttonStyle(.borderless)
             }
-          } label: {
-            tenseHeader(conj: conj, tense: tense)
+            .padding(.vertical, 2)
+            .listRowBackground(form.pronoun == "eu" ? Color.accentColor.opacity(0.08) : nil)
           }
+        } header: {
+          tenseHeader(conj: conj, tense: tense)
         }
       }
     }

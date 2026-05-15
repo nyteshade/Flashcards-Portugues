@@ -40,6 +40,7 @@ struct DictionaryView: View {
       .navigationTitle(navTitle)
       .navigationBarTitleDisplayMode(.inline)
       .searchable(text: $viewModel.searchText, prompt: "Search dictionary")
+      .toolbarBackground(.visible, for: .tabBar)
       .toolbar {
         ToolbarItem(placement: .topBarTrailing) {
           Button {

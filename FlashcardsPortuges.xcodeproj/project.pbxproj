@@ -36,6 +36,7 @@
 		3FA013C1E5EB190B07EA0357 /* ActivityTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CEA4DB4ADFF28D0000B131 /* ActivityTracker.swift */; };
 		4016B16EF82E46E2D10EA670 /* VerbDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027D02FE89E93819FB90BA07 /* VerbDetailViewModel.swift */; };
 		40BF91872DB21B4A2F749692 /* MLX in Frameworks */ = {isa = PBXBuildFile; productRef = 54D73A83C6E368C78AD4E3EE /* MLX */; };
+		428FB245758DDE43956A2D72 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F79B51063D61F67DE8AE469 /* Assets.xcassets */; };
 		482BFB459BD70F34BCFCBA50 /* LLMTranslating.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0B291F354C77B8B12FB773 /* LLMTranslating.swift */; };
 		49966CF9C3CD8F0AAFEFA42D /* TranslationActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0531A694F21606D67D23931 /* TranslationActionsView.swift */; };
 		4D8864803F43D1EC8C2F8092 /* MLX in Frameworks */ = {isa = PBXBuildFile; productRef = 1D757D01DDE13B58C69D2AEE /* MLX */; };
@@ -84,6 +85,7 @@
 		A1739A3554775EECD22E81A3 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D9754B47B590A5D2531E98 /* ChatViewModel.swift */; };
 		A2A60CC5598EC70BC33E1B32 /* DictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5A857B208EB704FB7002F9 /* DictionaryView.swift */; };
 		A388A35AC4115FE53C96B8E6 /* ModelCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778ADA9B7857D12E680972F6 /* ModelCatalog.swift */; };
+		A5B1964A72E25D7F1F7B7550 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9F79B51063D61F67DE8AE469 /* Assets.xcassets */; };
 		A76D8BA7D88DF470411F1E41 /* VoicePromptViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9843D68C30A2DB3DBA38BC09 /* VoicePromptViewModel.swift */; };
 		A7A96D8D0EEEA025EC33BE7B /* ActivityTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CEA4DB4ADFF28D0000B131 /* ActivityTracker.swift */; };
 		A818E2B225178367B2B64BAA /* MLXRandom in Frameworks */ = {isa = PBXBuildFile; productRef = EFBD13532452E09AAF625B9C /* MLXRandom */; };
@@ -159,6 +161,7 @@
 		9AED2F0B664A164CF8BA4816 /* TranslateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateViewModel.swift; sourceTree = "<group>"; };
 		9AF948C523DA16290780E7D7 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		9E623D86833D71EA1D12DB2D /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		9F79B51063D61F67DE8AE469 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A226709B9297FA3A46707D0B /* TranslationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationService.swift; sourceTree = "<group>"; };
 		A24FEE3FC96A542553265338 /* DictionaryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryStore.swift; sourceTree = "<group>"; };
 		A33785B6BAA65575092BA4A6 /* DictionaryStoring.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryStoring.swift; sourceTree = "<group>"; };
@@ -345,9 +348,18 @@
 			children = (
 				55ACF47BA45B962DFE3CC0F0 /* App */,
 				0C95390A42B7353070BD3D2D /* Core */,
+				718EC893C98CC3156534E663 /* Resources */,
 				C92D498A35B7971E67623F27 /* Views */,
 			);
 			path = FlashcardsPortuges;
+			sourceTree = "<group>";
+		};
+		718EC893C98CC3156534E663 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9F79B51063D61F67DE8AE469 /* Assets.xcassets */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		7F4C1B10876E1DBFC7F4690F = {
@@ -442,6 +454,7 @@
 			buildConfigurationList = 708A751F109971BAE7964E78 /* Build configuration list for PBXNativeTarget "FlashcardsPortugesIOS" */;
 			buildPhases = (
 				0089BB43F23437990080FC30 /* Sources */,
+				50AED709AB665604B426FC9B /* Resources */,
 				614DFB3EDFF1C53740E93316 /* Frameworks */,
 			);
 			buildRules = (
@@ -512,8 +525,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5B1964A72E25D7F1F7B7550 /* Assets.xcassets in Resources */,
 				5C8B3DF8C43CD6D55FFA9AE6 /* Flashcards.icns in Resources */,
 				E9186979B846D93804493A89 /* StudyDeck.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		50AED709AB665604B426FC9B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				428FB245758DDE43956A2D72 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

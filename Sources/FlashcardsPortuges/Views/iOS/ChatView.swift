@@ -26,6 +26,7 @@ struct ChatView: View {
       messageList
         .navigationTitle("Sofia")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(.visible, for: .tabBar)
         .toolbar {
           ToolbarItem(placement: .topBarLeading) {
             Button {

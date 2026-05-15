@@ -24,6 +24,7 @@ struct StudyView: View {
       content
         .navigationTitle(store.studyDeck.name)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(.visible, for: .tabBar)
         .toolbar {
           ToolbarItem(placement: .topBarLeading) {
             Button { showDeckPicker = true } label: {
@@ -61,7 +62,7 @@ struct StudyView: View {
             }
           }
         }
-        .searchable(text: $viewModel.searchText, prompt: "Search cards")
+        .toolbarBackground(.visible, for: .tabBar)
         .sheet(isPresented: $showDeckPicker) {
           DeckPickerSheet(store: store, viewModel: viewModel)
         }
@@ -156,7 +157,7 @@ struct StudyView: View {
           let resolved = viewModel.resolvedEnglishForVerbCard(current)
           if !resolved.isEmpty {
             Text("(\(VerbEnglishFormatter.normalize(resolved)))")
-              .font(.title3)
+              .font(.subheadline)
               .foregroundStyle(.secondary)
           }
           Button {
@@ -170,15 +171,15 @@ struct StudyView: View {
           conjugationTable(forms: current.conjugationForms)
         }
       }
-      .padding()
+      .padding(8)
       .onAppear { viewModel.backfillVerbEnglishIfNeeded(current) }
     } else {
-      VStack(spacing: 12) {
+      VStack(spacing: 8) {
         Text(current.verbInfinitive)
-          .font(.largeTitle.bold())
+          .font(.title.bold())
           .multilineTextAlignment(.center)
         Text(current.tenseName)
-          .font(.title2)
+          .font(.headline)
           .foregroundStyle(.secondary)
       }
       .padding()
@@ -187,16 +188,16 @@ struct StudyView: View {
 
   @ViewBuilder
   private func plainCardContent(current: Flashcard, flipped: Bool) -> some View {
-    VStack(spacing: 8) {
+    VStack(spacing: 6) {
       Text(flipped ? current.english : current.portuguese)
-        .font(.largeTitle.bold())
+        .font(.title.bold())
         .multilineTextAlignment(.center)
       Text(current.partOfSpeech.rawValue)
         .font(.caption)
         .foregroundStyle(.secondary)
       if !current.notes.isEmpty {
         Text(current.notes)
-          .font(.body)
+          .font(.subheadline)
           .foregroundStyle(.secondary)
           .multilineTextAlignment(.center)
           .padding(.top, 4)
@@ -207,15 +208,16 @@ struct StudyView: View {
 
   @ViewBuilder
   private func conjugationTable(forms: [ConjugationFormData]) -> some View {
-    VStack(alignment: .leading, spacing: 4) {
+    VStack(alignment: .leading, spacing: 2) {
       ForEach(forms, id: \.pronoun) { form in
-        HStack {
+        HStack(spacing: 8) {
           Text(form.pronoun)
-            .font(.body)
+            .font(.subheadline)
             .foregroundStyle(.secondary)
-            .frame(width: 100, alignment: .leading)
+            .lineLimit(1)
+            .fixedSize(horizontal: true, vertical: false)
           Text(form.form)
-            .font(.body.monospaced())
+            .font(.callout.monospaced())
           Spacer()
           Button {
             SpeechService.speakConjugation(pronoun: form.pronoun, form: form.form)
@@ -225,14 +227,14 @@ struct StudyView: View {
           }
           .buttonStyle(.borderless)
         }
-        .padding(.vertical, 4)
-        .padding(.horizontal, 8)
+        .padding(.vertical, 3)
+        .padding(.horizontal, 6)
         .background(form.pronoun == "eu" ? Color.accentColor.opacity(0.08) : Color.clear)
       }
     }
-    .padding(8)
+    .padding(6)
     .background(Color.gray.opacity(0.06))
-    .cornerRadius(8)
+    .cornerRadius(6)
   }
 
   @ViewBuilder
