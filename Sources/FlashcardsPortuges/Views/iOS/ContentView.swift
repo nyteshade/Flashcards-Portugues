@@ -10,7 +10,6 @@ struct ContentView: View {
   @ObservedObject var store: DictionaryStore
   @ObservedObject private var translator = EuroLLMTranslator.shared
   @StateObject private var chatStore = ChatStore()
-  @StateObject private var voicePrompt = VoicePromptViewModel()
   @State private var selectedTab: Tab = .study
   @State private var showSettings: Bool = false
 
@@ -47,11 +46,6 @@ struct ContentView: View {
           .tag(Tab.chat)
       }
     }
-    .safeAreaInset(edge: .top) {
-      if voicePrompt.shouldShow {
-        VoicePromptBanner(viewModel: voicePrompt)
-      }
-    }
     .sheet(isPresented: $showSettings) {
       SettingsView(translator: translator)
     }
@@ -61,9 +55,6 @@ struct ContentView: View {
         action: "Switched tab",
         detail: tabName(newTab)
       )
-    }
-    .task {
-      voicePrompt.refresh()
     }
   }
 
