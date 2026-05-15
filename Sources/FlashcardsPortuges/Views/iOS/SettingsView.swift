@@ -15,12 +15,44 @@ struct SettingsView: View {
   /// re-read their on-disk state without a separate FileManager
   /// observer.
   @State private var cacheToken: Int = 0
+  @State private var loadErrorMessage: String?
 
   private let physicalRAMBytes = Int(ProcessInfo.processInfo.physicalMemory)
+
+  /// `true` when running in the iOS Simulator. MLX's Metal backend
+  /// can't initialize there (`mlx/backend/metal/device.cpp:328`
+  /// asserts on a NULL property), so downloads and inference fail
+  /// before any network IO happens. We surface this explicitly in
+  /// Settings so users don't tap Download and think we broke.
+  private var isSimulator: Bool {
+    #if targetEnvironment(simulator)
+    return true
+    #else
+    return false
+    #endif
+  }
 
   var body: some View {
     NavigationStack {
       List {
+        if isSimulator {
+          Section {
+            Label {
+              VStack(alignment: .leading, spacing: 4) {
+                Text("Simulator can't run MLX")
+                  .font(.subheadline.weight(.semibold))
+                Text("Downloads and on-device translation/chat require a real iPhone or iPad. The iOS Simulator's Metal backend can't initialize MLX, so loading any variant here will fail.")
+                  .font(.footnote)
+                  .foregroundStyle(.secondary)
+              }
+            } icon: {
+              Image(systemName: "exclamationmark.triangle.fill")
+                .foregroundStyle(.orange)
+            }
+            .padding(.vertical, 4)
+          }
+        }
+
         Section {
           defaultVariantPicker
           ForEach(ModelCatalog.all) { variant in
@@ -30,6 +62,16 @@ struct SettingsView: View {
           Text("Translation Model")
         } footer: {
           Text("EuroLLM powers translation, chat, and learning hints. Larger variants give better answers but need more RAM; Auto picks the largest downloaded variant that fits comfortably on this device.")
+        }
+
+        if let loadErrorMessage {
+          Section {
+            Text(loadErrorMessage)
+              .font(.footnote)
+              .foregroundStyle(.red)
+          } header: {
+            Text("Last load attempt")
+          }
         }
       }
       .navigationTitle("Settings")
@@ -232,6 +274,7 @@ struct SettingsView: View {
 
   private func attemptLoad(_ variant: ModelVariant) {
     loadTask?.cancel()
+    loadErrorMessage = nil
     loadTask = Task {
       do {
         try await translator.load(variant: variant)
@@ -239,6 +282,7 @@ struct SettingsView: View {
         await MainActor.run { warningVariant = variant }
       } catch {
         Logger.log("Load failed for \(variant.id): \(error.localizedDescription)")
+        await MainActor.run { loadErrorMessage = error.localizedDescription }
       }
       await MainActor.run { cacheToken &+= 1 }
     }
