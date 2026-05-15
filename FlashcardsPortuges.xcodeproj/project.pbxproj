@@ -21,6 +21,7 @@
 		1F1D32A1CF50DD562C819680 /* FlashcardsPortugesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF206BC1AF36DE7024F09144 /* FlashcardsPortugesApp.swift */; };
 		252AE18060D37288B811A1D8 /* LocalTranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854E30ADD471B58D9A36B311 /* LocalTranslationService.swift */; };
 		26F56D07EC966A35E96F2285 /* MLXModelCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D278F1E9893C34B745802057 /* MLXModelCoordinator.swift */; };
+		2787976A475DC2968203C6A1 /* StudyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C226D9512B1D90EA20F7D6EA /* StudyView.swift */; };
 		2C2113190DC2EFD82AE70386 /* DictionaryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24FEE3FC96A542553265338 /* DictionaryStore.swift */; };
 		2F6681F634C4E466CEFDFD62 /* HuggingFace in Frameworks */ = {isa = PBXBuildFile; productRef = 95DA18B601D9922C8B60A489 /* HuggingFace */; };
 		30D2ACE31E89764DB9C7C973 /* PlatformColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F893C5FC75E1A4A43A713 /* PlatformColor.swift */; };
@@ -159,6 +160,7 @@
 		B2CEA4DB4ADFF28D0000B131 /* ActivityTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityTracker.swift; sourceTree = "<group>"; };
 		BC46C1AB39A4485E72DB5E02 /* DictionaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryViewModel.swift; sourceTree = "<group>"; };
 		C0531A694F21606D67D23931 /* TranslationActionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslationActionsView.swift; sourceTree = "<group>"; };
+		C226D9512B1D90EA20F7D6EA /* StudyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyView.swift; sourceTree = "<group>"; };
 		C94C0DCC4EF06284681448AF /* VoicePreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePreferences.swift; sourceTree = "<group>"; };
 		D1C7178FF274DD62F709EC5E /* VerbEnglishFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbEnglishFormatter.swift; sourceTree = "<group>"; };
 		D278F1E9893C34B745802057 /* MLXModelCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLXModelCoordinator.swift; sourceTree = "<group>"; };
@@ -292,6 +294,7 @@
 			children = (
 				713C6C23DEC1EC07D6B36004 /* ContentView.swift */,
 				14742B44E4624B2C6BB79472 /* SettingsView.swift */,
+				C226D9512B1D90EA20F7D6EA /* StudyView.swift */,
 			);
 			path = iOS;
 			sourceTree = "<group>";
@@ -535,6 +538,7 @@
 				E0044A03FC900A84073C6767 /* SettingsView.swift in Sources */,
 				193D6E5D590118E8EADD16C3 /* SmartTranslateButton.swift in Sources */,
 				8A978AE8EA16262DA2232E8A /* SpeechService.swift in Sources */,
+				2787976A475DC2968203C6A1 /* StudyView.swift in Sources */,
 				16A50B603FEF2C3192A8940D /* StudyViewModel.swift in Sources */,
 				9A6CADC78F5E83A2C270C51C /* TranslateViewModel.swift in Sources */,
 				0A84FEA84D1B7331CC630CD5 /* TranslationActionsView.swift in Sources */,
