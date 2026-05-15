@@ -79,7 +79,17 @@ enum ModelCatalog {
     physicalRAMBytes: Int,
     among candidates: [ModelVariant]? = nil
   ) -> ModelVariant? {
-    let pool = candidates ?? all
+    // Cap iOS to ≤9B even if the simulator reports the host Mac's RAM —
+    // no shipping iOS device has the memory budget for the 22B variant
+    // (estimated ~14 GB; top-tier iPhone 16 Pro / iPad M-class ship at
+    // 8 GB, and the per-process limit on iOS would kill it well below
+    // physical RAM anyway).
+    #if os(iOS)
+    let basePool = (candidates ?? all).filter { $0.parameterScale != .b22 }
+    #else
+    let basePool = candidates ?? all
+    #endif
+    let pool = basePool
     guard !pool.isEmpty else { return nil }
     let headroom = min(
       Int(Double(physicalRAMBytes) * 0.25),
