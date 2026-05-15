@@ -154,6 +154,11 @@ struct StudyView: View {
       }
     }
     .frame(maxWidth: .infinity, minHeight: 280)
+    // Cards are fixed-area visual elements — let Dynamic Type
+    // scale up to xLarge but no further, otherwise long verbs
+    // and conjugations overflow the card frame on devices set to
+    // accessibility text sizes.
+    .dynamicTypeSize(...DynamicTypeSize.xLarge)
   }
 
   @ViewBuilder
@@ -171,16 +176,17 @@ struct StudyView: View {
   private func verbConjugationSide(current: Flashcard) -> some View {
     VStack(spacing: 8) {
       HStack(alignment: .firstTextBaseline) {
-        Text(current.verbInfinitive).font(.title3.bold())
+        Text(current.verbInfinitive)
+          .font(.system(size: 20, weight: .bold))
         Button {
           SpeechService.speak(current.verbInfinitive)
         } label: {
-          Image(systemName: "speaker.wave.2").font(.caption)
+          Image(systemName: "speaker.wave.2").font(.system(size: 12))
         }
         .buttonStyle(.borderless)
         Spacer()
         Text(current.tenseName)
-          .font(.subheadline)
+          .font(.system(size: 14))
           .foregroundStyle(.secondary)
       }
       .padding(.horizontal, 4)
@@ -203,10 +209,12 @@ struct StudyView: View {
       : VerbEnglishFormatter.normalize(resolved)
     VStack(spacing: 6) {
       Text(display)
-        .font(.title.bold())
+        .font(.system(size: 24, weight: .bold))
         .multilineTextAlignment(.center)
+        .minimumScaleFactor(0.6)
+        .lineLimit(2)
       Text(current.tenseName)
-        .font(.caption)
+        .font(.system(size: 12))
         .foregroundStyle(.secondary)
     }
     .padding()
@@ -217,14 +225,16 @@ struct StudyView: View {
   private func plainCardContent(current: Flashcard, isEnglishSide: Bool) -> some View {
     VStack(spacing: 6) {
       Text(isEnglishSide ? current.english : current.portuguese)
-        .font(.title.bold())
+        .font(.system(size: 24, weight: .bold))
         .multilineTextAlignment(.center)
+        .minimumScaleFactor(0.6)
+        .lineLimit(3)
       Text(current.partOfSpeech.rawValue)
-        .font(.caption)
+        .font(.system(size: 11))
         .foregroundStyle(.secondary)
       if !current.notes.isEmpty {
         Text(current.notes)
-          .font(.subheadline)
+          .font(.system(size: 14))
           .foregroundStyle(.secondary)
           .multilineTextAlignment(.center)
           .padding(.top, 4)
@@ -239,12 +249,12 @@ struct StudyView: View {
       ForEach(forms, id: \.pronoun) { form in
         HStack(spacing: 8) {
           Text(form.pronoun)
-            .font(.subheadline)
+            .font(.system(size: 13))
             .foregroundStyle(.secondary)
             .lineLimit(1)
             .fixedSize(horizontal: true, vertical: false)
           Text(form.form)
-            .font(.callout.monospaced())
+            .font(.system(size: 14, design: .monospaced))
           Spacer()
           Button {
             SpeechService.speakConjugation(pronoun: form.pronoun, form: form.form)

@@ -132,11 +132,11 @@ struct VerbDetailView: View {
     List {
       Section {
         HStack(alignment: .firstTextBaseline, spacing: 6) {
-          Text(conj.infinitive).font(.title2.bold())
+          Text(conj.infinitive).font(.system(size: 22, weight: .bold))
           let displayedEnglish = viewModel.verbEnglish.isEmpty ? conj.english : viewModel.verbEnglish
           if !displayedEnglish.isEmpty {
             Text("(\(VerbEnglishFormatter.normalize(displayedEnglish)))")
-              .font(.title3)
+              .font(.system(size: 16))
               .foregroundStyle(.secondary)
           }
           Spacer()
@@ -154,12 +154,12 @@ struct VerbDetailView: View {
           ForEach(tense.forms) { form in
             HStack(spacing: 8) {
               Text(form.pronoun)
-                .font(.subheadline)
+                .font(.system(size: 14))
                 .foregroundStyle(.secondary)
                 .lineLimit(1)
                 .fixedSize(horizontal: true, vertical: false)
               Text(form.form)
-                .font(.callout.monospaced())
+                .font(.system(size: 15, design: .monospaced))
               Spacer()
               Button {
                 SpeechService.speakConjugation(pronoun: form.pronoun, form: form.form)
@@ -192,7 +192,7 @@ struct VerbDetailView: View {
     }
     HStack {
       Text(tense.name)
-        .font(.headline)
+        .font(.system(size: 15, weight: .semibold))
         .foregroundStyle(Color.accentColor)
       Spacer()
       if alreadyAdded {
