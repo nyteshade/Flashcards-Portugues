@@ -1,5 +1,11 @@
 import SwiftUI
 
+#if os(macOS)
+import AppKit
+#elseif os(iOS)
+import UIKit
+#endif
+
 /// Compact icon-button row that appears next to a translation snippet.
 /// Three actions: copy to clipboard, pronounce, add to study deck.
 /// Pronunciation always pronounces the Portuguese side.
@@ -58,9 +64,13 @@ struct TranslationActionsView: View {
     case .english: text = english
     case .both: text = "\(portuguese) — \(english)"
     }
+    #if os(macOS)
     let pb = NSPasteboard.general
     pb.clearContents()
     pb.setString(text, forType: .string)
+    #elseif os(iOS)
+    UIPasteboard.general.string = text
+    #endif
     copied = true
     Task { @MainActor in
       try? await Task.sleep(for: .seconds(1.2))

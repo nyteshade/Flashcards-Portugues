@@ -16,8 +16,11 @@ enum GroupFilter: Hashable {
 /// `ChatStore`.
 @MainActor
 final class DictionaryViewModel: ObservableObject {
-  // Sidebar / filtering
-  @Published var selectedFilter: GroupFilter = .all
+  // Sidebar / filtering.
+  // Optional so SwiftUI's iOS-compatible `List(selection: Binding<T?>)`
+  // overload applies — the macOS-only non-optional overload doesn't
+  // exist on iOS.
+  @Published var selectedFilter: GroupFilter? = .all
   @Published var searchText: String = ""
 
   // Group sidebar editing
@@ -48,7 +51,7 @@ final class DictionaryViewModel: ObservableObject {
   /// `selectedFilter`, and `searchText` are all observable inputs.
   func filteredEntries() -> [DictionaryEntry] {
     let base: [DictionaryEntry]
-    switch selectedFilter {
+    switch selectedFilter ?? .all {
     case .all:
       base = store.entries
     case .ungrouped:
@@ -66,12 +69,12 @@ final class DictionaryViewModel: ObservableObject {
   /// The group an "Add Entry" action should pre-target: the sidebar's
   /// selected group, or nil when All Entries / Ungrouped is selected.
   var selectedGroupIDForNewEntry: UUID? {
-    if case .group(let gid) = selectedFilter { return gid }
+    if case let .group(gid)? = selectedFilter { return gid }
     return nil
   }
 
   var titleForSelectedGroup: String {
-    switch selectedFilter {
+    switch selectedFilter ?? .all {
     case .all:
       return "Dictionary (\(store.entries.count) entries)"
     case .ungrouped:
@@ -104,13 +107,13 @@ final class DictionaryViewModel: ObservableObject {
   /// Delete whichever group is currently selected in the sidebar.
   /// No-op unless `selectedFilter` is a `.group`.
   func deleteSelectedGroup() {
-    guard case .group(let gid) = selectedFilter else { return }
+    guard case let .group(gid)? = selectedFilter else { return }
     deleteGroup(id: gid)
   }
 
   /// True when the (−) toolbar button should be enabled.
   var canDeleteSelectedGroup: Bool {
-    if case .group = selectedFilter { return true }
+    if case .group? = selectedFilter { return true }
     return false
   }
 
@@ -129,7 +132,7 @@ final class DictionaryViewModel: ObservableObject {
 
   func deleteGroup(id: UUID) {
     store.deleteGroup(id: id)
-    if case .group(let gid) = selectedFilter, gid == id {
+    if case let .group(gid)? = selectedFilter, gid == id {
       selectedFilter = .all
     }
   }

@@ -150,7 +150,7 @@ struct VerbDetailView: View {
                 .cornerRadius(8)
               }
               .padding(8)
-              .background(Color(nsColor: .windowBackgroundColor))
+              .background(Color.platformWindowBackground)
               .cornerRadius(12)
               .shadow(color: .black.opacity(0.05), radius: 2, y: 1)
             }

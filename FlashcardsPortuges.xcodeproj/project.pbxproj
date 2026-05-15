@@ -7,55 +7,108 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0048EC3351EDA1C2B159E069 /* VerbConjugator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A99659C624616ABD8B5B86 /* VerbConjugator.swift */; };
+		00550350DD1B34BA545F07C4 /* VoicePromptViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9843D68C30A2DB3DBA38BC09 /* VoicePromptViewModel.swift */; };
+		0409B45729F953A37F7B2AE7 /* LLMTranslating.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0B291F354C77B8B12FB773 /* LLMTranslating.swift */; };
 		042D246BDEADA4531AB84F11 /* Tokenizers in Frameworks */ = {isa = PBXBuildFile; productRef = BE32FEFCD7AFA75BC37E672B /* Tokenizers */; };
+		0A84FEA84D1B7331CC630CD5 /* TranslationActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0531A694F21606D67D23931 /* TranslationActionsView.swift */; };
+		0CA64FD6C646F92F796F9EE5 /* DictionaryStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33785B6BAA65575092BA4A6 /* DictionaryStoring.swift */; };
 		15FC8FD99D3F97FD39AB4C76 /* EuroLLMTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F91FED7CEEDB3F6B4A7E637 /* EuroLLMTranslator.swift */; };
+		16A50B603FEF2C3192A8940D /* StudyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C9A6916CC1EB5490534012 /* StudyViewModel.swift */; };
+		193D6E5D590118E8EADD16C3 /* SmartTranslateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1111E350996B4ABF6535812 /* SmartTranslateButton.swift */; };
+		1AEDF18B85B986957978B4CE /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C8422A4033A094929F18DB /* ChatService.swift */; };
 		1F1D32A1CF50DD562C819680 /* FlashcardsPortugesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF206BC1AF36DE7024F09144 /* FlashcardsPortugesApp.swift */; };
+		252AE18060D37288B811A1D8 /* LocalTranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854E30ADD471B58D9A36B311 /* LocalTranslationService.swift */; };
 		26F56D07EC966A35E96F2285 /* MLXModelCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D278F1E9893C34B745802057 /* MLXModelCoordinator.swift */; };
 		2C2113190DC2EFD82AE70386 /* DictionaryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24FEE3FC96A542553265338 /* DictionaryStore.swift */; };
+		2DC38833D512850454CF1A55 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17EB3A58AAF2AD62F8BBC79 /* ChatView.swift */; };
+		2F6681F634C4E466CEFDFD62 /* HuggingFace in Frameworks */ = {isa = PBXBuildFile; productRef = 95DA18B601D9922C8B60A489 /* HuggingFace */; };
+		30D2ACE31E89764DB9C7C973 /* PlatformColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F893C5FC75E1A4A43A713 /* PlatformColor.swift */; };
+		347706C456B5A7EE787073E5 /* VoicePromptBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D14AF73A72972581B51151 /* VoicePromptBanner.swift */; };
+		35836039E71480CD59D5B3E2 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826FF9F4A76F8E02A467616B /* Logger.swift */; };
+		3707E7EB4B1BCB16375DB23D /* DefinePopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6751FDB84B4B302FBF6A2C /* DefinePopover.swift */; };
+		3803DED1BDB6971CE7BA053D /* Flashcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8271019A4A13AC0F035C820F /* Flashcard.swift */; };
 		38F3B474D38A0B50075F5A19 /* DictionaryStoring.swift in Sources */ = {isa = PBXBuildFile; fileRef = A33785B6BAA65575092BA4A6 /* DictionaryStoring.swift */; };
 		3C310330AC5C2603B5856F99 /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E17EB3A58AAF2AD62F8BBC79 /* ChatView.swift */; };
 		3DE808E55A75AF582134E459 /* DictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7F224AF87A918422BF0248 /* DictionaryView.swift */; };
 		3F70EE189928958082DA487E /* MLXHuggingFace in Frameworks */ = {isa = PBXBuildFile; productRef = D84D76FFD949C4A86C29FE2D /* MLXHuggingFace */; };
+		3FA013C1E5EB190B07EA0357 /* ActivityTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CEA4DB4ADFF28D0000B131 /* ActivityTracker.swift */; };
+		4016B16EF82E46E2D10EA670 /* VerbDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027D02FE89E93819FB90BA07 /* VerbDetailViewModel.swift */; };
+		40BF91872DB21B4A2F749692 /* MLX in Frameworks */ = {isa = PBXBuildFile; productRef = 54D73A83C6E368C78AD4E3EE /* MLX */; };
 		477F9FCFF80AA3D2C1D0E933 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C13DB1CD8948B7F9F1B6FB /* ContentView.swift */; };
 		482BFB459BD70F34BCFCBA50 /* LLMTranslating.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB0B291F354C77B8B12FB773 /* LLMTranslating.swift */; };
 		49966CF9C3CD8F0AAFEFA42D /* TranslationActionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0531A694F21606D67D23931 /* TranslationActionsView.swift */; };
 		4D8864803F43D1EC8C2F8092 /* MLX in Frameworks */ = {isa = PBXBuildFile; productRef = 1D757D01DDE13B58C69D2AEE /* MLX */; };
 		4DE617E6014260D64001D359 /* SmartTranslateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1111E350996B4ABF6535812 /* SmartTranslateButton.swift */; };
+		4FF06C27AC612F94A778D0FA /* MLXLMCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 9427FBA00CF25D7227014B65 /* MLXLMCommon */; };
 		5529AD37DB88444DC0C85CA5 /* LocalTranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 854E30ADD471B58D9A36B311 /* LocalTranslationService.swift */; };
+		55FFE1896306EBB5FE464590 /* VerbEnglishFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C7178FF274DD62F709EC5E /* VerbEnglishFormatter.swift */; };
 		568D511E399D3ED722D2940C /* DictionaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC46C1AB39A4485E72DB5E02 /* DictionaryViewModel.swift */; };
 		56DFFA2339327138425456E5 /* VerbDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542B65576CA6F13D5608C62B /* VerbDetailView.swift */; };
+		59629E4330752DB891349DDB /* EuroLLMTranslator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F91FED7CEEDB3F6B4A7E637 /* EuroLLMTranslator.swift */; };
 		5C8B3DF8C43CD6D55FFA9AE6 /* Flashcards.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4865A0B248EAD240A942A70E /* Flashcards.icns */; };
+		5DE650C0C4976960D52F3436 /* AppActionExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BB2A581F6EFA2736B9D81D /* AppActionExecutor.swift */; };
+		604A8E59404795D4B88F6BBE /* ModelVariant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020640A3F1A2550B46080BD1 /* ModelVariant.swift */; };
+		60C6188D0D7BF93F73CC72AA /* DictionaryLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682D0F18C27FFED9ACAAC902 /* DictionaryLookup.swift */; };
+		622DDC389559F128A81A94AC /* DeckFileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CC279DE5F89B25FAB279AA /* DeckFileService.swift */; };
+		62EFF547CEBFB572663E9A1D /* PlatformColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F893C5FC75E1A4A43A713 /* PlatformColor.swift */; };
+		63924A4D08B0CBF4A1620482 /* FlashcardsPortugesIOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D7E28A77D7F67E3459331FC /* FlashcardsPortugesIOSApp.swift */; };
 		6397AEA657C6C6020FEB3DE7 /* StudyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C9A6916CC1EB5490534012 /* StudyViewModel.swift */; };
+		63DF4EC73015AEE39AE5369C /* MLXLLM in Frameworks */ = {isa = PBXBuildFile; productRef = 37C93A7135A0CC16250E50E5 /* MLXLLM */; };
 		67161F94C05DFFBEC6211A21 /* Flashcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8271019A4A13AC0F035C820F /* Flashcard.swift */; };
 		69CC4B0CA1F2D812D78522B3 /* PathProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA326F4E8B4D57CC124225C5 /* PathProvider.swift */; };
 		730CDEB2294EE06147AB55DB /* MLXOptimizers in Frameworks */ = {isa = PBXBuildFile; productRef = 527778BD6CF731D88367B822 /* MLXOptimizers */; };
 		76E3E4FADE9910A2E43BB22E /* ModelVariant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020640A3F1A2550B46080BD1 /* ModelVariant.swift */; };
 		788D21F094744A8DAB31EF4F /* AppActionExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BB2A581F6EFA2736B9D81D /* AppActionExecutor.swift */; };
 		7A1138296F955807DA37CF9D /* MLXLMCommon in Frameworks */ = {isa = PBXBuildFile; productRef = 12E6357B74AB8A91A2FF4479 /* MLXLMCommon */; };
+		7E4FE0E3AACAD920CFBD3EC0 /* DeckDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADECB3C3CF82F240D3704697 /* DeckDocument.swift */; };
+		801B3B42C22AD8AC092ED78C /* VoiceAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367E8D38ABB18C51A331120E /* VoiceAvailability.swift */; };
 		805D14AA1653B8CAF8185DA5 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E623D86833D71EA1D12DB2D /* SettingsView.swift */; };
+		833EDC7558CA9DD73F055D38 /* VoicePreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94C0DCC4EF06284681448AF /* VoicePreferences.swift */; };
 		8393C1F302837BA09588A7B4 /* DictionaryLookup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 682D0F18C27FFED9ACAAC902 /* DictionaryLookup.swift */; };
+		8A37EBC1F4A9908D78A75864 /* Tokenizers in Frameworks */ = {isa = PBXBuildFile; productRef = 18AE0DD49F0B69A2F919C8D3 /* Tokenizers */; };
+		8A978AE8EA16262DA2232E8A /* SpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A833EE61200C245BE0CF0670 /* SpeechService.swift */; };
 		8D0C36BB58FC339F940E6239 /* TranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A226709B9297FA3A46707D0B /* TranslationService.swift */; };
 		9057A0930D21D3B81ED12E74 /* VoiceAvailability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 367E8D38ABB18C51A331120E /* VoiceAvailability.swift */; };
 		91B44796426BEA8B4ED8D218 /* VerbEnglishFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1C7178FF274DD62F709EC5E /* VerbEnglishFormatter.swift */; };
+		91DFE372AF9EBE61A2F42FF9 /* MLXOptimizers in Frameworks */ = {isa = PBXBuildFile; productRef = C1162655C3485A4881E431A0 /* MLXOptimizers */; };
+		942C6D26590E59285D06B14F /* AppAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8997C91F81CA8DD421E7981A /* AppAction.swift */; };
 		97AE1C77569FDFE5BFEACDEB /* VerbConjugator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A99659C624616ABD8B5B86 /* VerbConjugator.swift */; };
+		9811CBB290D2D6B03A1999DB /* ModelStatusPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8843478178F699C32FD7DF48 /* ModelStatusPill.swift */; };
+		98484DE295824B7874F362A5 /* MLXHuggingFace in Frameworks */ = {isa = PBXBuildFile; productRef = ABF600209293F1817027EDCB /* MLXHuggingFace */; };
 		98BF9A5F6046E1D07C0AD2FA /* VoicePromptBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9D14AF73A72972581B51151 /* VoicePromptBanner.swift */; };
+		9A6CADC78F5E83A2C270C51C /* TranslateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AED2F0B664A164CF8BA4816 /* TranslateViewModel.swift */; };
 		9B15F3A1976A868CF97AA1B0 /* MLXLLM in Frameworks */ = {isa = PBXBuildFile; productRef = D0DC95B14FEFB8D984846E68 /* MLXLLM */; };
+		A1739A3554775EECD22E81A3 /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D9754B47B590A5D2531E98 /* ChatViewModel.swift */; };
 		A388A35AC4115FE53C96B8E6 /* ModelCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778ADA9B7857D12E680972F6 /* ModelCatalog.swift */; };
 		A6B8BE0934D7DC1A29C245E2 /* StudyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0C65DCD09A903710E07C98 /* StudyView.swift */; };
 		A76D8BA7D88DF470411F1E41 /* VoicePromptViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9843D68C30A2DB3DBA38BC09 /* VoicePromptViewModel.swift */; };
 		A7A96D8D0EEEA025EC33BE7B /* ActivityTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CEA4DB4ADFF28D0000B131 /* ActivityTracker.swift */; };
+		A818E2B225178367B2B64BAA /* MLXRandom in Frameworks */ = {isa = PBXBuildFile; productRef = EFBD13532452E09AAF625B9C /* MLXRandom */; };
 		AA6735AC7445D95405987A8A /* DeckFileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85CC279DE5F89B25FAB279AA /* DeckFileService.swift */; };
+		ADE31B06DB0058F024458F2A /* StudyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E0C65DCD09A903710E07C98 /* StudyView.swift */; };
 		B203287F5A69D585A7D6C444 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 826FF9F4A76F8E02A467616B /* Logger.swift */; };
+		B348D4EB45341DE227D597CE /* ChatStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DE7D4F870C7386064022D4 /* ChatStore.swift */; };
 		BD624F0EC7261825ED0FDE99 /* AppAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8997C91F81CA8DD421E7981A /* AppAction.swift */; };
 		BEB85E91BBBABCFD106B0DA0 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C8422A4033A094929F18DB /* ChatService.swift */; };
+		C030C26CA70B42E6FC1F562A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C13DB1CD8948B7F9F1B6FB /* ContentView.swift */; };
 		C06A48803A623C0DFE086DBD /* TranslateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB20C362D56830742C81CF40 /* TranslateView.swift */; };
+		C1581E7B400C645F87ABFFA7 /* MLXModelCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D278F1E9893C34B745802057 /* MLXModelCoordinator.swift */; };
 		C3390E7A4A734EBD2FC553F8 /* ModelStatusPill.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8843478178F699C32FD7DF48 /* ModelStatusPill.swift */; };
+		C762B47767B2F8FD38697F4E /* DictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA7F224AF87A918422BF0248 /* DictionaryView.swift */; };
 		C7C8288BA4BA8467BEB7ACB1 /* SpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A833EE61200C245BE0CF0670 /* SpeechService.swift */; };
+		C8C44B72CE7D8ACB5099DD76 /* TranslationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A226709B9297FA3A46707D0B /* TranslationService.swift */; };
 		CC79BBCE920BF97498BCA98D /* VerbDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 027D02FE89E93819FB90BA07 /* VerbDetailViewModel.swift */; };
+		CD4603B79A098227ECAB9018 /* DictionaryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A24FEE3FC96A542553265338 /* DictionaryStore.swift */; };
 		CDB073218C1B8F50CDBCF5C0 /* DefinePopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B6751FDB84B4B302FBF6A2C /* DefinePopover.swift */; };
+		CE1AC7314222AF9505B71FFC /* MLXNN in Frameworks */ = {isa = PBXBuildFile; productRef = 47F11C58E5C572BAD9B44452 /* MLXNN */; };
 		D2FD244F0E7C0E7D87E3649E /* DeckDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADECB3C3CF82F240D3704697 /* DeckDocument.swift */; };
 		D42718090809242DC37FA1B1 /* MLXRandom in Frameworks */ = {isa = PBXBuildFile; productRef = 7317197404699E0BDF37B849 /* MLXRandom */; };
+		D5ED426EAEC36D0154CF4D70 /* MLXMemoryHarness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB917ABD4506486A58E82DB /* MLXMemoryHarness.swift */; };
 		D6EA9F481DD50B58F28F9C06 /* VoicePreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = C94C0DCC4EF06284681448AF /* VoicePreferences.swift */; };
+		D846D0925BA792E6AACB21AC /* VerbDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542B65576CA6F13D5608C62B /* VerbDetailView.swift */; };
+		D878D5AFE552FC654C71F2C1 /* PathProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA326F4E8B4D57CC124225C5 /* PathProvider.swift */; };
+		DD9D0F0D747463F76379C182 /* TranslateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB20C362D56830742C81CF40 /* TranslateView.swift */; };
 		E9186979B846D93804493A89 /* StudyDeck.icns in Resources */ = {isa = PBXBuildFile; fileRef = B2CBAA1ADD60B0172F2B392C /* StudyDeck.icns */; };
 		EBC6129EF99AB3F75CC86C66 /* TranslateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AED2F0B664A164CF8BA4816 /* TranslateViewModel.swift */; };
 		ED48122A374FE30AFBBC6804 /* MLXNN in Frameworks */ = {isa = PBXBuildFile; productRef = 3ED34B2E477A810C2597C660 /* MLXNN */; };
@@ -63,12 +116,15 @@
 		F0516873F3E3B00AB2EA557B /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D9754B47B590A5D2531E98 /* ChatViewModel.swift */; };
 		F4482B95B2FA3ABA18A31E34 /* MLXMemoryHarness.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB917ABD4506486A58E82DB /* MLXMemoryHarness.swift */; };
 		FAC70D3EBEE5F4D94A2D6A26 /* ChatStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6DE7D4F870C7386064022D4 /* ChatStore.swift */; };
+		FC0337FCDF68039EF38A989B /* ModelCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778ADA9B7857D12E680972F6 /* ModelCatalog.swift */; };
+		FE3804813E4CBE54B03D67D4 /* DictionaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC46C1AB39A4485E72DB5E02 /* DictionaryViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		00A99659C624616ABD8B5B86 /* VerbConjugator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbConjugator.swift; sourceTree = "<group>"; };
 		020640A3F1A2550B46080BD1 /* ModelVariant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelVariant.swift; sourceTree = "<group>"; };
 		027D02FE89E93819FB90BA07 /* VerbDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbDetailViewModel.swift; sourceTree = "<group>"; };
+		0D7E28A77D7F67E3459331FC /* FlashcardsPortugesIOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardsPortugesIOSApp.swift; sourceTree = "<group>"; };
 		0FB917ABD4506486A58E82DB /* MLXMemoryHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLXMemoryHarness.swift; sourceTree = "<group>"; };
 		1DACC4A4DACAC34578A250C9 /* FlashcardsPortuges.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlashcardsPortuges.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E0C65DCD09A903710E07C98 /* StudyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyView.swift; sourceTree = "<group>"; };
@@ -107,6 +163,8 @@
 		C94C0DCC4EF06284681448AF /* VoicePreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePreferences.swift; sourceTree = "<group>"; };
 		D1C7178FF274DD62F709EC5E /* VerbEnglishFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbEnglishFormatter.swift; sourceTree = "<group>"; };
 		D278F1E9893C34B745802057 /* MLXModelCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLXModelCoordinator.swift; sourceTree = "<group>"; };
+		D78EAB0CDCF97EFC77B9CADA /* FlashcardsPortugesIOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FlashcardsPortugesIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E08F893C5FC75E1A4A43A713 /* PlatformColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlatformColor.swift; sourceTree = "<group>"; };
 		E17EB3A58AAF2AD62F8BBC79 /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		E3D9754B47B590A5D2531E98 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
 		E9D14AF73A72972581B51151 /* VoicePromptBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoicePromptBanner.swift; sourceTree = "<group>"; };
@@ -130,6 +188,22 @@
 				3F70EE189928958082DA487E /* MLXHuggingFace in Frameworks */,
 				EEF034052A9D23CB084821A0 /* HuggingFace in Frameworks */,
 				042D246BDEADA4531AB84F11 /* Tokenizers in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		614DFB3EDFF1C53740E93316 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				40BF91872DB21B4A2F749692 /* MLX in Frameworks */,
+				CE1AC7314222AF9505B71FFC /* MLXNN in Frameworks */,
+				91DFE372AF9EBE61A2F42FF9 /* MLXOptimizers in Frameworks */,
+				A818E2B225178367B2B64BAA /* MLXRandom in Frameworks */,
+				63DF4EC73015AEE39AE5369C /* MLXLLM in Frameworks */,
+				4FF06C27AC612F94A778D0FA /* MLXLMCommon in Frameworks */,
+				98484DE295824B7874F362A5 /* MLXHuggingFace in Frameworks */,
+				2F6681F634C4E466CEFDFD62 /* HuggingFace in Frameworks */,
+				8A37EBC1F4A9908D78A75864 /* Tokenizers in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,9 +295,18 @@
 		55ACF47BA45B962DFE3CC0F0 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				5F408AE9506C98604D8F543C /* iOS */,
 				2E6828A32434243D62AE7893 /* macOS */,
 			);
 			path = App;
+			sourceTree = "<group>";
+		};
+		5F408AE9506C98604D8F543C /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				0D7E28A77D7F67E3459331FC /* FlashcardsPortugesIOSApp.swift */,
+			);
+			path = iOS;
 			sourceTree = "<group>";
 		};
 		6F02BE57CF45910B1A31E3D4 /* FlashcardsPortuges */ = {
@@ -253,6 +336,7 @@
 				2B6751FDB84B4B302FBF6A2C /* DefinePopover.swift */,
 				BA7F224AF87A918422BF0248 /* DictionaryView.swift */,
 				8843478178F699C32FD7DF48 /* ModelStatusPill.swift */,
+				E08F893C5FC75E1A4A43A713 /* PlatformColor.swift */,
 				F1111E350996B4ABF6535812 /* SmartTranslateButton.swift */,
 				1E0C65DCD09A903710E07C98 /* StudyView.swift */,
 				AB20C362D56830742C81CF40 /* TranslateView.swift */,
@@ -281,6 +365,7 @@
 			isa = PBXGroup;
 			children = (
 				1DACC4A4DACAC34578A250C9 /* FlashcardsPortuges.app */,
+				D78EAB0CDCF97EFC77B9CADA /* FlashcardsPortugesIOS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -325,6 +410,33 @@
 			productReference = 1DACC4A4DACAC34578A250C9 /* FlashcardsPortuges.app */;
 			productType = "com.apple.product-type.application";
 		};
+		AEA46C153F95B2559BE1C0E4 /* FlashcardsPortugesIOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 708A751F109971BAE7964E78 /* Build configuration list for PBXNativeTarget "FlashcardsPortugesIOS" */;
+			buildPhases = (
+				0089BB43F23437990080FC30 /* Sources */,
+				614DFB3EDFF1C53740E93316 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FlashcardsPortugesIOS;
+			packageProductDependencies = (
+				54D73A83C6E368C78AD4E3EE /* MLX */,
+				47F11C58E5C572BAD9B44452 /* MLXNN */,
+				C1162655C3485A4881E431A0 /* MLXOptimizers */,
+				EFBD13532452E09AAF625B9C /* MLXRandom */,
+				37C93A7135A0CC16250E50E5 /* MLXLLM */,
+				9427FBA00CF25D7227014B65 /* MLXLMCommon */,
+				ABF600209293F1817027EDCB /* MLXHuggingFace */,
+				95DA18B601D9922C8B60A489 /* HuggingFace */,
+				18AE0DD49F0B69A2F919C8D3 /* Tokenizers */,
+			);
+			productName = FlashcardsPortugesIOS;
+			productReference = D78EAB0CDCF97EFC77B9CADA /* FlashcardsPortugesIOS.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -335,6 +447,9 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					49A19E1104F97BC7933BF815 = {
+						ProvisioningStyle = Automatic;
+					};
+					AEA46C153F95B2559BE1C0E4 = {
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -360,6 +475,7 @@
 			projectRoot = "";
 			targets = (
 				49A19E1104F97BC7933BF815 /* FlashcardsPortuges */,
+				AEA46C153F95B2559BE1C0E4 /* FlashcardsPortugesIOS */,
 			);
 		};
 /* End PBXProject section */
@@ -377,6 +493,58 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0089BB43F23437990080FC30 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3FA013C1E5EB190B07EA0357 /* ActivityTracker.swift in Sources */,
+				942C6D26590E59285D06B14F /* AppAction.swift in Sources */,
+				5DE650C0C4976960D52F3436 /* AppActionExecutor.swift in Sources */,
+				1AEDF18B85B986957978B4CE /* ChatService.swift in Sources */,
+				B348D4EB45341DE227D597CE /* ChatStore.swift in Sources */,
+				2DC38833D512850454CF1A55 /* ChatView.swift in Sources */,
+				A1739A3554775EECD22E81A3 /* ChatViewModel.swift in Sources */,
+				C030C26CA70B42E6FC1F562A /* ContentView.swift in Sources */,
+				7E4FE0E3AACAD920CFBD3EC0 /* DeckDocument.swift in Sources */,
+				622DDC389559F128A81A94AC /* DeckFileService.swift in Sources */,
+				3707E7EB4B1BCB16375DB23D /* DefinePopover.swift in Sources */,
+				60C6188D0D7BF93F73CC72AA /* DictionaryLookup.swift in Sources */,
+				CD4603B79A098227ECAB9018 /* DictionaryStore.swift in Sources */,
+				0CA64FD6C646F92F796F9EE5 /* DictionaryStoring.swift in Sources */,
+				C762B47767B2F8FD38697F4E /* DictionaryView.swift in Sources */,
+				FE3804813E4CBE54B03D67D4 /* DictionaryViewModel.swift in Sources */,
+				59629E4330752DB891349DDB /* EuroLLMTranslator.swift in Sources */,
+				3803DED1BDB6971CE7BA053D /* Flashcard.swift in Sources */,
+				63924A4D08B0CBF4A1620482 /* FlashcardsPortugesIOSApp.swift in Sources */,
+				0409B45729F953A37F7B2AE7 /* LLMTranslating.swift in Sources */,
+				252AE18060D37288B811A1D8 /* LocalTranslationService.swift in Sources */,
+				35836039E71480CD59D5B3E2 /* Logger.swift in Sources */,
+				D5ED426EAEC36D0154CF4D70 /* MLXMemoryHarness.swift in Sources */,
+				C1581E7B400C645F87ABFFA7 /* MLXModelCoordinator.swift in Sources */,
+				FC0337FCDF68039EF38A989B /* ModelCatalog.swift in Sources */,
+				9811CBB290D2D6B03A1999DB /* ModelStatusPill.swift in Sources */,
+				604A8E59404795D4B88F6BBE /* ModelVariant.swift in Sources */,
+				D878D5AFE552FC654C71F2C1 /* PathProvider.swift in Sources */,
+				62EFF547CEBFB572663E9A1D /* PlatformColor.swift in Sources */,
+				193D6E5D590118E8EADD16C3 /* SmartTranslateButton.swift in Sources */,
+				8A978AE8EA16262DA2232E8A /* SpeechService.swift in Sources */,
+				ADE31B06DB0058F024458F2A /* StudyView.swift in Sources */,
+				16A50B603FEF2C3192A8940D /* StudyViewModel.swift in Sources */,
+				DD9D0F0D747463F76379C182 /* TranslateView.swift in Sources */,
+				9A6CADC78F5E83A2C270C51C /* TranslateViewModel.swift in Sources */,
+				0A84FEA84D1B7331CC630CD5 /* TranslationActionsView.swift in Sources */,
+				C8C44B72CE7D8ACB5099DD76 /* TranslationService.swift in Sources */,
+				0048EC3351EDA1C2B159E069 /* VerbConjugator.swift in Sources */,
+				D846D0925BA792E6AACB21AC /* VerbDetailView.swift in Sources */,
+				4016B16EF82E46E2D10EA670 /* VerbDetailViewModel.swift in Sources */,
+				55FFE1896306EBB5FE464590 /* VerbEnglishFormatter.swift in Sources */,
+				801B3B42C22AD8AC092ED78C /* VoiceAvailability.swift in Sources */,
+				833EDC7558CA9DD73F055D38 /* VoicePreferences.swift in Sources */,
+				347706C456B5A7EE787073E5 /* VoicePromptBanner.swift in Sources */,
+				00550350DD1B34BA545F07C4 /* VoicePromptViewModel.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		03183132577AC33D4601123B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -409,6 +577,7 @@
 				C3390E7A4A734EBD2FC553F8 /* ModelStatusPill.swift in Sources */,
 				76E3E4FADE9910A2E43BB22E /* ModelVariant.swift in Sources */,
 				69CC4B0CA1F2D812D78522B3 /* PathProvider.swift in Sources */,
+				30D2ACE31E89764DB9C7C973 /* PlatformColor.swift in Sources */,
 				805D14AA1653B8CAF8185DA5 /* SettingsView.swift in Sources */,
 				4DE617E6014260D64001D359 /* SmartTranslateButton.swift in Sources */,
 				C7C8288BA4BA8467BEB7ACB1 /* SpeechService.swift in Sources */,
@@ -438,11 +607,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "";
 				CODE_SIGN_ENTITLEMENTS = FlashcardsPortuges.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_NAME = FlashcardsPortuges;
 				SDKROOT = macosx;
 			};
@@ -454,11 +625,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "";
 				CODE_SIGN_ENTITLEMENTS = FlashcardsPortuges.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
 				INFOPLIST_FILE = Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_NAME = FlashcardsPortuges;
 				SDKROOT = macosx;
 			};
@@ -502,7 +675,6 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -514,13 +686,12 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nyteshade.flashcards.portugues;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_STRICT_CONCURRENCY = minimal;
@@ -566,7 +737,6 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -584,18 +754,53 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nyteshade.flashcards.portugues;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		E5C40FA9AE7768D188106871 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_HARDENED_RUNTIME = NO;
+				INFOPLIST_FILE = "Info-iOS.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_NAME = FlashcardsPortuges;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		F38823889734E6B0C917F0D7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_HARDENED_RUNTIME = NO;
+				INFOPLIST_FILE = "Info-iOS.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_NAME = FlashcardsPortuges;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -616,6 +821,15 @@
 			buildConfigurations = (
 				8EC0BAB32FAE3C8613200F63 /* Debug */,
 				765990AE744FFC600EBF4CE1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		708A751F109971BAE7964E78 /* Build configuration list for PBXNativeTarget "FlashcardsPortugesIOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F38823889734E6B0C917F0D7 /* Debug */,
+				E5C40FA9AE7768D188106871 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
@@ -663,6 +877,11 @@
 			package = F1EAB5A4B9E38BAAFF5EE320 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */;
 			productName = MLXLMCommon;
 		};
+		18AE0DD49F0B69A2F919C8D3 /* Tokenizers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1CA0368E552E1A2B2BB0E943 /* XCRemoteSwiftPackageReference "swift-transformers" */;
+			productName = Tokenizers;
+		};
 		1D757D01DDE13B58C69D2AEE /* MLX */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C55CBF2FCD4B179BEE82D711 /* XCRemoteSwiftPackageReference "mlx-swift" */;
@@ -673,7 +892,17 @@
 			package = 6133B89DDB6BF0109BC9D13F /* XCRemoteSwiftPackageReference "swift-huggingface" */;
 			productName = HuggingFace;
 		};
+		37C93A7135A0CC16250E50E5 /* MLXLLM */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1EAB5A4B9E38BAAFF5EE320 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */;
+			productName = MLXLLM;
+		};
 		3ED34B2E477A810C2597C660 /* MLXNN */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C55CBF2FCD4B179BEE82D711 /* XCRemoteSwiftPackageReference "mlx-swift" */;
+			productName = MLXNN;
+		};
+		47F11C58E5C572BAD9B44452 /* MLXNN */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C55CBF2FCD4B179BEE82D711 /* XCRemoteSwiftPackageReference "mlx-swift" */;
 			productName = MLXNN;
@@ -683,15 +912,40 @@
 			package = C55CBF2FCD4B179BEE82D711 /* XCRemoteSwiftPackageReference "mlx-swift" */;
 			productName = MLXOptimizers;
 		};
+		54D73A83C6E368C78AD4E3EE /* MLX */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C55CBF2FCD4B179BEE82D711 /* XCRemoteSwiftPackageReference "mlx-swift" */;
+			productName = MLX;
+		};
 		7317197404699E0BDF37B849 /* MLXRandom */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C55CBF2FCD4B179BEE82D711 /* XCRemoteSwiftPackageReference "mlx-swift" */;
 			productName = MLXRandom;
 		};
+		9427FBA00CF25D7227014B65 /* MLXLMCommon */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1EAB5A4B9E38BAAFF5EE320 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */;
+			productName = MLXLMCommon;
+		};
+		95DA18B601D9922C8B60A489 /* HuggingFace */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6133B89DDB6BF0109BC9D13F /* XCRemoteSwiftPackageReference "swift-huggingface" */;
+			productName = HuggingFace;
+		};
+		ABF600209293F1817027EDCB /* MLXHuggingFace */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1EAB5A4B9E38BAAFF5EE320 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */;
+			productName = MLXHuggingFace;
+		};
 		BE32FEFCD7AFA75BC37E672B /* Tokenizers */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1CA0368E552E1A2B2BB0E943 /* XCRemoteSwiftPackageReference "swift-transformers" */;
 			productName = Tokenizers;
+		};
+		C1162655C3485A4881E431A0 /* MLXOptimizers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C55CBF2FCD4B179BEE82D711 /* XCRemoteSwiftPackageReference "mlx-swift" */;
+			productName = MLXOptimizers;
 		};
 		D0DC95B14FEFB8D984846E68 /* MLXLLM */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -702,6 +956,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F1EAB5A4B9E38BAAFF5EE320 /* XCRemoteSwiftPackageReference "mlx-swift-lm" */;
 			productName = MLXHuggingFace;
+		};
+		EFBD13532452E09AAF625B9C /* MLXRandom */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C55CBF2FCD4B179BEE82D711 /* XCRemoteSwiftPackageReference "mlx-swift" */;
+			productName = MLXRandom;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
