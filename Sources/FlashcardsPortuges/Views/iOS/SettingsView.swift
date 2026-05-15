@@ -1,11 +1,15 @@
+import AVFoundation
 import SwiftUI
 
 /// iOS-shaped settings — a pushed `NavigationStack` presented as a
-/// sheet from `ContentView`'s gear button. Model-catalog only; voice
-/// picking lives in iOS System Settings (Accessibility → Spoken
-/// Content → Voices) rather than inside the app.
+/// sheet from `ContentView`'s gear button. Model catalog + voice
+/// picker (matches macOS); the auto-prompt banner that nagged users
+/// to install Premium voices via System Settings is intentionally
+/// not ported here — iOS users discover voices through the system's
+/// own Spoken Content settings.
 struct SettingsView: View {
   @ObservedObject var translator: EuroLLMTranslator
+  @ObservedObject private var voicePrefs = VoicePreferences.shared
   @AppStorage(ModelCatalog.activeVariantDefaultsKey) private var activeVariantPref: String = "auto"
 
   @Environment(\.dismiss) private var dismiss
@@ -16,6 +20,9 @@ struct SettingsView: View {
   /// observer.
   @State private var cacheToken: Int = 0
   @State private var loadErrorMessage: String?
+  /// Bumped to force the voice pickers to re-query
+  /// AVSpeechSynthesisVoice after the user taps "Refresh voices".
+  @State private var voicesReloadToken = 0
 
   private let physicalRAMBytes = Int(ProcessInfo.processInfo.physicalMemory)
 
@@ -62,6 +69,32 @@ struct SettingsView: View {
           Text("Translation Model")
         } footer: {
           Text("EuroLLM powers translation, chat, and learning hints. Larger variants give better answers but need more RAM; Auto picks the largest downloaded variant that fits comfortably on this device.")
+        }
+
+        Section {
+          voicePicker(
+            title: "American English",
+            language: .englishUS,
+            selection: $voicePrefs.englishUSVoiceID
+          )
+          .id("en-\(voicesReloadToken)")
+
+          voicePicker(
+            title: "European Portuguese",
+            language: .portuguese,
+            selection: $voicePrefs.portugueseVoiceID
+          )
+          .id("pt-\(voicesReloadToken)")
+
+          Button {
+            voicesReloadToken += 1
+          } label: {
+            Label("Refresh voices", systemImage: "arrow.clockwise")
+          }
+        } header: {
+          Text("Voices")
+        } footer: {
+          Text("Install additional Premium and Enhanced voices in System Settings → Accessibility → Spoken Content → Voices. Tap Refresh after installing to surface them here.")
         }
 
         if let loadErrorMessage {
@@ -261,6 +294,49 @@ struct SettingsView: View {
     .presentationDetents([.medium])
   }
 
+  // MARK: - Voice picker
+
+  @ViewBuilder
+  private func voicePicker(
+    title: String,
+    language: SpeechService.Language,
+    selection: Binding<String>
+  ) -> some View {
+    let voices = VoicePreferences.availableVoices(for: language)
+    HStack {
+      Picker(title, selection: selection) {
+        ForEach(voices, id: \.identifier) { voice in
+          Text(voiceLabel(voice)).tag(voice.identifier)
+        }
+      }
+      Button {
+        let sample = sampleSentence(for: language)
+        SpeechService.speak(sample, language: language)
+      } label: {
+        Image(systemName: "speaker.wave.2")
+      }
+      .buttonStyle(.borderless)
+      .disabled(voices.isEmpty)
+    }
+  }
+
+  private func voiceLabel(_ voice: AVSpeechSynthesisVoice) -> String {
+    var label = voice.name
+    if voice.quality != .default {
+      label += " · \(voice.qualityLabel)"
+    }
+    return label
+  }
+
+  private func sampleSentence(for language: SpeechService.Language) -> String {
+    switch language {
+    case .englishUS:
+      return "Hello, this is a quick voice preview."
+    case .portuguese:
+      return "Olá, esta é uma rápida amostra de voz."
+    }
+  }
+
   // MARK: - Helpers
 
   private var loadInFlight: Bool {
@@ -290,11 +366,13 @@ struct SettingsView: View {
 
   private func forceLoad(_ variant: ModelVariant) {
     loadTask?.cancel()
+    loadErrorMessage = nil
     loadTask = Task {
       do {
         try await translator.forceLoad(variant: variant)
       } catch {
         Logger.log("Force-load failed for \(variant.id): \(error.localizedDescription)")
+        await MainActor.run { loadErrorMessage = error.localizedDescription }
       }
       await MainActor.run { cacheToken &+= 1 }
     }

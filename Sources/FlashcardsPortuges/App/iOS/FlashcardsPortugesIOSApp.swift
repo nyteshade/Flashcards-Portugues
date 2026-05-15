@@ -1,3 +1,4 @@
+import AVFoundation
 import Darwin
 import SwiftUI
 
@@ -12,7 +13,34 @@ struct FlashcardsPortugesIOSApp: App {
   init() {
     Logger.log("FlashcardsPortugesIOSApp started.")
     Self.prepareHuggingFaceEnvironment()
+    Self.prepareAudioSession()
     EuroLLMTranslator.shared.autoLoadIfCached()
+  }
+
+  /// Configure AVAudioSession so AVSpeechSynthesizer actually plays
+  /// audio on a real iPhone. iOS's default audio category is
+  /// `.soloAmbient`, which:
+  ///   - Goes silent when the Ring/Silent hardware switch is set to
+  ///     silent.
+  ///   - Doesn't mix with or duck other audio.
+  /// For a language-learning app we want to hear pronunciations
+  /// even with the device on silent (the user explicitly tapped a
+  /// speaker button — clear intent), so use `.playback` mixed with
+  /// `.spokenAudio` mode and duck other audio briefly. macOS has no
+  /// AVAudioSession and works as-is.
+  private static func prepareAudioSession() {
+    let session = AVAudioSession.sharedInstance()
+    do {
+      try session.setCategory(
+        .playback,
+        mode: .spokenAudio,
+        options: [.duckOthers]
+      )
+      try session.setActive(true)
+      Logger.log("AVAudioSession ready (.playback / .spokenAudio)")
+    } catch {
+      Logger.log("AVAudioSession setup failed: \(error.localizedDescription)")
+    }
   }
 
   /// Pre-populate the env vars that MLX / swift-huggingface /
