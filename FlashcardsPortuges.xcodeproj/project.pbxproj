@@ -51,6 +51,7 @@
 		63924A4D08B0CBF4A1620482 /* FlashcardsPortugesIOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D7E28A77D7F67E3459331FC /* FlashcardsPortugesIOSApp.swift */; };
 		6397AEA657C6C6020FEB3DE7 /* StudyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21C9A6916CC1EB5490534012 /* StudyViewModel.swift */; };
 		63DF4EC73015AEE39AE5369C /* MLXLLM in Frameworks */ = {isa = PBXBuildFile; productRef = 37C93A7135A0CC16250E50E5 /* MLXLLM */; };
+		66DC6F08ADAB7B865D55CB10 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 713C6C23DEC1EC07D6B36004 /* ContentView.swift */; };
 		67161F94C05DFFBEC6211A21 /* Flashcard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8271019A4A13AC0F035C820F /* Flashcard.swift */; };
 		69CC4B0CA1F2D812D78522B3 /* PathProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA326F4E8B4D57CC124225C5 /* PathProvider.swift */; };
 		730CDEB2294EE06147AB55DB /* MLXOptimizers in Frameworks */ = {isa = PBXBuildFile; productRef = 527778BD6CF731D88367B822 /* MLXOptimizers */; };
@@ -133,6 +134,7 @@
 		65FE02B61565303706281474 /* TranslateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TranslateView.swift; sourceTree = "<group>"; };
 		682D0F18C27FFED9ACAAC902 /* DictionaryLookup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryLookup.swift; sourceTree = "<group>"; };
 		68BB2A581F6EFA2736B9D81D /* AppActionExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppActionExecutor.swift; sourceTree = "<group>"; };
+		713C6C23DEC1EC07D6B36004 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		778ADA9B7857D12E680972F6 /* ModelCatalog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelCatalog.swift; sourceTree = "<group>"; };
 		826FF9F4A76F8E02A467616B /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		8271019A4A13AC0F035C820F /* Flashcard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Flashcard.swift; sourceTree = "<group>"; };
@@ -288,6 +290,7 @@
 		428CBE6757A2CB630B7B08EA /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				713C6C23DEC1EC07D6B36004 /* ContentView.swift */,
 				14742B44E4624B2C6BB79472 /* SettingsView.swift */,
 			);
 			path = iOS;
@@ -508,6 +511,7 @@
 				1AEDF18B85B986957978B4CE /* ChatService.swift in Sources */,
 				B348D4EB45341DE227D597CE /* ChatStore.swift in Sources */,
 				A1739A3554775EECD22E81A3 /* ChatViewModel.swift in Sources */,
+				66DC6F08ADAB7B865D55CB10 /* ContentView.swift in Sources */,
 				7E4FE0E3AACAD920CFBD3EC0 /* DeckDocument.swift in Sources */,
 				622DDC389559F128A81A94AC /* DeckFileService.swift in Sources */,
 				3707E7EB4B1BCB16375DB23D /* DefinePopover.swift in Sources */,
