@@ -1,13 +1,11 @@
 import SwiftUI
 
-/// iOS app shell. Native TabView with a `NavigationStack` per tab.
-/// Each tab renders its own toolbar including a gear button that
-/// presents `SettingsView` as a sheet — iOS has no system `Settings`
-/// scene like macOS, so it surfaces through here.
-///
-/// Phase 2 scaffolding: the five tab bodies are placeholders. Phases
-/// 3–7 replace them in turn with bespoke iOS views that consume the
-/// same shared ViewModels as their macOS counterparts.
+/// iOS app shell. Native TabView with a bespoke `NavigationStack`
+/// per tab. Each tab renders its own toolbar including a gear button
+/// that presents `Views/iOS/SettingsView` as a sheet — iOS has no
+/// system `Settings { }` scene like macOS, so it surfaces through
+/// here. Translate + Chat tabs only appear once the LLM is ready,
+/// matching the macOS shell.
 struct ContentView: View {
   @ObservedObject var store: DictionaryStore
   @ObservedObject private var translator = EuroLLMTranslator.shared
@@ -44,7 +42,7 @@ struct ContentView: View {
           .tabItem { Label("Translate", systemImage: "wand.and.stars") }
           .tag(Tab.translate)
 
-        ChatTabStub(showSettings: $showSettings)
+        ChatView(store: store, chatStore: chatStore, showSettings: $showSettings)
           .tabItem { Label("Chat", systemImage: "bubble.left.and.bubble.right") }
           .tag(Tab.chat)
       }
@@ -80,48 +78,3 @@ struct ContentView: View {
   }
 }
 
-// MARK: - Tab stubs (Phase 3–7 replace each in turn)
-
-/// Common chrome for a stub tab: a `NavigationStack` with a title
-/// and the gear button in the trailing nav bar slot. The bespoke
-/// per-tab views in Phases 3–7 will define their own NavigationStack
-/// + toolbar; this scaffold is only here to confirm the iOS target
-/// compiles and launches with the right shape.
-private struct StubTab: View {
-  let title: String
-  @Binding var showSettings: Bool
-
-  var body: some View {
-    NavigationStack {
-      VStack(spacing: 12) {
-        Spacer()
-        Image(systemName: "hammer")
-          .font(.system(size: 48, weight: .regular))
-          .foregroundStyle(.tertiary)
-        Text("\(title) — coming soon")
-          .font(.headline)
-          .foregroundStyle(.secondary)
-        Text("Bespoke iOS UI is being written tab-by-tab. The shared core (Models, Services, ViewModels) is already iOS-ready.")
-          .font(.footnote)
-          .foregroundStyle(.tertiary)
-          .multilineTextAlignment(.center)
-          .padding(.horizontal, 32)
-        Spacer()
-      }
-      .navigationTitle(title)
-      .navigationBarTitleDisplayMode(.inline)
-      .toolbar {
-        ToolbarItem(placement: .topBarTrailing) {
-          Button { showSettings = true } label: {
-            Image(systemName: "gearshape")
-          }
-        }
-      }
-    }
-  }
-}
-
-private struct ChatTabStub: View {
-  @Binding var showSettings: Bool
-  var body: some View { StubTab(title: "Chat", showSettings: $showSettings) }
-}
