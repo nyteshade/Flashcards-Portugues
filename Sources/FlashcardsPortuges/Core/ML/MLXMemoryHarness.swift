@@ -139,7 +139,16 @@ actor MLXMemoryHarness {
     if criticalPressureActive {
       return .rejected(reason: .memoryPressureCritical)
     }
-    
+
+    // macOS-only: the Mach system-wide free-pages count is a useful
+    // heuristic for a non-sandboxed Mac where the user might have
+    // dozens of other processes resident. On iOS the kernel reclaims
+    // aggressively and rarely reports more than ~2–3 GB of "free +
+    // inactive" pages even on devices with 11 GB+ of RAM, so this
+    // check would reject every load. The per-process memoryLimit
+    // check below — which respects the increased-memory-limit
+    // entitlement — is the authoritative iOS gate.
+    #if !os(iOS)
     let available = freeSystemMemoryBytes()
     let headroom = Int(Double(available) * freeMemoryThreshold)
     if requested > headroom {
@@ -148,7 +157,8 @@ actor MLXMemoryHarness {
         availableBytes: available
       ))
     }
-    
+    #endif
+
     let snap = MLX.Memory.snapshot()
     let projected = snap.activeMemory + requested
     if projected > budget.memoryLimitBytes {

@@ -35,10 +35,18 @@ actor MLXModelCoordinator {
   /// Returns when the container is resident and ready. Throws on
   /// harness rejection or fetch failure. Cancellable — call
   /// `cancelLoad()` to abort an in-flight download.
-  func load(modelID: String, huggingFaceRepo: String, estimatedBytes: Int) async throws {
-    let admission = await harness.canAccept(estimatedAdditionalBytes: estimatedBytes)
-    if case .rejected(let reason) = admission {
-      throw MLXTranslatorError.harnessRejection(reason: reason)
+  ///
+  /// `force` skips the harness admission check. The outer
+  /// `EuroLLMTranslator.forceLoad` path already skips its own check;
+  /// this parameter lets it skip the coordinator's mirror check too,
+  /// so "Continue anyway" in the warning sheet actually proceeds
+  /// instead of bouncing off this layer.
+  func load(modelID: String, huggingFaceRepo: String, estimatedBytes: Int, force: Bool = false) async throws {
+    if !force {
+      let admission = await harness.canAccept(estimatedAdditionalBytes: estimatedBytes)
+      if case .rejected(let reason) = admission {
+        throw MLXTranslatorError.harnessRejection(reason: reason)
+      }
     }
     
     isLoadInFlight = true

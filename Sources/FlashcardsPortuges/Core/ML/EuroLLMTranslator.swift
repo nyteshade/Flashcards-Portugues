@@ -214,7 +214,8 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
       try await coordinator.load(
         modelID: variant.id,
         huggingFaceRepo: variant.huggingFaceRepo,
-        estimatedBytes: variant.estimatedBytes
+        estimatedBytes: variant.estimatedBytes,
+        force: force
       )
       activeVariant = variant
       status = .ready
