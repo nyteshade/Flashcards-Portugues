@@ -45,13 +45,17 @@ struct MemoryBudget: Equatable, Sendable {
     // iOS imposes a hard per-process resident-memory cap that's much
     // lower than total device RAM. With the
     // com.apple.developer.kernel.increased-memory-limit entitlement
-    // the ceiling rises to ~80 % of device RAM on iPhone, but we
-    // still need to leave room for the rest of the app (SwiftUI,
-    // images, dictionary store, etc.) before MLX hits jetsam. macOS
-    // can be more generous — the kernel will just swap if it has to.
+    // the ceiling rises to ~80 % of device RAM on iPhone, leaving
+    // room for ~1 GB of app overhead alongside MLX. 65 % is the
+    // sweet spot — admits the 9B variant (6 GB) on 11 GB+ iPads and
+    // the 1.7B (1.5 GB) on every supported device, without crowding
+    // the rest of the app into jetsam range.
+    //
+    // macOS can be more generous — the kernel will swap if needed
+    // rather than killing the process — so the 60/40 split stays.
     #if os(iOS)
-    let memoryShare = 0.50
-    let wiredShare  = 0.30
+    let memoryShare = 0.65
+    let wiredShare  = 0.40
     #else
     let memoryShare = 0.60
     let wiredShare  = 0.40
