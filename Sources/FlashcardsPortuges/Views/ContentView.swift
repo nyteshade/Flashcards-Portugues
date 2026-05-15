@@ -6,6 +6,10 @@ struct ContentView: View {
   @StateObject private var chatStore = ChatStore()
   @StateObject private var voicePrompt = VoicePromptViewModel()
   @State private var selectedTab: Tab = .study
+  /// iOS-only: the macOS target reaches Settings via the system
+  /// `Settings { … }` scene. On iOS we present `Views/iOS/SettingsView`
+  /// as a sheet driven by this flag.
+  @State private var showSettings: Bool = false
 
   enum Tab: String, Hashable {
     case study, dictionary, verbs, translate, chat
@@ -24,7 +28,19 @@ struct ContentView: View {
       ToolbarItem(placement: .primaryAction) {
         ModelStatusPill(translator: translator)
       }
+      #if os(iOS)
+      ToolbarItem(placement: .topBarTrailing) {
+        Button { showSettings = true } label: {
+          Image(systemName: "gearshape")
+        }
+      }
+      #endif
     }
+    #if os(iOS)
+    .sheet(isPresented: $showSettings) {
+      SettingsView(translator: translator)
+    }
+    #endif
     .padding(.trailing)
     .onChange(of: selectedTab) { _, newTab in
       ActivityTracker.shared.record(

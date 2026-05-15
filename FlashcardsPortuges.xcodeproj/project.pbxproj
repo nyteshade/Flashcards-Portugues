@@ -109,6 +109,7 @@
 		D846D0925BA792E6AACB21AC /* VerbDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 542B65576CA6F13D5608C62B /* VerbDetailView.swift */; };
 		D878D5AFE552FC654C71F2C1 /* PathProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA326F4E8B4D57CC124225C5 /* PathProvider.swift */; };
 		DD9D0F0D747463F76379C182 /* TranslateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB20C362D56830742C81CF40 /* TranslateView.swift */; };
+		E0044A03FC900A84073C6767 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 14742B44E4624B2C6BB79472 /* SettingsView.swift */; };
 		E9186979B846D93804493A89 /* StudyDeck.icns in Resources */ = {isa = PBXBuildFile; fileRef = B2CBAA1ADD60B0172F2B392C /* StudyDeck.icns */; };
 		EBC6129EF99AB3F75CC86C66 /* TranslateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AED2F0B664A164CF8BA4816 /* TranslateViewModel.swift */; };
 		ED48122A374FE30AFBBC6804 /* MLXNN in Frameworks */ = {isa = PBXBuildFile; productRef = 3ED34B2E477A810C2597C660 /* MLXNN */; };
@@ -126,6 +127,7 @@
 		027D02FE89E93819FB90BA07 /* VerbDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerbDetailViewModel.swift; sourceTree = "<group>"; };
 		0D7E28A77D7F67E3459331FC /* FlashcardsPortugesIOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardsPortugesIOSApp.swift; sourceTree = "<group>"; };
 		0FB917ABD4506486A58E82DB /* MLXMemoryHarness.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLXMemoryHarness.swift; sourceTree = "<group>"; };
+		14742B44E4624B2C6BB79472 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		1DACC4A4DACAC34578A250C9 /* FlashcardsPortuges.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlashcardsPortuges.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E0C65DCD09A903710E07C98 /* StudyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyView.swift; sourceTree = "<group>"; };
 		21C9A6916CC1EB5490534012 /* StudyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyViewModel.swift; sourceTree = "<group>"; };
@@ -283,6 +285,14 @@
 			path = macOS;
 			sourceTree = "<group>";
 		};
+		428CBE6757A2CB630B7B08EA /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				14742B44E4624B2C6BB79472 /* SettingsView.swift */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
 		53599541A1562B3FFFF66204 /* icons */ = {
 			isa = PBXGroup;
 			children = (
@@ -343,6 +353,7 @@
 				C0531A694F21606D67D23931 /* TranslationActionsView.swift */,
 				542B65576CA6F13D5608C62B /* VerbDetailView.swift */,
 				E9D14AF73A72972581B51151 /* VoicePromptBanner.swift */,
+				428CBE6757A2CB630B7B08EA /* iOS */,
 				3BCBB0DAC195C2B3325C54D1 /* macOS */,
 			);
 			path = Views;
@@ -526,6 +537,7 @@
 				604A8E59404795D4B88F6BBE /* ModelVariant.swift in Sources */,
 				D878D5AFE552FC654C71F2C1 /* PathProvider.swift in Sources */,
 				62EFF547CEBFB572663E9A1D /* PlatformColor.swift in Sources */,
+				E0044A03FC900A84073C6767 /* SettingsView.swift in Sources */,
 				193D6E5D590118E8EADD16C3 /* SmartTranslateButton.swift in Sources */,
 				8A978AE8EA16262DA2232E8A /* SpeechService.swift in Sources */,
 				ADE31B06DB0058F024458F2A /* StudyView.swift in Sources */,
