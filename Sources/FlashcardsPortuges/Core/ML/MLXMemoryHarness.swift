@@ -40,11 +40,25 @@ struct MemoryBudget: Equatable, Sendable {
   let memoryLimitBytes: Int
   let wiredLimitBytes: Int
   let cacheLimitBytes: Int
-  
+
   static func conservativeDefaults(physicalRAMBytes: Int) -> MemoryBudget {
-    MemoryBudget(
-      memoryLimitBytes: Int(Double(physicalRAMBytes) * 0.60),
-      wiredLimitBytes: Int(Double(physicalRAMBytes) * 0.40),
+    // iOS imposes a hard per-process resident-memory cap that's much
+    // lower than total device RAM. With the
+    // com.apple.developer.kernel.increased-memory-limit entitlement
+    // the ceiling rises to ~80 % of device RAM on iPhone, but we
+    // still need to leave room for the rest of the app (SwiftUI,
+    // images, dictionary store, etc.) before MLX hits jetsam. macOS
+    // can be more generous — the kernel will just swap if it has to.
+    #if os(iOS)
+    let memoryShare = 0.50
+    let wiredShare  = 0.30
+    #else
+    let memoryShare = 0.60
+    let wiredShare  = 0.40
+    #endif
+    return MemoryBudget(
+      memoryLimitBytes: Int(Double(physicalRAMBytes) * memoryShare),
+      wiredLimitBytes: Int(Double(physicalRAMBytes) * wiredShare),
       cacheLimitBytes: 256 * 1024 * 1024
     )
   }

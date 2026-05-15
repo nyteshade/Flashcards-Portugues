@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- iOS apps are always sandboxed automatically; no app-sandbox key
+         required. These entitlements expand the per-process memory cap
+         so MLX has room for model weights + activations + KV cache.
+
+         iOS 15+: increased-memory-limit raises the per-process ceiling
+         from the default (~50% of device RAM) to ~80% on iPhone.
+         Without it, even the 1.7B-4bit model (≈1.5 GB on disk, 2–3 GB
+         peak resident) gets jetsam-killed on top-tier iPhones because
+         the resident set crosses the default ceiling.
+
+         iPadOS 14.5+: extended-virtual-addressing unlocks the full
+         physical-RAM headroom on M-class iPads. Needed for the 9B-4bit
+         variant on 16 GB iPad Pro / Air. No effect on iPhone. -->
+    <key>com.apple.developer.kernel.increased-memory-limit</key>
+    <true/>
+    <key>com.apple.developer.kernel.extended-virtual-addressing</key>
+    <true/>
+</dict>
+</plist>
