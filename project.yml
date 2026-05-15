@@ -63,13 +63,24 @@ targets:
         excludes:
           - "App/iOS/**"
           - "Views/iOS/**"
+          - "Resources/Prompts/**"
       - path: icons/Flashcards.icns
         buildPhase: resources
       - path: icons/StudyDeck.icns
         buildPhase: resources
+      # Folder reference for Prompts so the Prompts/<scale>/ tree is
+      # preserved verbatim in the bundle (xcodegen `resources:` block
+      # builds a regular Group that flattens files; only `sources:`
+      # supports `type: folder` for a real PBXFileReference folder).
+      # PromptLoader's subdirectory: lookup depends on this.
+      - path: Sources/FlashcardsPortuges/Resources/Prompts
+        type: folder
+        buildPhase: resources
     resources:
       - path: Sources/FlashcardsPortuges/Resources
         optional: true
+        excludes:
+          - "Prompts/**"
     info:
       path: Info.plist
       properties:
@@ -133,9 +144,16 @@ targets:
         excludes:
           - "App/macOS/**"
           - "Views/macOS/**"
+          - "Resources/Prompts/**"
+      # Folder reference for Prompts (see macOS target for rationale).
+      - path: Sources/FlashcardsPortuges/Resources/Prompts
+        type: folder
+        buildPhase: resources
     resources:
       - path: Sources/FlashcardsPortuges/Resources
         optional: true
+        excludes:
+          - "Prompts/**"
     info:
       path: Info-iOS.plist
       # xcodegen overwrites Info-iOS.plist on every `xcodegen
