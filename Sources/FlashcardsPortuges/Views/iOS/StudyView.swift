@@ -1,4 +1,5 @@
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// iOS-native Study tab. Single-column `NavigationStack` with the
 /// active deck name as the title; deck picker, Add-from-Dictionary,
@@ -12,6 +13,14 @@ struct StudyView: View {
   @StateObject private var viewModel: StudyViewModel
 
   @State private var showDeckPicker = false
+
+  // MARK: File import/export (iOS native — uses SwiftUI modifiers,
+  // not the AppKit NSOpenPanel/NSSavePanel path in DeckFileService.)
+  @State private var showFileImporter = false
+  @State private var showFileExporter = false
+  @State private var pendingExportData: Data?
+  @State private var pendingExportFilename: String = ""
+  @State private var pendingExportContentType: UTType = .json
 
   init(store: DictionaryStore, showSettings: Binding<Bool>) {
     self.store = store
@@ -54,6 +63,22 @@ struct StudyView: View {
                 )
               }
               Divider()
+              Button {
+                showFileImporter = true
+              } label: {
+                Label("Open Deck…", systemImage: "folder")
+              }
+              Button {
+                prepareExport(asMarkdown: false)
+              } label: {
+                Label("Save Deck…", systemImage: "square.and.arrow.down")
+              }
+              Button {
+                prepareExport(asMarkdown: true)
+              } label: {
+                Label("Export as Markdown…", systemImage: "doc.richtext")
+              }
+              Divider()
               Button(role: .destructive) {
                 viewModel.removeCurrentCardFromDeck()
               } label: {
@@ -77,6 +102,32 @@ struct StudyView: View {
         .sheet(isPresented: $viewModel.showAddSheet) {
           AddCardsFromDictionarySheet(store: store)
         }
+        .fileImporter(
+          isPresented: $showFileImporter,
+          allowedContentTypes: [.json, .plainText]
+        ) { result in
+          switch result {
+          case .success(let url):
+            guard let deck = try? DeckIO.read(from: url) else {
+              Logger.log("DeckFileService: could not decode deck from \(url)")
+              return
+            }
+            store.adoptDeck(deck, makeActive: true)
+          case .failure(let error):
+            Logger.log("DeckFileService open failed: \(error.localizedDescription)")
+          }
+        }
+        .fileExporter(
+          isPresented: $showFileExporter,
+          item: pendingExportData,
+          contentTypes: [pendingExportContentType],
+          defaultFilename: pendingExportFilename
+        ) { result in
+          if case .failure(let error) = result {
+            Logger.log("DeckFileService export failed: \(error.localizedDescription)")
+          }
+          pendingExportData = nil
+        }
         .sheet(isPresented: $viewModel.showDefinePopover) {
           DefinePopover(
             word: viewModel.defineWord,
@@ -92,6 +143,25 @@ struct StudyView: View {
     .onChange(of: store.activeDeckID) { _, _ in
       viewModel.resetForActiveDeckChange()
     }
+  }
+
+  /// Encode the active study deck and flag the next `.fileExporter`
+  /// to present. Call from the ellipsis menu.
+  private func prepareExport(asMarkdown: Bool) {
+    let deck = store.studyDeck
+
+    if asMarkdown {
+      let md = DeckIO.markdown(for: deck)
+      pendingExportData = md.data(using: .utf8)
+      pendingExportFilename = "\(deck.name).md"
+      pendingExportContentType = .plainText
+    } else {
+      pendingExportData = try? JSONEncoder().encode(deck)
+      pendingExportFilename = "\(deck.name).flcd"
+      pendingExportContentType = .json
+    }
+
+    showFileExporter = true
   }
 
   @ViewBuilder

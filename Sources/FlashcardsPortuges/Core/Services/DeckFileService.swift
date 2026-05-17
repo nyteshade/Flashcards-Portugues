@@ -6,10 +6,14 @@ import AppKit
 #endif
 
 /// Glue between the app and the host OS file dialogs. On macOS this
-/// drives `NSSavePanel` / `NSOpenPanel`; an iOS target will need
-/// `UIDocumentPicker`-backed implementations behind the same surface.
-/// The symbol is present on both platforms so callers compile
-/// unchanged; iOS bodies are no-op stubs until that target is wired up.
+/// drives `NSSavePanel` / `NSOpenPanel`. On iOS / iPadOS, SwiftUI
+/// views use native `.fileImporter` / `.fileExporter` modifiers
+/// directly (see `Views/iOS/StudyView.swift`) — these stubs exist
+/// only so callers compile unchanged on all platforms.
+/// Both paths auto-support iCloud Drive without extra configuration:
+/// macOS NSOpenPanel/NSOpenPanel browse iCloud natively; iOS
+/// UIDocumentPicker (backing `.fileImporter` / `.fileExporter`)
+/// includes iCloud Drive in its browser automatically.
 @MainActor
 enum DeckFileService {
   /// Prompt for a save location and write the deck as a `.flcd`.
@@ -30,7 +34,7 @@ enum DeckFileService {
       presentError(title: "Could not save deck", error: error)
     }
     #else
-    Logger.log("DeckFileService.saveDeckAs: not implemented on this platform")
+    Logger.log("DeckFileService.saveDeckAs: use .fileExporter in iOS views instead")
     #endif
   }
 
@@ -50,7 +54,7 @@ enum DeckFileService {
       return nil
     }
     #else
-    Logger.log("DeckFileService.openDeck: not implemented on this platform")
+    Logger.log("DeckFileService.openDeck: use .fileImporter in iOS views instead")
     return nil
     #endif
   }
@@ -71,7 +75,7 @@ enum DeckFileService {
       presentError(title: "Could not export deck", error: error)
     }
     #else
-    Logger.log("DeckFileService.exportDeckAsMarkdown: not implemented on this platform")
+    Logger.log("DeckFileService.exportDeckAsMarkdown: use .fileExporter in iOS views instead")
     #endif
   }
 
