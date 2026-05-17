@@ -24,7 +24,7 @@ struct SettingsView: View {
   /// AVSpeechSynthesisVoice after the user taps "Refresh voices".
   @State private var voicesReloadToken = 0
 
-  private let physicalRAMBytes = Int(ProcessInfo.processInfo.physicalMemory)
+  private let physicalRAMBytes = DeviceRAM.physical
 
   /// `true` when running in the iOS Simulator. MLX's Metal backend
   /// can't initialize there (`mlx/backend/metal/device.cpp:328`
@@ -146,7 +146,7 @@ struct SettingsView: View {
     VStack(alignment: .leading, spacing: 6) {
       HStack(spacing: 6) {
         Text(variant.displayName).font(.body)
-        if recommended?.id == variant.id {
+        if recommended?.variant.id == variant.id {
           Text("Recommended")
             .font(.caption2)
             .padding(.horizontal, 6).padding(.vertical, 2)

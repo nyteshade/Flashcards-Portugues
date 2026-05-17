@@ -20,7 +20,7 @@ struct SettingsView: View {
   /// new ones from System Settings while the app is already running.
   @State private var voicesReloadToken = 0
 
-  private let physicalRAMBytes = Int(ProcessInfo.processInfo.physicalMemory)
+  private let physicalRAMBytes = DeviceRAM.physical
 
   var body: some View {
     Form {
@@ -117,7 +117,7 @@ struct SettingsView: View {
       VStack(alignment: .leading, spacing: 4) {
         HStack(spacing: 6) {
           Text(variant.displayName).font(.body)
-          if recommended?.id == variant.id {
+          if recommended?.variant.id == variant.id {
             Text("Recommended")
               .font(.caption2)
               .padding(.horizontal, 6).padding(.vertical, 2)

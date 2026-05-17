@@ -98,7 +98,7 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
     #if targetEnvironment(simulator) && os(iOS)
     throw MLXTranslatorError.simulatorUnsupported
     #else
-    let ram = Int(ProcessInfo.processInfo.physicalMemory)
+    let ram = DeviceRAM.physical
     await harness.configure(physicalRAMBytes: ram)
     configured = true
     Logger.log("EuroLLM harness configured: physRAM=\(ram) bytes")
@@ -111,7 +111,7 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
   /// the user can still trigger a load explicitly from Settings.
   func autoLoadIfCached() {
     Task {
-      let physRAM = Int(ProcessInfo.processInfo.physicalMemory)
+      let physRAM = DeviceRAM.physical
       guard let variant = ModelCatalog.resolveActive(
         preference: activeVariantPreference,
         physicalRAMBytes: physRAM
@@ -134,7 +134,7 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
   /// the explicit Load button's job.
   func ensureLoaded() async throws {
     if isReady { return }
-    let physRAM = Int(ProcessInfo.processInfo.physicalMemory)
+    let physRAM = DeviceRAM.physical
     guard let variant = ModelCatalog.resolveActive(
       preference: activeVariantPreference,
       physicalRAMBytes: physRAM
