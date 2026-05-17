@@ -51,6 +51,14 @@ schemes:
       config: Debug
     archive:
       config: Release
+  FlashcardsPortugesIPad:
+    build:
+      targets:
+        FlashcardsPortugesIPad: all
+    run:
+      config: Debug
+    archive:
+      config: Release
 
 targets:
   FlashcardsPortuges:
@@ -62,7 +70,9 @@ targets:
       - path: Sources/FlashcardsPortuges
         excludes:
           - "App/iOS/**"
+          - "App/iPadOS/**"
           - "Views/iOS/**"
+          - "Views/iPadOS/**"
           - "Resources/Prompts/**"
       - path: icons/Flashcards.icns
         buildPhase: resources
@@ -143,7 +153,9 @@ targets:
       - path: Sources/FlashcardsPortuges
         excludes:
           - "App/macOS/**"
+          - "App/iPadOS/**"
           - "Views/macOS/**"
+          - "Views/iPadOS/**"
           - "Resources/Prompts/**"
       # Folder reference for Prompts (see macOS target for rationale).
       - path: Sources/FlashcardsPortuges/Resources/Prompts
@@ -178,7 +190,67 @@ targets:
         PRODUCT_NAME: FlashcardsPortuges
         INFOPLIST_FILE: Info-iOS.plist
         IPHONEOS_DEPLOYMENT_TARGET: "17.0"
-        TARGETED_DEVICE_FAMILY: "1,2"
+        TARGETED_DEVICE_FAMILY: "1"
+        ENABLE_HARDENED_RUNTIME: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_ENTITLEMENTS: FlashcardsPortuges-iOS.entitlements
+    dependencies:
+      - package: mlx-swift
+        product: MLX
+      - package: mlx-swift
+        product: MLXNN
+      - package: mlx-swift
+        product: MLXOptimizers
+      - package: mlx-swift
+        product: MLXRandom
+      - package: mlx-swift-lm
+        product: MLXLLM
+      - package: mlx-swift-lm
+        product: MLXLMCommon
+      - package: mlx-swift-lm
+        product: MLXHuggingFace
+      - package: swift-huggingface
+        product: HuggingFace
+      - package: swift-transformers
+        product: Tokenizers
+
+  FlashcardsPortugesIPad:
+    type: application
+    platform: iOS
+    sources:
+      # iPadOS target — excludes iPhone views and macOS views.
+      # Uses Views/iPadOS/ as its exclusive view layer.
+      - path: Sources/FlashcardsPortuges
+        excludes:
+          - "App/macOS/**"
+          - "App/iOS/**"
+          - "Views/macOS/**"
+          - "Views/iOS/**"
+          - "Resources/Prompts/**"
+      # Folder reference for Prompts (see macOS target for rationale).
+      - path: Sources/FlashcardsPortuges/Resources/Prompts
+        type: folder
+        buildPhase: resources
+    resources:
+      - path: Sources/FlashcardsPortuges/Resources
+        optional: true
+        excludes:
+          - "Prompts/**"
+    info:
+      path: Info-iPadOS.plist
+      properties:
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    settings:
+      base:
+        PRODUCT_NAME: FlashcardsPortuges
+        INFOPLIST_FILE: Info-iPadOS.plist
+        IPHONEOS_DEPLOYMENT_TARGET: "17.0"
+        TARGETED_DEVICE_FAMILY: "2"
         ENABLE_HARDENED_RUNTIME: NO
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         CODE_SIGN_ENTITLEMENTS: FlashcardsPortuges-iOS.entitlements
