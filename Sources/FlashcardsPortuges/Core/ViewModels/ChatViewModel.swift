@@ -51,8 +51,8 @@ final class ChatViewModel: ObservableObject {
     busy = true
 
     let summary = tracker.contextualSummary()
-    let prompt = ChatService.buildPrompt(
-      messages: chatStore.messages,
+    let messages = ChatService.buildMessages(
+      from: chatStore.messages,
       activitySummary: summary
     )
 
@@ -61,7 +61,7 @@ final class ChatViewModel: ObservableObject {
       defer { Task { @MainActor in self.busy = false } }
       let start = Date()
       do {
-        let response = try await self.translator.chat(prompt: prompt)
+        let response = try await self.translator.chat(messages: messages)
         let elapsed = Date().timeIntervalSince(start)
         let stats = ChatMessage.GenerationStats(
           elapsedSeconds: elapsed,

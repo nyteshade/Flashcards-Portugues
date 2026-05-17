@@ -107,26 +107,48 @@ actor MLXModelCoordinator {
   }
   
   /// Run a one-shot generation against the loaded container.
-  func infer(prompt: String, maxTokens: Int = 512, temperature: Float = 0.2) async throws -> String {
+  /// Uses ChatSession with optional system instructions. MLX-LM
+  /// auto-applies the model's chat template (ChatML for EuroLLM).
+  /// Prefer this over the bare-string `infer(prompt:)` — this path
+  /// gets the proper role tags the model was SFT'd on.
+  ///
+  /// @param instructions Optional system prompt prepended as a
+  ///   `.system` message by ChatSession. nil for plain user prompts.
+  /// @param userMessage The user's input. ChatSession wraps it in a
+  ///   `.user` message and applies the chat template.
+  /// @param maxTokens Generation budget (default 512).
+  /// @param temperature Sampling temperature (default 0.2).
+  /// @returns The model's plain-text response after the chat template
+  ///   has been applied.
+  func respond(
+    instructions: String?,
+    to userMessage: String,
+    maxTokens: Int = 512,
+    temperature: Float = 0.2
+  ) async throws -> String {
     guard let model = loaded else {
       throw MLXTranslatorError.noModelLoaded
     }
+
     let admission = await harness.canAccept(estimatedAdditionalBytes: 0)
+
     if case .rejected(let reason) = admission {
       throw MLXTranslatorError.harnessRejection(reason: reason)
     }
-    
+
     isInferenceInFlight = true
     defer { isInferenceInFlight = false }
-    
+
     let session = ChatSession(
       model.container,
+      instructions: instructions,
       generateParameters: GenerateParameters(
         maxTokens: maxTokens,
         temperature: temperature
       )
     )
-    return try await session.respond(to: prompt)
+
+    return try await session.respond(to: userMessage)
   }
 }
 

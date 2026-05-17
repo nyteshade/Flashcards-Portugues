@@ -1,5 +1,6 @@
 import Foundation
 import NaturalLanguage
+import MLXLMCommon
 
 struct LLMTranslation: Codable, Equatable {
   struct Variants: Codable, Equatable {
@@ -274,7 +275,7 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
         status = .ready
         statusMessage = "Ready"
       }
-      let raw = try await coordinator.infer(prompt: prompt, maxTokens: 64, temperature: 0.0)
+      let raw = try await coordinator.respond(instructions: nil, to: prompt, maxTokens: 64, temperature: 0.0)
       Logger.log("EuroLLM POS classify raw: \(raw)")
       return Self.parsePartOfSpeech(raw)
     } catch {
@@ -362,7 +363,7 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
         status = .ready
         statusMessage = "Ready"
       }
-      let raw = try await coordinator.infer(prompt: prompt, maxTokens: 64, temperature: 0.0)
+      let raw = try await coordinator.respond(instructions: nil, to: prompt, maxTokens: 64, temperature: 0.0)
       Logger.log("EuroLLM infinitive raw: \(raw)")
       guard let body = Self.extractJSONBody(from: raw),
             let data = body.data(using: .utf8),
@@ -403,7 +404,7 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
       status = .ready
       statusMessage = "Ready"
     }
-    let raw = try await coordinator.infer(prompt: prompt, maxTokens: 512, temperature: 0.2)
+    let raw = try await coordinator.respond(instructions: nil, to: prompt, maxTokens: 512, temperature: 0.2)
     Logger.log("EuroLLM define raw: \(raw)")
     let body = Self.extractJSONBody(from: raw) ?? raw
     guard let data = body.data(using: .utf8) else {
@@ -428,8 +429,53 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
       statusMessage = "Ready"
     }
     Logger.log("EuroLLM chat prompt length: \(prompt.count)")
-    let raw = try await coordinator.infer(
-      prompt: prompt,
+    let raw = try await coordinator.respond(
+      instructions: nil,
+      to: prompt,
+      maxTokens: maxTokens,
+      temperature: 0.7
+    )
+    Logger.log("EuroLLM chat response length: \(raw.count)")
+    return raw
+  }
+
+  /// Multi-turn chat with structured messages. Uses the history-based
+  /// ChatSession init so MLX-LM re-hydrates the full transcript and
+  /// applies the model's chat template (ChatML for EuroLLM). The
+  /// system prompt should be the first message in the array.
+  ///
+  /// @param messages Full conversation transcript including the new
+  ///   user message as the last element. First message must be
+  ///   `.system` role.
+  /// @param maxTokens Generation budget (default 1024).
+  /// @returns The model's assistant response text.
+  func chat(messages: [Chat.Message], maxTokens: Int = 1024) async throws -> String {
+    try await ensureLoaded()
+    status = .processing
+    statusMessage = "Thinking…"
+    defer {
+      status = .ready
+      statusMessage = "Ready"
+    }
+    Logger.log("EuroLLM chat messages count: \(messages.count)")
+
+    // Split system from conversation on the MainActor side so we
+    // only pass Sendable types (String) across to the actor-isolated
+    // coordinator. Chat.Message contains MLXArray-backed media fields
+    // and isn't Sendable-safe.
+    let systemContent = messages.first { $0.role == .system }?.content
+    let conversation = messages.filter { $0.role != .system }
+    let prompt = conversation.map { msg in
+      switch msg.role {
+      case .user: return "User: \(msg.content)"
+      case .assistant: return "Sofia: \(msg.content)"
+      default: return msg.content
+      }
+    }.joined(separator: "\n\n")
+
+    let raw = try await coordinator.respond(
+      instructions: systemContent,
+      to: prompt,
       maxTokens: maxTokens,
       temperature: 0.7
     )
@@ -453,7 +499,7 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
       status = .ready
       statusMessage = "Ready"
     }
-    let raw = try await coordinator.infer(prompt: prompt, maxTokens: 512, temperature: 0.2)
+    let raw = try await coordinator.respond(instructions: nil, to: prompt, maxTokens: 512, temperature: 0.2)
     Logger.log("EuroLLM raw response: \(raw)")
     let parsed = try Self.parseJSON(raw, fallbackOriginal: text)
     if !parsed.translation.direct.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
@@ -465,7 +511,7 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
     // as the direct translation.
     Logger.log("EuroLLM JSON returned empty values; retrying with plain-text prompt")
     let plainPrompt = Self.buildPlainTextPrompt(text: text, direction: direction)
-    let plainRaw = try await coordinator.infer(prompt: plainPrompt, maxTokens: 256, temperature: 0.2)
+    let plainRaw = try await coordinator.respond(instructions: nil, to: plainPrompt, maxTokens: 256, temperature: 0.2)
     Logger.log("EuroLLM plain-text retry raw: \(plainRaw)")
     let cleaned = Self.cleanPlainTranslation(plainRaw)
     guard !cleaned.isEmpty else {

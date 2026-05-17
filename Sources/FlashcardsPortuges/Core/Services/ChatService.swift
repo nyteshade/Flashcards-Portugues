@@ -1,4 +1,5 @@
 import Foundation
+import MLXLMCommon
 
 struct ChatMessage: Identifiable, Equatable {
   let id = UUID()
@@ -91,5 +92,44 @@ enum ChatService {
       return (nil, cleaned.isEmpty ? reply : cleaned)
     }
     return (action, cleaned)
+  }
+
+  /// Build structured `[Chat.Message]` for the ChatSession
+  /// history-based API. The system prompt, action catalog, and
+  /// optional activity summary are combined into a single `.system`
+  /// message. Conversation history follows as alternating `.user` /
+  /// `.assistant` messages.
+  ///
+  /// MLX-LM applies the model's chat template (ChatML for EuroLLM)
+  /// automatically via UserInputProcessor — we just supply the
+  /// role-tagged messages and let the library format them.
+  ///
+  /// @param chatMessages The conversation history from ChatStore.
+  /// @param activitySummary Optional ActivityTracker context summary.
+  /// @returns Array of Chat.Message suitable for ChatSession history
+  ///   init. First element is always `.system`.
+  static func buildMessages(
+    from chatMessages: [ChatMessage],
+    activitySummary: String? = nil
+  ) -> [Chat.Message] {
+    var parts: [String] = [systemPrompt, actionInstructions]
+
+    if let summary = activitySummary, !summary.isEmpty {
+      parts.append(summary)
+    }
+
+    let systemContent = parts.joined(separator: "\n\n")
+    var messages: [Chat.Message] = [.system(systemContent)]
+
+    for msg in chatMessages {
+      switch msg.role {
+      case .user:
+        messages.append(.user(msg.content))
+      case .assistant:
+        messages.append(.assistant(msg.content))
+      }
+    }
+
+    return messages
   }
 }
