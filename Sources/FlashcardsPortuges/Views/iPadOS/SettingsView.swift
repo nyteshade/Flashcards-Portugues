@@ -1,4 +1,5 @@
 import AVFoundation
+import MLXModelKit
 import SwiftUI
 
 /// iPadOS Settings — presented as a sheet from ContentView's gear
@@ -7,7 +8,7 @@ import SwiftUI
 struct SettingsView: View {
   @ObservedObject var translator: EuroLLMTranslator
   @ObservedObject private var voicePrefs = VoicePreferences.shared
-  @AppStorage(ModelCatalog.activeVariantDefaultsKey)
+  @AppStorage(ModelVariant.activeVariantDefaultsKey)
   private var activeVariantPref: String = "auto"
 
   @Environment(\.dismiss) private var dismiss
@@ -50,7 +51,7 @@ struct SettingsView: View {
 
         Section {
           defaultVariantPicker
-          ForEach(ModelCatalog.all) { variant in
+          ForEach(ModelVariant.euroLLMAll) { variant in
             variantRow(variant)
           }
         } header: {
@@ -99,7 +100,7 @@ struct SettingsView: View {
 
   @ViewBuilder
   private var defaultVariantPicker: some View {
-    let onDisk = ModelCatalog.onDiskVariants()
+    let onDisk = ModelCatalog.onDiskVariants(in: ModelVariant.euroLLMAll)
     Picker("Default", selection: $activeVariantPref) {
       Text("Auto").tag("auto")
       ForEach(onDisk) { variant in
@@ -118,7 +119,7 @@ struct SettingsView: View {
     let isActive = !isPending
       && translator.activeVariant?.id == variant.id
     let recommended = ModelCatalog.recommended(
-      physicalRAMBytes: physicalRAMBytes
+      physicalRAMBytes: physicalRAMBytes, among: ModelVariant.euroLLMAll
     )
 
     VStack(alignment: .leading, spacing: 6) {

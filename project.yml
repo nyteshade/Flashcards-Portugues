@@ -21,18 +21,8 @@ settings:
     SWIFT_STRICT_CONCURRENCY: minimal
 
 packages:
-  mlx-swift:
-    url: https://github.com/ml-explore/mlx-swift.git
-    from: 0.31.3
-  mlx-swift-lm:
-    url: https://github.com/ml-explore/mlx-swift-lm.git
-    branch: main
-  swift-huggingface:
-    url: https://github.com/huggingface/swift-huggingface.git
-    from: 0.9.0
-  swift-transformers:
-    url: https://github.com/huggingface/swift-transformers
-    from: 1.3.0
+  MLXToolbox:
+    path: ../MLXToolbox
 
 schemes:
   FlashcardsPortuges:
@@ -126,24 +116,10 @@ targets:
         ENABLE_HARDENED_RUNTIME: YES
         CODE_SIGN_ENTITLEMENTS: FlashcardsPortuges.entitlements
     dependencies:
-      - package: mlx-swift
-        product: MLX
-      - package: mlx-swift
-        product: MLXNN
-      - package: mlx-swift
-        product: MLXOptimizers
-      - package: mlx-swift
-        product: MLXRandom
-      - package: mlx-swift-lm
-        product: MLXLLM
-      - package: mlx-swift-lm
-        product: MLXLMCommon
-      - package: mlx-swift-lm
-        product: MLXHuggingFace
-      - package: swift-huggingface
-        product: HuggingFace
-      - package: swift-transformers
-        product: Tokenizers
+      - package: MLXToolbox
+        product: MLXSafety
+      - package: MLXToolbox
+        product: MLXModelKit
 
   FlashcardsPortugesIOS:
     type: application
@@ -195,24 +171,10 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         CODE_SIGN_ENTITLEMENTS: FlashcardsPortuges-iOS.entitlements
     dependencies:
-      - package: mlx-swift
-        product: MLX
-      - package: mlx-swift
-        product: MLXNN
-      - package: mlx-swift
-        product: MLXOptimizers
-      - package: mlx-swift
-        product: MLXRandom
-      - package: mlx-swift-lm
-        product: MLXLLM
-      - package: mlx-swift-lm
-        product: MLXLMCommon
-      - package: mlx-swift-lm
-        product: MLXHuggingFace
-      - package: swift-huggingface
-        product: HuggingFace
-      - package: swift-transformers
-        product: Tokenizers
+      - package: MLXToolbox
+        product: MLXSafety
+      - package: MLXToolbox
+        product: MLXModelKit
 
   FlashcardsPortugesIPad:
     type: application
@@ -255,21 +217,7 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         CODE_SIGN_ENTITLEMENTS: FlashcardsPortuges-iOS.entitlements
     dependencies:
-      - package: mlx-swift
-        product: MLX
-      - package: mlx-swift
-        product: MLXNN
-      - package: mlx-swift
-        product: MLXOptimizers
-      - package: mlx-swift
-        product: MLXRandom
-      - package: mlx-swift-lm
-        product: MLXLLM
-      - package: mlx-swift-lm
-        product: MLXLMCommon
-      - package: mlx-swift-lm
-        product: MLXHuggingFace
-      - package: swift-huggingface
-        product: HuggingFace
-      - package: swift-transformers
-        product: Tokenizers
+      - package: MLXToolbox
+        product: MLXSafety
+      - package: MLXToolbox
+        product: MLXModelKit

@@ -1,6 +1,8 @@
 import Foundation
 import NaturalLanguage
+import MLXSafety
 import MLXLMCommon
+import MLXModelKit
 
 struct LLMTranslation: Codable, Equatable {
   struct Variants: Codable, Equatable {
@@ -32,6 +34,40 @@ struct LLMDefinition: Codable, Equatable {
   let partOfSpeech: String
   let definition: String
   let examples: [Example]
+
+  init(term: String, partOfSpeech: String, definition: String, examples: [Example]) {
+    self.term = term
+    self.partOfSpeech = partOfSpeech
+    self.definition = definition
+    self.examples = examples
+  }
+
+  init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    term = try container.decode(String.self, forKey: .term)
+    partOfSpeech = try container.decode(String.self, forKey: .partOfSpeech)
+    definition = try container.decode(String.self, forKey: .definition)
+    if let nested = try? container.decode([Example].self, forKey: .examples) {
+      examples = nested
+    } else {
+      // 1.7B flat format: examplePT / exampleEN instead of examples array.
+      let flatContainer = try? decoder.container(keyedBy: FlatKeys.self)
+      if let pt = try? flatContainer?.decode(String.self, forKey: .examplePT),
+         let en = try? flatContainer?.decode(String.self, forKey: .exampleEN) {
+        examples = [Example(portuguese: pt, english: en)]
+      } else {
+        examples = []
+      }
+    }
+  }
+
+  enum CodingKeys: String, CodingKey {
+    case term, partOfSpeech, definition, examples
+  }
+
+  enum FlatKeys: String, CodingKey {
+    case examplePT, exampleEN
+  }
 }
 
 /// App-level facade over `MLXModelCoordinator` that runs EuroLLM with
@@ -82,7 +118,7 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
   /// else is a `ModelVariant.id`. SettingsView writes this via
   /// `@AppStorage`.
   private var activeVariantPreference: String {
-    UserDefaults.standard.string(forKey: ModelCatalog.activeVariantDefaultsKey) ?? "auto"
+    UserDefaults.standard.string(forKey: ModelVariant.activeVariantDefaultsKey) ?? "auto"
   }
   
   /// Configure the harness with this machine's physical RAM. Safe
@@ -114,7 +150,8 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
       let physRAM = DeviceRAM.physical
       guard let variant = ModelCatalog.resolveActive(
         preference: activeVariantPreference,
-        physicalRAMBytes: physRAM
+        physicalRAMBytes: physRAM,
+        in: ModelVariant.euroLLMAll
       ) else {
         Logger.log("EuroLLM auto-load skipped: no on-disk variant matches preference '\(activeVariantPreference)'")
         return
@@ -137,7 +174,8 @@ final class EuroLLMTranslator: ObservableObject, LLMTranslating {
     let physRAM = DeviceRAM.physical
     guard let variant = ModelCatalog.resolveActive(
       preference: activeVariantPreference,
-      physicalRAMBytes: physRAM
+      physicalRAMBytes: physRAM,
+      in: ModelVariant.euroLLMAll
     ) else {
       throw MLXTranslatorError.noModelLoaded
     }

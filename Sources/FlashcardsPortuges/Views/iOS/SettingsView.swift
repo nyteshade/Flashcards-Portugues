@@ -1,4 +1,5 @@
 import AVFoundation
+import MLXModelKit
 import SwiftUI
 
 /// iOS-shaped settings — a pushed `NavigationStack` presented as a
@@ -10,7 +11,7 @@ import SwiftUI
 struct SettingsView: View {
   @ObservedObject var translator: EuroLLMTranslator
   @ObservedObject private var voicePrefs = VoicePreferences.shared
-  @AppStorage(ModelCatalog.activeVariantDefaultsKey) private var activeVariantPref: String = "auto"
+  @AppStorage(ModelVariant.activeVariantDefaultsKey) private var activeVariantPref: String = "auto"
 
   @Environment(\.dismiss) private var dismiss
   @State private var loadTask: Task<Void, Never>?
@@ -62,7 +63,7 @@ struct SettingsView: View {
 
         Section {
           defaultVariantPicker
-          ForEach(ModelCatalog.all) { variant in
+          ForEach(ModelVariant.euroLLMAll) { variant in
             variantRow(variant)
           }
         } header: {
@@ -124,7 +125,7 @@ struct SettingsView: View {
 
   @ViewBuilder
   private var defaultVariantPicker: some View {
-    let onDisk = ModelCatalog.onDiskVariants()
+    let onDisk = ModelCatalog.onDiskVariants(in: ModelVariant.euroLLMAll)
     Picker("Default", selection: $activeVariantPref) {
       Text("Auto").tag("auto")
       ForEach(onDisk) { variant in
@@ -141,7 +142,7 @@ struct SettingsView: View {
     let isPending = translator.pendingVariant?.id == variant.id
     let onDisk = !isPending && ModelCatalog.isOnDisk(variant)
     let isActive = !isPending && translator.activeVariant?.id == variant.id
-    let recommended = ModelCatalog.recommended(physicalRAMBytes: physicalRAMBytes)
+    let recommended = ModelCatalog.recommended(physicalRAMBytes: physicalRAMBytes, among: ModelVariant.euroLLMAll)
 
     VStack(alignment: .leading, spacing: 6) {
       HStack(spacing: 6) {

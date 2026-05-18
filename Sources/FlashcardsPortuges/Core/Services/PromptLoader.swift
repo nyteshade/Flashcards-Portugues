@@ -1,4 +1,5 @@
 import Foundation
+import MLXModelKit
 
 /// Loads LLM prompt templates from the app bundle and substitutes
 /// `{{name}}` placeholders with runtime values.

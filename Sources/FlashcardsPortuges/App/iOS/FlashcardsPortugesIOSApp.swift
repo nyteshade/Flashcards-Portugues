@@ -1,5 +1,6 @@
 import AVFoundation
 import Darwin
+import MLXModelKit
 import SwiftUI
 
 /// iOS app entry point. Mirrors the macOS app's startup steps
@@ -59,12 +60,12 @@ struct FlashcardsPortugesIOSApp: App {
   ///
   /// Existing values are NOT overwritten — `overwrite: 0`.
   private static func prepareHuggingFaceEnvironment() {
-    let cache = PathProvider.modelCacheDirectory.path
-    let cacheParent = PathProvider.modelCacheDirectory
+    let cache = ModelCacheProvider.defaultCacheDirectory.path
+    let cacheParent = ModelCacheProvider.defaultCacheDirectory
       .deletingLastPathComponent().path
     let xdgCache = URL.cachesDirectory.path
     try? FileManager.default.createDirectory(
-      at: PathProvider.modelCacheDirectory,
+      at: ModelCacheProvider.defaultCacheDirectory,
       withIntermediateDirectories: true
     )
     setenv("HF_HUB_CACHE", cache, 1)
