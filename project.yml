@@ -22,7 +22,8 @@ settings:
 
 packages:
   MLXToolbox:
-    path: ../MLXToolbox
+    url: https://github.com/nyteshade/MLXToolbox
+    from: "0.1.0"
 
 schemes:
   FlashcardsPortuges:
