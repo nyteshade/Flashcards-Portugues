@@ -41,15 +41,14 @@ MLX_TOOLBOX="../MLXToolbox"
 
 if [[ ! -d "$MLX_TOOLBOX" || ! -f "$MLX_TOOLBOX/Package.swift" ]]; then
   echo "⚠ MLXToolbox not found at $MLX_TOOLBOX"
-  echo "  The local package reference in project.yml won't resolve."
-  echo "  Options:"
-  echo "    1. Clone MLXToolbox to the sibling directory:"
-  echo "       git clone https://github.com/ml-explore/MLXToolbox.git ../MLXToolbox"
-  echo "    2. Edit project.yml packages.MLXToolbox.path to point to your copy"
-  echo
-
-  # Don't fail here — the user might fix it manually.
-  # But we should warn prominently.
+  echo "  Cloning from GitHub..."
+  if git clone git@github.com:nyteshade/MLXToolbox.git "$MLX_TOOLBOX" 2>/dev/null; then
+    echo "✓ Cloned MLXToolbox to $MLX_TOOLBOX"
+  else
+    echo "❌ Failed to clone MLXToolbox." >&2
+    echo "   Clone it manually: git clone git@github.com:nyteshade/MLXToolbox.git ../MLXToolbox" >&2
+    exit 1
+  fi
 else
   echo "✓ MLXToolbox found at $(cd "$MLX_TOOLBOX" && pwd)"
 fi
