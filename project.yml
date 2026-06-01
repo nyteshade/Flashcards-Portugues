@@ -22,7 +22,7 @@ settings:
 
 packages:
   MLXToolbox:
-    url: https://github.com/nyteshade/MLXToolbox
+    url: git@github.com:nyteshade/MLXToolbox
     from: "0.1.0"
 
 schemes:
