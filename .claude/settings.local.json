@@ -197,7 +197,8 @@
       "Bash(xcrun simctl *)",
       "Bash(xcodebuild -project FlashcardsPortuges.xcodeproj -scheme FlashcardsPortugesIOS -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath .build/ios -skipMacroValidation -skipPackagePluginValidation -quiet build)",
       "Bash(xcodebuild *)",
-      "Bash(xcodegen *)"
+      "Bash(xcodegen *)",
+      "Bash(git *)"
     ]
   }
 }
