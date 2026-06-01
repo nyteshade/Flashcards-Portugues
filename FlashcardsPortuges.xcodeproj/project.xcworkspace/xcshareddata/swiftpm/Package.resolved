@@ -1,5 +1,5 @@
 {
-  "originHash" : "2812d8f8bbf707e5d23ebb2f3b1fbf368917e8dfab9a6eab22d4d7a7821bd7d6",
+  "originHash" : "22ffcb2f11ae564385be29c7daa73e5d47a5451a29ce47c8e5646b07257280fb",
   "pins" : [
     {
       "identity" : "gzipswift",
@@ -26,6 +26,15 @@
       "state" : {
         "revision" : "9bff95ca5f0b9e8c021acc4d71a2bbe4a7441631",
         "version" : "2.29.1"
+      }
+    },
+    {
+      "identity" : "mlxtoolbox",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nyteshade/MLXToolbox",
+      "state" : {
+        "revision" : "19325ecd3a4677c4727ff190a3471d21d4a81f70",
+        "version" : "0.1.0"
       }
     },
     {

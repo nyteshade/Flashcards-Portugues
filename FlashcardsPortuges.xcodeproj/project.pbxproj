@@ -174,7 +174,6 @@
 		30786C593B7C9750C48992B8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		3462C060F98C87F4E7330932 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		367E8D38ABB18C51A331120E /* VoiceAvailability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceAvailability.swift; sourceTree = "<group>"; };
-		389F0CDEEEE4BE48912BE9F2 /* MLXToolbox */ = {isa = PBXFileReference; lastKnownFileType = folder; name = MLXToolbox; path = ../MLXToolbox; sourceTree = SOURCE_ROOT; };
 		43AB600A24911F87050A9568 /* FlashcardsPortugesIPadApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashcardsPortugesIPadApp.swift; sourceTree = "<group>"; };
 		4692E1F8B03985410858CF47 /* PromptLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptLoader.swift; sourceTree = "<group>"; };
 		4865A0B248EAD240A942A70E /* Flashcards.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Flashcards.icns; sourceTree = "<group>"; };
@@ -402,19 +401,10 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		7EDE9A5875A0206C254CDFB0 /* Packages */ = {
-			isa = PBXGroup;
-			children = (
-				389F0CDEEEE4BE48912BE9F2 /* MLXToolbox */,
-			);
-			name = Packages;
-			sourceTree = "<group>";
-		};
 		7F4C1B10876E1DBFC7F4690F = {
 			isa = PBXGroup;
 			children = (
 				53599541A1562B3FFFF66204 /* icons */,
-				7EDE9A5875A0206C254CDFB0 /* Packages */,
 				1A6C59043C3081A09F1DDB0B /* Sources */,
 				EF25A0DD14C31E25AE9B3811 /* Products */,
 			);
@@ -584,7 +574,7 @@
 			mainGroup = 7F4C1B10876E1DBFC7F4690F;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				D6AB2687588A7A0530A49C97 /* XCLocalSwiftPackageReference "../MLXToolbox" */,
+				71BFD466243A998D79088714 /* XCRemoteSwiftPackageReference "MLXToolbox" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EF25A0DD14C31E25AE9B3811 /* Products */;
@@ -1074,36 +1064,46 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		D6AB2687588A7A0530A49C97 /* XCLocalSwiftPackageReference "../MLXToolbox" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../MLXToolbox;
+/* Begin XCRemoteSwiftPackageReference section */
+		71BFD466243A998D79088714 /* XCRemoteSwiftPackageReference "MLXToolbox" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nyteshade/MLXToolbox";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.0;
+			};
 		};
-/* End XCLocalSwiftPackageReference section */
+/* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
 		00ED4497382AB05A1F4A968D /* MLXModelKit */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 71BFD466243A998D79088714 /* XCRemoteSwiftPackageReference "MLXToolbox" */;
 			productName = MLXModelKit;
 		};
 		1D68C6C9628530354B8063B3 /* MLXSafety */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 71BFD466243A998D79088714 /* XCRemoteSwiftPackageReference "MLXToolbox" */;
 			productName = MLXSafety;
 		};
 		420E4646B1F2D146BEEB4E41 /* MLXSafety */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 71BFD466243A998D79088714 /* XCRemoteSwiftPackageReference "MLXToolbox" */;
 			productName = MLXSafety;
 		};
 		6C367D92FBBB69517B5BDD25 /* MLXSafety */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 71BFD466243A998D79088714 /* XCRemoteSwiftPackageReference "MLXToolbox" */;
 			productName = MLXSafety;
 		};
 		7652E72837590EE49116C94D /* MLXModelKit */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 71BFD466243A998D79088714 /* XCRemoteSwiftPackageReference "MLXToolbox" */;
 			productName = MLXModelKit;
 		};
 		DC813550B7C58652DF961CA7 /* MLXModelKit */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 71BFD466243A998D79088714 /* XCRemoteSwiftPackageReference "MLXToolbox" */;
 			productName = MLXModelKit;
 		};
 /* End XCSwiftPackageProductDependency section */
